@@ -1,2 +1,46 @@
 # hygs
-How you grew smart – record of your projects, employers and skills
+How you grew smart – record of your projects, employers and skills.
+
+As an IT-guy I change frameworks and libraries like clothes. After >30years of experience in general and >20years as employee it piled up. So I wondered how I grew smart and took modern means of statistics to lift this hidden treasure.
+
+## Install it
+
+You only need to load the DDL and DML of this repository:
+
+```
+sqlite3 your_capability.db ".read db/install_de.sql"
+```
+
+## Use it
+
+Mind that all weighting is based on percentage ranging from 0..100. If you are employed fulltime for a project it's weight is 100%, which is the default value. This is the same for capabilities. If you work for example fulltime with Java and spend 10% of your time with Maven, then assign 10 to the prj_cap_mapping for Maven and use the default for Java.
+
+* create employers in prj_company
+* create projects in cap_project
+* assign capabilities to projects with prj_cap_mapping
+
+Special cases:
+
+* Training: create project with weight of 50%, so time spent on the project counts half
+* Fulltime project moved to maintenance: create two projects, one with 100% mapping, the other with the maintenance rate, e.g. 20%
+* Multiple projects in parallel: create projects according to time slices and weight each accordingly, like A fulltime, then B partly overlapping with A 60% and B 40%: A1 with 100%, A2 with 60%, B with 40%
+
+## SQLite
+
+I was also plagued with tons of skill management tools of the various employers. I can't access them anymore so the information is lost. But I can carry around a SQLite database, on a thumb drive or even uploaded somewhere.
+
+* small and lightweight
+* SQL-support, incl. triggers, views and functions
+* portable
+* adaptable, like with PDO for PHP or JPA for Java or any other recent database-capable programming language
+* fast
+
+I thank the collegue who pointed out that unique feature, to carry around an entire database, designed for its only purpose.
+
+## Data
+
+* master data, like capabilities and categories, e.g. Java 8 as capability and Programming Language as a category
+* dynamic data of your own, employers, projects
+* mapping table of capabilities to projects, with weight
+* views for calculations, like effective/ weighted months assigned to a project or effective months spent with a tool/ capability
+* maintenance and auditing data, to keep the database stable and up to date
