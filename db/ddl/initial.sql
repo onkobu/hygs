@@ -10,11 +10,12 @@ BEGIN TRANSACTION;
 
 -- Table: app_capability
 CREATE TABLE app_capability (
-    cap_id          INTEGER       PRIMARY KEY,
+    cap_id          INTEGER       PRIMARY KEY AUTOINCREMENT,
     cap_name        VARCHAR (50)  NOT NULL,
     cap_description VARCHAR (255),
     cap_version     INTEGER       NOT NULL,
-    cap_timestamp   DATETIME      DEFAULT (datetime('now', 'localtime') ),
+    cap_timestamp   DATETIME      DEFAULT (datetime('now', 'localtime') ) 
+                                  NOT NULL,
     UNIQUE (
         cap_name,
         cap_version
@@ -505,6 +506,9 @@ CREATE VIEW prj_months AS
       FROM cap_project
      ORDER BY prj_from ASC;
 
+
+INSERT INTO app_capability ( cap_version, cap_description, cap_name )
+    VALUES ( 0, 'initial ddl creating structure', 'init' );
 
 COMMIT TRANSACTION;
 PRAGMA foreign_keys = on;

@@ -1,0 +1,15 @@
+- en
+- fill app_capability from install scripts
+- app_capability with prepare-entry per version, upon start of upgrade this
+  entry is created and fails, if it already exists with
+  unique-constraint=safety check
+- upgrade script, determine max version from app_capability and enumerate
+  upgrade-scripts until max file name
+- skill table, FK to cap_capability
+- role table, JOIN-table to cap_project,
+- employer assignment view
+- timeline of technology
+- perl interface, export XML
+- backup
+- wiki, i18n part of table, standalone without translation resources=personal
+  table
