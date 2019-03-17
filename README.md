@@ -48,6 +48,8 @@ I was also plagued with tons of skill management tools of the various employers.
 * fast
 
 I thank the collegue who pointed out that unique feature, to carry around an entire database, designed for its only purpose.
+
+![Database Schema](relationships.real.large.png)
  
 ## Data
  
@@ -63,3 +65,36 @@ I thank the collegue who pointed out that unique feature, to carry around an ent
 * increment version number in upgrade.sh, this'll be your file's name
 * test locally with a sample database, incl. upgrade.sh
 * record the script in install.template and invoke gen_install.sh to populate installation script(s)
+
+## Schemaspy
+
+* make sure, Java 8 (or later) is installed on your system
+* make sure, GraphViz is installed on your system (with Java-interface)
+* get Schemaspy version from https://github.com/schemaspy, put into any/ new directory
+* get JDBC-driver from https://github.com/xerial/sqlite-jdbc, put into same directory as Schemaspy
+* create sqlite.properties (see below), put into same directory as Schemaspy
+* create a target directory for Schemaspy-output (HTML, JavaScript, …)
+* invoke Schemaspy from within Schemaspy-directory
+
+Configuration file sqlite.properties for SQLite-JDBC-driver must match the
+driver exactly. The example is using 3.27.2:
+
+```
+description=SQLite-Xerial
+driver=org.sqlite.JDBC
+driverPath=sqlite-jdbc-3.27.2.jar
+connectionSpec=jdbc:sqlite:<db>
+```
+
+Invocation on command line:
+
+```
+# Render graphics to ~/Documents/hygs-schema -directory, complete cataloge,
+# user (-u) and schema (-s) must be given but value is not used.
+# Invocation for version other than 6.0.0 may differ
+#
+java -jar schemaspy-6.0.0.jar -t sqlite.properties \
+  -dp ./sqlite-jdbc-3.27.2.jar 
+  -db ~/git/hygs/db/sample_de.db 
+  -o ~/Documents/hygs-schema -u dontcare -cat % -s dontcare
+```
