@@ -17,11 +17,11 @@ CREATE VIEW distinct_capabilities AS
 
 CREATE VIEW your_lack_of_skills AS
     SELECT *
-      FROM cap_skill s
-           JOIN
-           cap_skill_mapping m ON s.skill_id = m.skill_id
-           JOIN
-           cap_capability c ON m.cap_id = c.cap_id;
+      FROM cap_capability c
+     WHERE NOT c.cap_id IN (
+               SELECT cap_id
+                 FROM cap_skill_mapping
+           );
 
 .print create view your_skills
 

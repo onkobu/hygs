@@ -24,7 +24,7 @@ fi
 
 let UPGRADE_FROM=VERSION+1
 
-DB_BACKUP_FILE=$DATABASE.$UPGRADE_FROM
+DB_BACKUP_FILE=$DATABASE.$VERSION
 if [ -f $DB_BACKUP_FILE ]; then
 	echo "DB Backup $DB_BACKUP_FILE exists, move or delete first"
 	exit 3
