@@ -49,7 +49,13 @@ I was also plagued with tons of skill management tools of the various employers.
 
 I thank the collegue who pointed out that unique feature, to carry around an entire database, designed for its only purpose.
 
-![Database Schema](relationships.real.large.png)
+![Database Schema](docs/relationships.real.large.png)
+
+![Application Capability Table](docs/app_capability.1degree.png)
+
+![Application Maintenance Table](docs/app_maintenance.1degree.png)
+
+![Application Audit Log](docs/log_audit.1degree.png)
  
 ## Data
  
