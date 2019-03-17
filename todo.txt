@@ -1,4 +1,3 @@
-- en, will break current upgrade.sh, as it reads all .sql
 - employer assignment view
 - timeline of technology
 - perl interface, export XML
@@ -8,6 +7,8 @@
 
 # Done
 
+- en, will not break current upgrade.sh, as it filters by locale-specific
+  upgrade.lst
 - capability view, grouped by name, joined with category
 - skill views, capabilities with skills and without
 - additional capabilities, project management
