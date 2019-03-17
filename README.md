@@ -56,3 +56,10 @@ I thank the collegue who pointed out that unique feature, to carry around an ent
 * mapping table of capabilities to projects, with weight
 * views for calculations, like effective/ weighted months assigned to a project or effective months spent with a tool/ capability
 * maintenance and auditing data, to keep the database stable and up to date
+
+# For Developers
+
+* for changes add a new script in either DML or DDL-directory
+* increment version number in upgrade.sh, this'll be your file's name
+* test locally with a sample database, incl. upgrade.sh
+* record the script in install.template and invoke gen_install.sh to populate installation script(s)

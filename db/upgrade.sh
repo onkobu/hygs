@@ -1,7 +1,19 @@
 #!/bin/bash
 
 DATABASE=$1
-UPGRADE_TO=3
+UPGRADE_TO=5
+
+if [ $# -eq 0 -o "$1" = '-h' -o "$1" = '--help' ]; then
+	echo ""
+	echo "Upgrading How-You-Grow-Smart-DB"
+	echo ""
+	echo "Queries the version from a given DB file and checks whether and"
+	echo "and which SQL-scripts need to be added, to move to newest version."
+	echo ""
+	echo "    upgrade.sh <db-file>"
+	echo ""
+	exit 0
+fi
 
 VERSION=$(sqlite3 $DATABASE 'SELECT max(cap_version) from app_capability;')
 
