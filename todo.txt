@@ -8,6 +8,9 @@
 
 # Done
 
+- capability view, grouped by name, joined with category
+- skill views, capabilities with skills and without
+- additional capabilities, project management
 - skill table, FK to cap_capability
 - schemaspy-figures/ howto
 - fill app_capability from install scripts

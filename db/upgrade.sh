@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DATABASE=$1
-UPGRADE_TO=7
+UPGRADE_TO=9
 
 if [ $# -eq 0 -o "$1" = '-h' -o "$1" = '--help' ]; then
 	echo ""
