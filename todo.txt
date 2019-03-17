@@ -1,5 +1,4 @@
-- en
-- skill table, FK to cap_capability
+- en, will break current upgrade.sh, as it reads all .sql
 - employer assignment view
 - timeline of technology
 - perl interface, export XML
@@ -9,10 +8,13 @@
 
 # Done
 
+- skill table, FK to cap_capability
+- schemaspy-figures/ howto
 - fill app_capability from install scripts
 - upgrade script, determine max version from app_capability and enumerate
   upgrade-scripts until max file name
 - role table, JOIN-table to cap_project,
+- Tool-Recommendation, sqlitestudio, sqlitebrowser
 
 # Rejected
 

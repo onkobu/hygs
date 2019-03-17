@@ -12,10 +12,11 @@
 .read ddl/003_prj_role_map.sql
 .read ddl/004_audit_log_ref2.sql
 .read ddl/005_your_roles.sql
+.read ddl/006_skill_map.sql
 
 .print DML
 .read dml/cap_capability.sql
 .read dml/cap_category_de.sql
 .read dml/002_prj_role.sql
-
+.read dml/007_skill_map_de.sql
 

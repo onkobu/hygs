@@ -37,6 +37,12 @@ Special cases:
 * Fulltime project moved to maintenance: create two projects, one with 100% mapping, the other with the maintenance rate, e.g. 20%
 * Multiple projects in parallel: create projects according to time slices and weight each accordingly, like A fulltime, then B partly overlapping with A 60% and B 40%: A1 with 100%, A2 with 60%, B with 40%
 
+Recommended Tools
+
+* SQLiteStudio, https://sqlitestudio.pl, full DDL-support
+* SQLite Browser, https://sqlitebrowser.org/, poor trigger support in UI
+* Schema Spy for schema documentation, http://schemaspy.org/
+
 ## SQLite
 
 I was also plagued with tons of skill management tools of the various employers. I can't access them anymore so the information is lost. But I can carry around a SQLite database, on a thumb drive or even uploaded somewhere.
