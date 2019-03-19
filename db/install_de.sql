@@ -5,7 +5,7 @@
 -- do not change by hand, will be generated automatically
 --
 
--- generated 2019-03-17
+-- generated 2019-03-19
 .print DDL
 .read ddl/initial.sql
 .read ddl/001_prj_role.sql
@@ -23,3 +23,5 @@
 .read dml/007_skill_map_de.sql
 .read dml/009_capabilities_de.sql
 .read dml/011_app_properties.sql
+.read dml/012_roles_and_caps_de.sql
+

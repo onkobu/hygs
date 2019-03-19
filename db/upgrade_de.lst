@@ -9,3 +9,4 @@
 ./dml/007_skill_map_de.sql
 ./dml/009_capabilities_de.sql
 ./dml/011_app_properties.sql
+./dml/012_roles_and_caps_de.sql

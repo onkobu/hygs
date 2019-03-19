@@ -15,3 +15,5 @@
 .read dml/007_skill_map_$lang.sql
 .read dml/009_capabilities_$lang.sql
 .read dml/011_app_properties.sql
+.read dml/012_roles_and_caps_$lang.sql
+
