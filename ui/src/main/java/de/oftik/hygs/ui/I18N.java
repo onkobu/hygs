@@ -1,13 +1,27 @@
 package de.oftik.hygs.ui;
 
+import java.util.ResourceBundle;
+
 public enum I18N {
-	COMPANY, ID, STREET, CITY, ZIP;
+	COMPANY,
+
+	ID,
+
+	STREET,
+
+	CITY,
+
+	ZIP;
 
 	public String title() {
-		return name();
+		return getBundle().getString(name() + ".title");
 	}
 
 	public String label() {
-		return name();
+		return getBundle().getString(name() + ".label");
+	}
+
+	private ResourceBundle getBundle() {
+		return ResourceBundle.getBundle(I18N.class.getName().toLowerCase());
 	}
 }
