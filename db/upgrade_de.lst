@@ -10,3 +10,4 @@
 ./dml/009_capabilities_de.sql
 ./dml/011_app_properties.sql
 ./dml/012_roles_and_caps_de.sql
+./dml/013_roles_and_caps_de.sql

@@ -133,7 +133,6 @@ INSERT INTO cap_capability (
                                'Enterprise Service Bus',
                                100
                            );
-	;
 
 INSERT INTO app_capability ( cap_version, cap_description, cap_name )
     VALUES ( 12, 'add application properties', 'roles and capabilities dml' );

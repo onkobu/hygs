@@ -24,4 +24,4 @@
 .read dml/009_capabilities_de.sql
 .read dml/011_app_properties.sql
 .read dml/012_roles_and_caps_de.sql
-
+.read dml/013_roles_and_caps_de.sql
