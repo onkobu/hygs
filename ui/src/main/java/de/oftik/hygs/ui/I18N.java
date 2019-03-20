@@ -11,7 +11,13 @@ public enum I18N {
 
 	CITY,
 
-	ZIP;
+	ZIP,
+
+	EXPORT_PRJ_MONTHS,
+
+	EXPORT,
+
+	MSG_EXPORTED_XML;
 
 	public String title() {
 		return getBundle().getString(name() + ".title");
@@ -23,5 +29,25 @@ public enum I18N {
 
 	private ResourceBundle getBundle() {
 		return ResourceBundle.getBundle(I18N.class.getName().toLowerCase());
+	}
+
+	public boolean hasTooltip() {
+		return getBundle().containsKey(createTooltipKey());
+	}
+
+	private String createTooltipKey() {
+		return name() + ".tooltip";
+	}
+
+	public String tooltip() {
+		return getBundle().getString(createTooltipKey());
+	}
+
+	public String message(Object... params) {
+		final String rawMsg = getBundle().getString(name() + ".message");
+		if (params == null || params.length == 0) {
+			return rawMsg;
+		}
+		return String.format(rawMsg, params);
 	}
 }

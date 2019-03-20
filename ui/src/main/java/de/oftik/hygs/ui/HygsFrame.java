@@ -22,6 +22,7 @@ public class HygsFrame extends JFrame {
 		add(centerPane, BorderLayout.CENTER);
 
 		centerPane.add(I18N.COMPANY.title(), new CompanyPanel(applicationContext));
+		centerPane.add(I18N.EXPORT.title(), new ExportPanel(applicationContext));
 		return this;
 	}
 }

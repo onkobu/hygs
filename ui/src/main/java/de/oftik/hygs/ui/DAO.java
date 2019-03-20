@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public abstract class DAO<T> {
 	private final ApplicationContext context;
@@ -18,15 +19,19 @@ public abstract class DAO<T> {
 	}
 
 	public List<T> findAll() throws SQLException {
+		final List<T> resultList = new ArrayList<>();
+		consumeAll(resultList::add);
+		return resultList;
+	}
+
+	public void consumeAll(Consumer<T> consumer) throws SQLException {
 		try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + context.dbPath());) {
 			final Statement statement = conn.createStatement();
 			statement.setQueryTimeout(30);
 			final ResultSet rs = statement.executeQuery("SELECT * FROM " + table.name() + ";");
-			final List<T> resultList = new ArrayList<>();
 			while (rs.next()) {
-				resultList.add(map(rs));
+				consumer.accept(map(rs));
 			}
-			return resultList;
 		}
 	}
 
