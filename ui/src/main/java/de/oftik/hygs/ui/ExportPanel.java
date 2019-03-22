@@ -15,6 +15,8 @@ import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
 import de.oftik.hygs.ui.prjmon.ProjectMonthsExporter;
+import de.oftik.kehys.keijukainen.function.EitherOr;
+import de.oftik.kehys.keijukainen.function.Pair;
 import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
 
 public class ExportPanel extends JPanel {
@@ -47,13 +49,15 @@ public class ExportPanel extends JPanel {
 		final File file = chooser.getSelectedFile();
 		ProjectMonthsExporter exporter = new ProjectMonthsExporter(context);
 		try {
-			final List<ExportError> errs = exporter.marshal(file);
-			if (errs.isEmpty()) {
+			final Pair<QueryStatistics, List<ExportError>> statsOrErrs = exporter.marshal(file);
+			EitherOr.with(statsOrErrs).either((stats) -> {
+				resultArea.append(I18N.MSG_EXPORTED_STATISTICS.message(stats.getRowCount(),
+						stats.getTotalMillies() / 1000.0, stats.getDurationMin(), stats.getDurationMax()));
 				resultArea.append(I18N.MSG_EXPORTED_XML.message(file));
-			} else {
-				errs.stream().map(ExportError::toString).forEach(resultArea::append);
+			}).or((errs) -> {
+				statsOrErrs.right().stream().map(ExportError::toString).forEach(resultArea::append);
 				resultArea.setCaretPosition(resultArea.getDocument().getLength());
-			}
+			});
 		} catch (IOException | JAXBException | XMLStreamException | FactoryConfigurationError e) {
 			resultArea.append(Exceptions.renderStackTrace(e));
 		}

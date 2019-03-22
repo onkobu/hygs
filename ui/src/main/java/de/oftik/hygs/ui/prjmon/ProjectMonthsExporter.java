@@ -20,6 +20,9 @@ import javax.xml.stream.XMLStreamWriter;
 
 import de.oftik.hygs.ui.ApplicationContext;
 import de.oftik.hygs.ui.ExportError;
+import de.oftik.hygs.ui.QueryStatistics;
+import de.oftik.hygs.ui.TimerConsumerWrapper;
+import de.oftik.kehys.keijukainen.function.Pair;
 
 public class ProjectMonthsExporter {
 	private ProjectMonthsDAO dao;
@@ -33,19 +36,32 @@ public class ProjectMonthsExporter {
 		this.dao = dao;
 	}
 
-	public List<ExportError> marshal(File f)
+	public Pair<QueryStatistics, List<ExportError>> marshal(File f)
 			throws IOException, JAXBException, XMLStreamException, FactoryConfigurationError {
 		final String xmlCharEnc = "UTF-8";
 		final List<ExportError> allErrors = new ArrayList<>();
+		QueryStatistics statsTmp;
 		try (FileWriter fw = new FileWriter(f); BufferedWriter bw = new BufferedWriter(fw);) {
-			marshal(xmlCharEnc, allErrors, bw);
+			statsTmp = marshal(xmlCharEnc, allErrors, bw);
 		} catch (SQLException e) {
+			statsTmp = null;
 			allErrors.add(new ExportError(e));
 		}
-		return allErrors;
+		final QueryStatistics stats = allErrors.isEmpty() ? statsTmp : null;
+		return new Pair<QueryStatistics, List<ExportError>>() {
+			@Override
+			public QueryStatistics left() {
+				return stats;
+			}
+
+			@Override
+			public List<ExportError> right() {
+				return allErrors.isEmpty() ? null : allErrors;
+			}
+		};
 	}
 
-	void marshal(final String xmlCharEnc, final List<ExportError> allErrors, Writer bw)
+	QueryStatistics marshal(final String xmlCharEnc, final List<ExportError> allErrors, Writer bw)
 			throws XMLStreamException, FactoryConfigurationError, JAXBException, PropertyException, SQLException {
 		XMLStreamWriter xsw = XMLOutputFactory.newInstance().createXMLStreamWriter(bw);
 		final JAXBContext context = JAXBContext.newInstance(ProjectMonths.class);
@@ -61,7 +77,7 @@ public class ProjectMonthsExporter {
 //			xsw.writeNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
 //			xsw.writeAttribute("xsi:schemaLocation", "http://meinnamespace.meinefirma.de Buecher.xsd");
 //			xsw.writeCharacters("\r\n");
-		dao.consumeAll((pm) -> {
+		final TimerConsumerWrapper<ProjectMonth> tcw = TimerConsumerWrapper.wrap((pm) -> {
 			try {
 				marshaller.marshal(pm, xsw);
 				xsw.writeCharacters("\r\n");
@@ -69,10 +85,13 @@ public class ProjectMonthsExporter {
 				allErrors.add(new ExportError(e, pm.getId()));
 			}
 		});
+		dao.consumeAll(tcw);
+		tcw.stop();
 		xsw.writeEndElement();
 		xsw.writeEndDocument();
 		xsw.writeCharacters("\r\n");
 		xsw.flush();
 		xsw.close();
+		return tcw;
 	}
 }

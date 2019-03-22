@@ -35,8 +35,8 @@ public class ProjectsMonthsExporterTest {
 		final ArrayList<ExportError> errs = new ArrayList<>();
 		new ProjectMonthsExporter(dao).marshal("UTF-8", errs, sw);
 
-		assertThat(sw.toString(), equalTo(
-				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<prj-mons><projectMonth id=\"0\" months=\"0\"></projectMonth>\r\n</prj-mons>\r\n"));
+		assertThat(sw.toString(), equalTo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+				+ "<prj-mons><projectMonth id=\"0\" months=\"0\"></projectMonth>\r\n" + "</prj-mons>\r\n"));
 		assertThat(errs, Matchers.empty());
 	}
 
@@ -48,8 +48,9 @@ public class ProjectsMonthsExporterTest {
 		final ArrayList<ExportError> errs = new ArrayList<>();
 		new ProjectMonthsExporter(dao).marshal("UTF-8", errs, sw);
 
-		assertThat(sw.toString(), equalTo(
-				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<prj-mons><projectMonth id=\"70\" projectName=\"heal the world\" months=\"16\"></projectMonth>\r\n</prj-mons>\r\n"));
+		assertThat(sw.toString(), equalTo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+				+ "<prj-mons><projectMonth id=\"70\" projectName=\"heal the world\" months=\"16\"></projectMonth>\r\n"
+				+ "</prj-mons>\r\n"));
 		assertThat(errs, Matchers.empty());
 	}
 
