@@ -5,6 +5,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import de.oftik.hygs.ui.orm.QueryStatistics;
+
 public final class TimerConsumerWrapper<T> implements Consumer<T>, QueryStatistics {
 	private Instant started;
 	private Instant stopped;

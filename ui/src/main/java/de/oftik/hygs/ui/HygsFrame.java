@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
 import de.oftik.hygs.ui.company.CompanyPanel;
+import de.oftik.hygs.ui.project.ProjectPanel;
 
 public class HygsFrame extends JFrame {
 	private final ApplicationContext applicationContext;
@@ -22,6 +23,7 @@ public class HygsFrame extends JFrame {
 		add(centerPane, BorderLayout.CENTER);
 
 		centerPane.add(I18N.COMPANY.title(), new CompanyPanel(applicationContext));
+		centerPane.add(I18N.PROJECT.title(), new ProjectPanel(applicationContext));
 		centerPane.add(I18N.EXPORT.title(), new ExportPanel(applicationContext));
 		return this;
 	}

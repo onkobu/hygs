@@ -1,4 +1,4 @@
-package de.oftik.hygs.ui;
+package de.oftik.hygs.ui.orm;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+
+import de.oftik.hygs.ui.ApplicationContext;
 
 public abstract class DAO<T> {
 	private final ApplicationContext context;

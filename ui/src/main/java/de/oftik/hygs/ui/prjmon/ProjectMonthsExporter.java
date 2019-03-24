@@ -20,8 +20,8 @@ import javax.xml.stream.XMLStreamWriter;
 
 import de.oftik.hygs.ui.ApplicationContext;
 import de.oftik.hygs.ui.ExportError;
-import de.oftik.hygs.ui.QueryStatistics;
 import de.oftik.hygs.ui.TimerConsumerWrapper;
+import de.oftik.hygs.ui.orm.QueryStatistics;
 import de.oftik.kehys.keijukainen.function.Pair;
 
 public class ProjectMonthsExporter {

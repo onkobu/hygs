@@ -4,8 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import de.oftik.hygs.ui.ApplicationContext;
-import de.oftik.hygs.ui.DAO;
-import de.oftik.hygs.ui.Table;
+import de.oftik.hygs.ui.orm.DAO;
+import de.oftik.hygs.ui.orm.Table;
 
 public class ProjectMonthsDAO extends DAO<ProjectMonth> {
 

@@ -11,6 +11,8 @@ import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 
+import de.oftik.hygs.ui.orm.DAO;
+
 public abstract class EntityListPanel<T> extends JPanel {
 	private final DefaultListModel<T> listModel = new DefaultListModel<>();
 	private final JList<T> entityList = new JList<>(listModel);
@@ -30,6 +32,10 @@ public abstract class EntityListPanel<T> extends JPanel {
 		});
 		createUI();
 		fillList();
+	}
+
+	protected EntityForm<T> getForm() {
+		return entityForm;
 	}
 
 	private void showEntity(T t) {

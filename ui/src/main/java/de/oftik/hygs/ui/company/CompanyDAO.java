@@ -4,8 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import de.oftik.hygs.ui.ApplicationContext;
-import de.oftik.hygs.ui.DAO;
-import de.oftik.hygs.ui.Table;
+import de.oftik.hygs.ui.orm.DAO;
+import de.oftik.hygs.ui.orm.Table;
 
 public class CompanyDAO extends DAO<Company> {
 
@@ -15,7 +15,6 @@ public class CompanyDAO extends DAO<Company> {
 
 	@Override
 	protected Company map(ResultSet rs) throws SQLException {
-		return new Company(rs.getLong("cmp_id"), rs.getString("cmp_name"), rs.getString("cmp_street"),
-				rs.getString("cmp_city"), rs.getString("cmp_zip"));
+		return CompanyColumn.to(rs, new Company());
 	}
 }

@@ -1,4 +1,4 @@
-package de.oftik.hygs.ui;
+package de.oftik.hygs.ui.orm;
 
 import java.time.Instant;
 

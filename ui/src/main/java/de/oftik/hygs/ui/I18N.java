@@ -19,7 +19,15 @@ public enum I18N {
 
 	MSG_EXPORTED_XML,
 
-	MSG_EXPORTED_STATISTICS;
+	MSG_EXPORTED_STATISTICS,
+
+	PROJECT,
+
+	FROM,
+
+	TO,
+
+	DESCRIPTION;
 
 	public String title() {
 		return getBundle().getString(name() + ".title");
