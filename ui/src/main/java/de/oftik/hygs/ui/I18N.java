@@ -27,7 +27,15 @@ public enum I18N {
 
 	TO,
 
-	DESCRIPTION;
+	DESCRIPTION,
+
+	CAPABILITY,
+
+	VERSION,
+
+	CATEGORY,
+
+	WEIGHT;
 
 	public String title() {
 		return getBundle().getString(name() + ".title");

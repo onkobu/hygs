@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
+import de.oftik.hygs.ui.cap.CapabilityPanel;
 import de.oftik.hygs.ui.company.CompanyPanel;
 import de.oftik.hygs.ui.project.ProjectPanel;
 
@@ -24,6 +25,7 @@ public class HygsFrame extends JFrame {
 
 		centerPane.add(I18N.COMPANY.title(), new CompanyPanel(applicationContext));
 		centerPane.add(I18N.PROJECT.title(), new ProjectPanel(applicationContext));
+		centerPane.add(I18N.CAPABILITY.title(), new CapabilityPanel(applicationContext));
 		centerPane.add(I18N.EXPORT.title(), new ExportPanel(applicationContext));
 		return this;
 	}

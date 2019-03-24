@@ -21,7 +21,9 @@ public class ProjectPanel extends EntityListPanel<Project> implements CompanyCac
 		} catch (SQLException ex) {
 			throw new IllegalStateException(ex);
 		}
-		((ProjectForm) getForm()).setCompanyCache(this);
+		final ProjectForm prjForm = (ProjectForm) getForm();
+		prjForm.setCompanyCache(this);
+		prjForm.setAssignedCapabilityDAO(new AssignedCapabilityDAO(applicationContext));
 	}
 
 	@Override

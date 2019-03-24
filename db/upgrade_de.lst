@@ -5,6 +5,7 @@
 ./ddl/006_skill_map.sql
 ./ddl/008_skill_views.sql
 ./ddl/010_app_properties.sql
+./ddl/014_v_prj_cap.sql
 ./dml/002_prj_role.sql
 ./dml/007_skill_map_de.sql
 ./dml/009_capabilities_de.sql

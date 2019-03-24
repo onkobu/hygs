@@ -29,9 +29,9 @@ public class CompanyForm extends EntityForm<Company> {
 		cityField.setColumns(idField.getColumns());
 		zipField.setColumns(idField.getColumns());
 
-		addTextField(I18N.ID, idField, gbc);
-		addTextField(I18N.COMPANY, nameField, gbc.nextRow());
-		addTextField(I18N.STREET, streetField, gbc.nextRow());
+		addRowTextField(I18N.ID, idField, gbc);
+		addRowTextField(I18N.COMPANY, nameField, gbc.nextRow());
+		addRowTextField(I18N.STREET, streetField, gbc.nextRow());
 
 		addLabel(I18N.CITY, gbc.nextRow());
 		add(cityField, gbc.nextColumn().end());
