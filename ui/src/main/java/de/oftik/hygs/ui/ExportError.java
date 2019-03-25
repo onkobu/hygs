@@ -13,6 +13,10 @@ public class ExportError {
 		this(t, null);
 	}
 
+	public Long getEntityId() {
+		return entityId;
+	}
+
 	@Override
 	public String toString() {
 		return Exceptions.renderStackTrace(throwable);

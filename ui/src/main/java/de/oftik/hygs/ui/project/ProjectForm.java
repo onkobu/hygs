@@ -1,30 +1,29 @@
 package de.oftik.hygs.ui.project;
 
-import java.awt.Component;
+import static de.oftik.kehys.keijukainen.gui.ListTableModel.createDescription;
+
 import java.awt.GridBagLayout;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableColumnModel;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+import de.oftik.hygs.query.Converters;
+import de.oftik.hygs.query.project.AssignedCapability;
+import de.oftik.hygs.query.project.AssignedCapabilityDAO;
+import de.oftik.hygs.query.project.Project;
 import de.oftik.hygs.ui.EntityForm;
 import de.oftik.hygs.ui.I18N;
-import de.oftik.hygs.ui.orm.Converters;
 import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
+import de.oftik.kehys.keijukainen.gui.ListTableModel;
 
 public class ProjectForm extends EntityForm<Project> {
 	private static final Logger log = Logger.getLogger(ProjectForm.class.getName());
@@ -40,63 +39,19 @@ public class ProjectForm extends EntityForm<Project> {
 			new DateFormatter());
 	private final JTextField companyNameField = new JTextField();
 
-	private final DefaultTableColumnModel columnModel = new DefaultTableColumnModel();
 	private final String[] identifiers = new String[] { I18N.CAPABILITY.label(), I18N.VERSION.label(),
 			I18N.WEIGHT.label() };
-	private final DefaultTableModel tableModel = new DefaultTableModel(identifiers, 3);
-	private final JTable capabilityTable = new JTable(tableModel, columnModel);
+
+	private final JTable capabilityTable = new JTable();
 	private CompanyCache companyCache;
 	private AssignedCapabilityDAO assignedCapabilityDAO;
-
-	static class CapabilityNameRenderer implements TableCellRenderer {
-		private final DefaultTableCellRenderer rendererDelegate = new DefaultTableCellRenderer();
-
-		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean hasFocus,
-				int row, int column) {
-			if (value == null) {
-				return rendererDelegate.getTableCellRendererComponent(table, value, selected, hasFocus, row, column);
-			}
-			return rendererDelegate.getTableCellRendererComponent(table, ((AssignedCapability) value).getName(),
-					selected, hasFocus, row, column);
-		}
-	}
-
-	static class CapabilityVersionRenderer implements TableCellRenderer {
-		private final DefaultTableCellRenderer rendererDelegate = new DefaultTableCellRenderer();
-
-		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean hasFocus,
-				int row, int column) {
-			if (value == null) {
-				return rendererDelegate.getTableCellRendererComponent(table, value, selected, hasFocus, row, column);
-			}
-			return rendererDelegate.getTableCellRendererComponent(table, ((AssignedCapability) value).getVersion(),
-					selected, hasFocus, row, column);
-		}
-	}
-
-	static class CapabilityWeightRenderer implements TableCellRenderer {
-		private final DefaultTableCellRenderer rendererDelegate = new DefaultTableCellRenderer();
-
-		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean hasFocus,
-				int row, int column) {
-			if (value == null) {
-				return rendererDelegate.getTableCellRendererComponent(table, value, selected, hasFocus, row, column);
-			}
-			return rendererDelegate.getTableCellRendererComponent(table, ((AssignedCapability) value).getWeight(),
-					selected, hasFocus, row, column);
-		}
-	}
+	private final ListTableModel<AssignedCapability> tableModel = new ListTableModel<>(
+			createDescription(identifiers[0], String.class, AssignedCapability::getName),
+			createDescription(identifiers[1], String.class, AssignedCapability::getVersion),
+			createDescription(identifiers[2], Integer.TYPE, AssignedCapability::getWeight));
 
 	public ProjectForm() {
-		columnModel.addColumn(new TableColumn(0, 30, new CapabilityNameRenderer(), null));
-		columnModel.getColumn(0).setHeaderValue(identifiers[0]);
-		columnModel.addColumn(new TableColumn(0, 10, new CapabilityVersionRenderer(), null));
-		columnModel.getColumn(1).setHeaderValue(identifiers[1]);
-		columnModel.addColumn(new TableColumn(0, 10, new CapabilityWeightRenderer(), null));
-		columnModel.getColumn(2).setHeaderValue(identifiers[2]);
+		capabilityTable.setModel(tableModel);
 		createUI();
 	}
 
@@ -140,13 +95,11 @@ public class ProjectForm extends EntityForm<Project> {
 		try {
 			final List<AssignedCapability> caps = assignedCapabilityDAO.findByProject(t);
 			if (caps.isEmpty()) {
-				tableModel.setRowCount(0);
+				tableModel.clear();
 				return;
 			}
-			tableModel.setRowCount(caps.size());
-			final List<Object[]> capsLst = caps.stream().map((cap) -> new Object[] { cap, cap, cap })
-					.collect(Collectors.toList());
-			tableModel.setDataVector(capsLst.toArray(new Object[capsLst.size()][]), identifiers);
+			tableModel.set(caps);
+			capabilityTable.invalidate();
 		} catch (SQLException e) {
 			log.throwing(getClass().getSimpleName(), "showEntity", e);
 		}

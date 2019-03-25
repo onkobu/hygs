@@ -18,7 +18,7 @@ public class HygsFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 
-	HygsFrame createUI() {
+	public HygsFrame createUI() {
 		setLayout(new BorderLayout());
 		final JTabbedPane centerPane = new JTabbedPane();
 		add(centerPane, BorderLayout.CENTER);

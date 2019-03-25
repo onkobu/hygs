@@ -4,10 +4,13 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.oftik.hygs.query.company.Company;
+import de.oftik.hygs.query.company.CompanyDAO;
+import de.oftik.hygs.query.project.AssignedCapabilityDAO;
+import de.oftik.hygs.query.project.Project;
+import de.oftik.hygs.query.project.ProjectDAO;
 import de.oftik.hygs.ui.ApplicationContext;
 import de.oftik.hygs.ui.EntityListPanel;
-import de.oftik.hygs.ui.company.Company;
-import de.oftik.hygs.ui.company.CompanyDAO;
 
 public class ProjectPanel extends EntityListPanel<Project> implements CompanyCache {
 	private final CompanyDAO companyDao;

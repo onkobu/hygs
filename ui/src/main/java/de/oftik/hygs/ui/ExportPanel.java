@@ -14,7 +14,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
-import de.oftik.hygs.ui.orm.QueryStatistics;
+import de.oftik.hygs.query.QueryStatistics;
 import de.oftik.hygs.ui.prjmon.ProjectMonthsExporter;
 import de.oftik.kehys.keijukainen.function.EitherOr;
 import de.oftik.kehys.keijukainen.function.Pair;

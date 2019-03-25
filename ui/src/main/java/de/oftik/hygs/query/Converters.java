@@ -1,4 +1,4 @@
-package de.oftik.hygs.ui.orm;
+package de.oftik.hygs.query;
 
 import java.time.LocalDate;
 import java.time.ZoneId;

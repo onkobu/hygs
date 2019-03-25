@@ -1,11 +1,11 @@
-package de.oftik.hygs.ui.prjmon;
+package de.oftik.hygs.query.prjmon;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import de.oftik.hygs.query.DAO;
+import de.oftik.hygs.query.Table;
 import de.oftik.hygs.ui.ApplicationContext;
-import de.oftik.hygs.ui.orm.DAO;
-import de.oftik.hygs.ui.orm.Table;
 
 public class ProjectMonthsDAO extends DAO<ProjectMonth> {
 
@@ -15,7 +15,7 @@ public class ProjectMonthsDAO extends DAO<ProjectMonth> {
 
 	@Override
 	protected ProjectMonth map(ResultSet rs) throws SQLException {
-		return ProjectMonthColumn.to(rs, new ProjectMonth());
+		return ProjectMonthColumn.to(rs);
 	}
 
 }

@@ -1,13 +1,14 @@
-package de.oftik.hygs.ui.cap;
+package de.oftik.hygs.query.cap;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import de.oftik.hygs.query.DAO;
+import de.oftik.hygs.query.Table;
 import de.oftik.hygs.ui.ApplicationContext;
-import de.oftik.hygs.ui.orm.DAO;
-import de.oftik.hygs.ui.orm.Table;
+import de.oftik.hygs.ui.cap.Category;
 
 public class CapabilityDAO extends DAO<Capability> {
 	public CapabilityDAO(ApplicationContext context) {
@@ -16,7 +17,7 @@ public class CapabilityDAO extends DAO<Capability> {
 
 	@Override
 	protected Capability map(ResultSet rs) throws SQLException {
-		return CapabilityColumn.to(rs, new Capability());
+		return CapabilityColumn.to(rs);
 	}
 
 	public List<Capability> findByCategory(Category g) throws SQLException {

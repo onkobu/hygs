@@ -9,6 +9,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
+import de.oftik.hygs.query.cap.Capability;
+import de.oftik.hygs.query.cap.CapabilityDAO;
 import de.oftik.hygs.ui.ApplicationContext;
 import de.oftik.hygs.ui.GroupedEntityPanel;
 

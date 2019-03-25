@@ -11,18 +11,16 @@ import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 
-import de.oftik.hygs.ui.orm.DAO;
+import de.oftik.hygs.query.DAO;
 
 public abstract class EntityListPanel<T> extends JPanel {
 	private final DefaultListModel<T> listModel = new DefaultListModel<>();
 	private final JList<T> entityList = new JList<>(listModel);
 	private final EntityForm<T> entityForm;
-	private final ApplicationContext applicationContext;
 	private final DAO<T> dao;
 
 	public EntityListPanel(ApplicationContext applicationContext, DAO<T> dao, EntityForm<T> form,
 			ListCellRenderer<T> cellRenderer) {
-		this.applicationContext = applicationContext;
 		this.entityForm = form;
 		this.dao = dao;
 		entityList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

@@ -1,4 +1,4 @@
-package de.oftik.hygs.ui.orm;
+package de.oftik.hygs.query;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -45,7 +45,7 @@ public abstract class DAO<T> {
 		return DriverManager.getConnection("jdbc:sqlite:" + context.dbPath());
 	}
 
-	protected final List<T> findBy(Connection conn, Column condition, Object value) throws SQLException {
+	protected final List<T> findBy(Connection conn, Column<T> condition, Object value) throws SQLException {
 		final PreparedStatement stmt = conn
 				.prepareStatement("SELECT * FROM " + table.name() + " WHERE " + condition.name() + " = ?");
 		stmt.setObject(1, value);

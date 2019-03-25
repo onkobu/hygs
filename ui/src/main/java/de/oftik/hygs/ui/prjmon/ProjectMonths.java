@@ -5,6 +5,8 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import de.oftik.hygs.query.prjmon.ProjectMonth;
+
 @XmlRootElement
 public class ProjectMonths {
 	private List<ProjectMonth> months;

@@ -1,4 +1,4 @@
-package de.oftik.hygs.ui.prjmon;
+package de.oftik.hygs.query.prjmon;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -9,16 +9,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ProjectMonth {
 	@XmlAttribute
-	private long id;
+	private final long id;
 
 	@XmlAttribute
-	private String projectName;
+	private final String projectName;
 
 	@XmlAttribute
-	private int months;
+	private final int months;
 
 	public ProjectMonth() {
-		super();
+		throw new UnsupportedOperationException("Utterwise JAX-B whines like likkel gjal");
 	}
 
 	public ProjectMonth(long id, String projectName, int months) {
@@ -32,23 +32,11 @@ public class ProjectMonth {
 		return id;
 	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
-
 	public String getProjectName() {
 		return projectName;
 	}
 
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
-
 	public int getMonths() {
 		return months;
-	}
-
-	public void setMonths(int months) {
-		this.months = months;
 	}
 }

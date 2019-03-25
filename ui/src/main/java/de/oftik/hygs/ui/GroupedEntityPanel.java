@@ -18,8 +18,8 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
-import de.oftik.hygs.ui.orm.DAO;
-import de.oftik.hygs.ui.orm.Identifiable;
+import de.oftik.hygs.query.DAO;
+import de.oftik.hygs.query.Identifiable;
 
 public abstract class GroupedEntityPanel<G extends Identifiable, E> extends JPanel {
 	private static final Logger log = Logger.getLogger(GroupedEntityPanel.class.getName());
@@ -29,7 +29,6 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E> extends JPan
 	private final JTree tree = new JTree(treeModel);
 	private final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 	private final GroupedEntityForm<G, E> entityForm;
-	private final ApplicationContext applicationContext;
 	private final DAO<G> groupDao;
 	private final DAO<E> entityDao;
 
@@ -37,7 +36,6 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E> extends JPan
 
 	public GroupedEntityPanel(ApplicationContext context, DAO<G> groupDao, DAO<E> entityDao,
 			GroupedEntityForm<G, E> entityForm, TreeCellRenderer renderer) {
-		this.applicationContext = context;
 		this.groupDao = groupDao;
 		this.entityDao = entityDao;
 		this.entityForm = entityForm;

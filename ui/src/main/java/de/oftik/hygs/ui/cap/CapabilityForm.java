@@ -10,6 +10,7 @@ import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 
+import de.oftik.hygs.query.cap.Capability;
 import de.oftik.hygs.ui.GroupedEntityForm;
 import de.oftik.hygs.ui.I18N;
 import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;

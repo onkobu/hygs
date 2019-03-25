@@ -1,4 +1,4 @@
-package de.oftik.hygs.ui.orm;
+package de.oftik.hygs.query;
 
 public interface Identifiable {
 	long getId();

@@ -4,6 +4,7 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JTextField;
 
+import de.oftik.hygs.query.company.Company;
 import de.oftik.hygs.ui.EntityForm;
 import de.oftik.hygs.ui.I18N;
 import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;

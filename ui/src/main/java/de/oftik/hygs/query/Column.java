@@ -1,4 +1,4 @@
-package de.oftik.hygs.ui.orm;
+package de.oftik.hygs.query;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -7,8 +7,6 @@ import java.time.LocalDate;
 
 public interface Column<T> {
 	String name();
-
-	void toPojo(ResultSet rs, T t) throws SQLException;
 
 	default LocalDate asLocalDate(ResultSet rs) throws SQLException {
 		final Date value = rs.getDate(name());

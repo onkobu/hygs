@@ -1,11 +1,11 @@
-package de.oftik.hygs.ui.project;
+package de.oftik.hygs.query.project;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import de.oftik.hygs.query.DAO;
+import de.oftik.hygs.query.Table;
 import de.oftik.hygs.ui.ApplicationContext;
-import de.oftik.hygs.ui.orm.DAO;
-import de.oftik.hygs.ui.orm.Table;
 
 public class ProjectDAO extends DAO<Project> {
 	public ProjectDAO(ApplicationContext context) {
@@ -14,6 +14,6 @@ public class ProjectDAO extends DAO<Project> {
 
 	@Override
 	protected Project map(ResultSet rs) throws SQLException {
-		return ProjectColumn.to(rs, new Project());
+		return ProjectColumn.to(rs);
 	}
 }

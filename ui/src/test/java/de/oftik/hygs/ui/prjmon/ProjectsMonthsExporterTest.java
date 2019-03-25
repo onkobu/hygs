@@ -14,6 +14,8 @@ import java.util.function.Consumer;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
+import de.oftik.hygs.query.prjmon.ProjectMonth;
+import de.oftik.hygs.query.prjmon.ProjectMonthsDAO;
 import de.oftik.hygs.ui.ExportError;
 
 public class ProjectsMonthsExporterTest {
@@ -30,13 +32,19 @@ public class ProjectsMonthsExporterTest {
 
 	@Test
 	public void writeSingleEmptyEntity() throws Exception {
-		final ProjectMonthsDAOFixture dao = new ProjectMonthsDAOFixture(Arrays.asList(new ProjectMonth()));
+		final int id = 17;
+		final String name = "prjName";
+		final int months = 7;
+		final ProjectMonthsDAOFixture dao = new ProjectMonthsDAOFixture(
+				Arrays.asList(new ProjectMonth(id, name, months)));
 		final StringWriter sw = new StringWriter();
 		final ArrayList<ExportError> errs = new ArrayList<>();
 		new ProjectMonthsExporter(dao).marshal("UTF-8", errs, sw);
 
-		assertThat(sw.toString(), equalTo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
-				+ "<prj-mons><projectMonth id=\"0\" months=\"0\"></projectMonth>\r\n" + "</prj-mons>\r\n"));
+		assertThat(sw.toString(),
+				equalTo("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + "<prj-mons><projectMonth id=\"" + id
+						+ "\" projectName=\"" + name + "\" months=\"" + months + "\"></projectMonth>\r\n"
+						+ "</prj-mons>\r\n"));
 		assertThat(errs, Matchers.empty());
 	}
 

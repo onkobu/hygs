@@ -1,25 +1,24 @@
 package de.oftik.hygs.ui.cap;
 
-import de.oftik.hygs.ui.orm.Identifiable;
+import de.oftik.hygs.query.Identifiable;
 
 public class Category implements Identifiable {
-	private long id;
+	private final long id;
 
-	private String name;
+	private final String name;
 
+	public Category(long id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+
+	@Override
 	public long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
-
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 }

@@ -11,7 +11,9 @@
 		<surefire.version>3.0.0-M3</surefire.version>
 		<junit.version>4.12</junit.version>
 		<hamcrest.version>1.3</hamcrest.version>
-
+		<sqlite.version>3.27.2</sqlite.version>
+		<keijukainen.version>1.0.4-SNAPSHOT</keijukainen.version>
+		<pmd.version>3.11.0</pmd.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -28,14 +30,14 @@
 		<dependency>
 			<groupId>de.oftik</groupId>
 			<artifactId>keijukainen</artifactId>
-			<version>1.0.3</version>
+			<version>${keijukainen.version}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
 		<dependency>
 			<groupId>org.xerial</groupId>
 			<artifactId>sqlite-jdbc</artifactId>
-			<version>3.27.2</version>
+			<version>${sqlite.version}</version>
 		</dependency>
 
 
@@ -116,7 +118,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
-				<version>3.11.0</version>
+				<version>${pmd.version}</version>
 			</plugin>
 		</plugins>
 	</build>
