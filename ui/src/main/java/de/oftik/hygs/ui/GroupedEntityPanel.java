@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
@@ -18,6 +20,8 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
+import de.oftik.hygs.cmd.CommandBroker;
+import de.oftik.hygs.cmd.Notification;
 import de.oftik.hygs.query.DAO;
 import de.oftik.hygs.query.Identifiable;
 
@@ -34,8 +38,11 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E> extends JPan
 
 	private final Map<Long, DefaultMutableTreeNode> groupMap = new HashMap<>();
 
+	private final ApplicationContext applicationContext;
+
 	public GroupedEntityPanel(ApplicationContext context, DAO<G> groupDao, DAO<E> entityDao,
 			GroupedEntityForm<G, E> entityForm, TreeCellRenderer renderer) {
+		this.applicationContext = context;
 		this.groupDao = groupDao;
 		this.entityDao = entityDao;
 		this.entityForm = entityForm;
@@ -47,6 +54,10 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E> extends JPan
 
 	private void nodeSelected(TreeSelectionEvent evt) {
 		final TreePath sp = tree.getSelectionPath();
+		if (sp == null) {
+			selectionCleared();
+			return;
+		}
 		final DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) sp.getLastPathComponent();
 		if (isGroupNode(selNode)) {
 			groupSelected((G) selNode.getUserObject());
@@ -70,10 +81,18 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E> extends JPan
 		entityForm.showEntity(g, e);
 	}
 
+	protected void selectionCleared() {
+		entityForm.clearEntity();
+	}
+
 	protected abstract List<E> loadForGroup(G g) throws SQLException;
 
 	protected DAO<E> entityDao() {
 		return entityDao;
+	}
+
+	protected CommandBroker broker() {
+		return applicationContext.getBroker();
 	}
 
 	private void createUI() {
@@ -83,21 +102,55 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E> extends JPan
 		add(splitPane, BorderLayout.CENTER);
 	}
 
+	protected void refreshGroupIds(Notification notification) {
+		notification.getIds().forEach((id) -> {
+			try {
+				Optional<G> optG = groupDao.findById(id);
+				if (optG.isPresent()) {
+					addOrReplace(optG.get());
+				} else {
+					delete(optG.get());
+				}
+			} catch (SQLException e) {
+				log.log(Level.SEVERE, "refreshGroupIds", e);
+			}
+		});
+		treeModel.nodeStructureChanged(root);
+		entityForm.setGroups(extractGroups());
+	}
+
+	private List<G> extractGroups() {
+		final List<G> groups = new ArrayList<>();
+		for (int i = 0; i < root.getChildCount(); i++) {
+			groups.add((G) ((DefaultMutableTreeNode) root.getChildAt(i)).getUserObject());
+		}
+		return groups;
+	}
+
+	private void addOrReplace(G g) {
+		final DefaultMutableTreeNode existing = groupMap.get(g.getId());
+		if (existing == null) {
+			registerGroup(toGroupNode(g));
+		}
+	}
+
+	private void delete(G g) {
+		throw new UnsupportedOperationException("Not ready yet");
+	}
+
 	private void fillTree() {
 		final List<G> groups = new ArrayList<>();
 		try {
 			groupDao.consumeAll((g) -> {
-				final DefaultMutableTreeNode tn = new DefaultMutableTreeNode();
-				tn.setUserObject(g);
+				final DefaultMutableTreeNode tn = toGroupNode(g);
 				groups.add(g);
-				root.add(tn);
+				registerGroup(tn);
 				List<E> entities = null;
 				try {
 					entities = loadForGroup(g);
 				} catch (SQLException e) {
 					log.throwing(GroupedEntityPanel.class.getSimpleName(), "fillTree", e);
 				}
-				groupMap.put(g.getId(), tn);
 				if (entities == null || entities.isEmpty()) {
 					return;
 				}
@@ -108,6 +161,17 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E> extends JPan
 		}
 		treeModel.nodeStructureChanged(root);
 		entityForm.setGroups(groups);
+	}
+
+	protected DefaultMutableTreeNode registerGroup(final DefaultMutableTreeNode tn) {
+		root.add(tn);
+		return groupMap.put(((G) tn.getUserObject()).getId(), tn);
+	}
+
+	protected DefaultMutableTreeNode toGroupNode(G g) {
+		final DefaultMutableTreeNode tn = new DefaultMutableTreeNode();
+		tn.setUserObject(g);
+		return tn;
 	}
 
 	private static DefaultMutableTreeNode toNode(Object obj) {

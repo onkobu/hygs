@@ -35,7 +35,13 @@ public enum I18N {
 
 	CATEGORY,
 
-	WEIGHT;
+	WEIGHT,
+
+	CREATE_CATEGORY,
+
+	DLG_ERROR,
+
+	DLG_INFO;
 
 	public String title() {
 		return getBundle().getString(name() + ".title");

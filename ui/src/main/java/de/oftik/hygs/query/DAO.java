@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
@@ -30,6 +31,19 @@ public abstract class DAO<T> {
 		return resultList;
 	}
 
+	public Optional<T> findById(Long id) throws SQLException {
+		try (Connection conn = createConnection();) {
+			final Statement statement = conn.createStatement();
+			statement.setQueryTimeout(30);
+			final ResultSet rs = statement
+					.executeQuery("SELECT * FROM " + table.name() + " WHERE " + getPkColumn() + " = " + id + ";");
+			if (rs.next()) {
+				return Optional.of(map(rs));
+			}
+			return Optional.empty();
+		}
+	}
+
 	public void consumeAll(Consumer<T> consumer) throws SQLException {
 		try (Connection conn = createConnection();) {
 			final Statement statement = conn.createStatement();
@@ -40,6 +54,8 @@ public abstract class DAO<T> {
 			}
 		}
 	}
+
+	protected abstract Column getPkColumn();
 
 	protected final Connection createConnection() throws SQLException {
 		return DriverManager.getConnection("jdbc:sqlite:" + context.dbPath());

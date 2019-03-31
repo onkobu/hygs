@@ -1,7 +1,9 @@
 package de.oftik.hygs.ui;
 
 import java.awt.GridBagLayout;
+import java.util.function.Supplier;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -12,10 +14,14 @@ import javax.swing.JTextField;
 
 import org.jdatepicker.impl.JDatePickerImpl;
 
+import de.oftik.hygs.cmd.CommandBroker;
 import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
 
 public class FormPanel extends JPanel {
-	public FormPanel() {
+	private final Supplier<CommandBroker> brokerSupplier;
+
+	public FormPanel(Supplier<CommandBroker> brokerSupplier) {
+		this.brokerSupplier = brokerSupplier;
 		setLayout(new GridBagLayout());
 	}
 
@@ -28,6 +34,12 @@ public class FormPanel extends JPanel {
 	protected void addShortTextField(I18N label, JTextField field, GridBagConstraintFactory gbc) {
 		addLabel(label, gbc);
 		add(field, gbc.nextColumn().fillHorizontal().weightx(0.3).end());
+	}
+
+	protected void addButton(I18N label, ButtonCallback callback, GridBagConstraintFactory gbc) {
+		final JButton button = new JButton(label.label());
+		button.addActionListener((evt) -> callback.buttonPressed());
+		add(button, gbc.end());
 	}
 
 	protected void addLargeTextField(I18N label, JTextField field, GridBagConstraintFactory gbc) {
@@ -62,5 +74,9 @@ public class FormPanel extends JPanel {
 	protected void add(I18N label, JTable table, GridBagConstraintFactory gbc) {
 		addLabel(label, gbc);
 		add(new JScrollPane(table), gbc.nextRow().fillBoth().remainderX().remainderY().weightx(1.0).weighty(1.0).end());
+	}
+
+	protected CommandBroker broker() {
+		return brokerSupplier.get();
 	}
 }

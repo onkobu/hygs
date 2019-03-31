@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import de.oftik.hygs.query.Column;
 import de.oftik.hygs.query.DAO;
 import de.oftik.hygs.query.Table;
 import de.oftik.hygs.ui.ApplicationContext;
@@ -24,5 +25,10 @@ public class CapabilityDAO extends DAO<Capability> {
 		try (Connection conn = createConnection()) {
 			return super.findBy(conn, CapabilityColumn.cap_category, g.getId());
 		}
+	}
+
+	@Override
+	protected Column getPkColumn() {
+		return CapabilityColumn.cap_id;
 	}
 }

@@ -8,7 +8,8 @@ import de.oftik.hygs.ui.EntityListPanel;
 public class CompanyPanel extends EntityListPanel<Company> {
 
 	public CompanyPanel(ApplicationContext applicationContext) {
-		super(applicationContext, new CompanyDAO(applicationContext), new CompanyForm(), new CompanyCellRenderer());
+		super(applicationContext, new CompanyDAO(applicationContext), new CompanyForm(applicationContext::getBroker),
+				new CompanyCellRenderer());
 	}
 
 }

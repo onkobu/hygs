@@ -17,7 +17,8 @@ public class ProjectPanel extends EntityListPanel<Project> implements CompanyCac
 	private final Map<Long, Company> companyCache = new HashMap<>();
 
 	public ProjectPanel(ApplicationContext applicationContext) {
-		super(applicationContext, new ProjectDAO(applicationContext), new ProjectForm(), new ProjectCellRenderer());
+		super(applicationContext, new ProjectDAO(applicationContext), new ProjectForm(applicationContext::getBroker),
+				new ProjectCellRenderer());
 		this.companyDao = new CompanyDAO(applicationContext);
 		try {
 			companyDao.consumeAll((cmp) -> companyCache.put(cmp.getId(), cmp));

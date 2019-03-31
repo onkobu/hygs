@@ -9,6 +9,10 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
+import de.oftik.hygs.cmd.CommandTarget;
+import de.oftik.hygs.cmd.CommandTargetDefinition;
+import de.oftik.hygs.cmd.Notification;
+import de.oftik.hygs.cmd.NotificationListener;
 import de.oftik.hygs.query.cap.Capability;
 import de.oftik.hygs.query.cap.CapabilityDAO;
 import de.oftik.hygs.ui.ApplicationContext;
@@ -43,8 +47,24 @@ public class CapabilityPanel extends GroupedEntityPanel<Category, Capability> {
 	}
 
 	public CapabilityPanel(ApplicationContext context) {
-		super(context, new CategoryDAO(context), new CapabilityDAO(context), new CapabilityForm(),
+		super(context, new CategoryDAO(context), new CapabilityDAO(context), new CapabilityForm(context::getBroker),
 				new CapabilityTreeCellRenderer());
+		broker().registerListener(new NotificationListener() {
+			@Override
+			public CommandTarget target() {
+				return CommandTargetDefinition.category;
+			}
+
+			@Override
+			public void onEnqueueError(Notification notification) {
+				// FormPanel will handle this
+			}
+
+			@Override
+			public void onSuccess(Notification notification) {
+				refreshGroupIds(notification);
+			}
+		});
 	}
 
 	@Override

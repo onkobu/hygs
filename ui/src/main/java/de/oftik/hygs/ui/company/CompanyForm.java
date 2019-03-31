@@ -1,9 +1,11 @@
 package de.oftik.hygs.ui.company;
 
 import java.awt.GridBagLayout;
+import java.util.function.Supplier;
 
 import javax.swing.JTextField;
 
+import de.oftik.hygs.cmd.CommandBroker;
 import de.oftik.hygs.query.company.Company;
 import de.oftik.hygs.ui.EntityForm;
 import de.oftik.hygs.ui.I18N;
@@ -16,7 +18,8 @@ public class CompanyForm extends EntityForm<Company> {
 	private final JTextField cityField = new JTextField();
 	private final JTextField zipField = new JTextField();
 
-	public CompanyForm() {
+	public CompanyForm(Supplier<CommandBroker> brokerSupplier) {
+		super(brokerSupplier);
 		createUI();
 	}
 

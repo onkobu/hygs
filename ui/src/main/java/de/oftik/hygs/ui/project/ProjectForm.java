@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 import javax.swing.JTable;
@@ -16,6 +17,7 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+import de.oftik.hygs.cmd.CommandBroker;
 import de.oftik.hygs.query.Converters;
 import de.oftik.hygs.query.project.AssignedCapability;
 import de.oftik.hygs.query.project.AssignedCapabilityDAO;
@@ -50,7 +52,8 @@ public class ProjectForm extends EntityForm<Project> {
 			createDescription(identifiers[1], String.class, AssignedCapability::getVersion),
 			createDescription(identifiers[2], Integer.TYPE, AssignedCapability::getWeight));
 
-	public ProjectForm() {
+	public ProjectForm(Supplier<CommandBroker> brokerSupplier) {
+		super(brokerSupplier);
 		capabilityTable.setModel(tableModel);
 		createUI();
 	}
