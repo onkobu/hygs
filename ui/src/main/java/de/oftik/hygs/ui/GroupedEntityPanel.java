@@ -25,12 +25,22 @@ import de.oftik.hygs.cmd.Notification;
 import de.oftik.hygs.query.DAO;
 import de.oftik.hygs.query.Identifiable;
 
-public abstract class GroupedEntityPanel<G extends Identifiable, E> extends JPanel {
+/**
+ * A panel with a tree-like structure on one side, grouping entities. Next to it
+ * a form shows details of a selected entity.
+ * 
+ * @author onkobu
+ *
+ * @param <G>
+ * @param <E>
+ */
+public abstract class GroupedEntityPanel<G extends Identifiable, E> extends JPanel
+		implements ApplicationContextListener {
 	private static final Logger log = Logger.getLogger(GroupedEntityPanel.class.getName());
 
-	private final DefaultMutableTreeNode root = new DefaultMutableTreeNode();
-	private final DefaultTreeModel treeModel = new DefaultTreeModel(root);
-	private final JTree tree = new JTree(treeModel);
+	private final DefaultMutableTreeNode root;
+	private final DefaultTreeModel treeModel;
+	private final JTree tree;
 	private final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 	private final GroupedEntityForm<G, E> entityForm;
 	private final DAO<G> groupDao;
@@ -40,14 +50,18 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E> extends JPan
 
 	private final ApplicationContext applicationContext;
 
-	public GroupedEntityPanel(ApplicationContext context, DAO<G> groupDao, DAO<E> entityDao,
+	public GroupedEntityPanel(ApplicationContext context, I18N rootTitle, DAO<G> groupDao, DAO<E> entityDao,
 			GroupedEntityForm<G, E> entityForm, TreeCellRenderer renderer) {
 		this.applicationContext = context;
 		this.groupDao = groupDao;
 		this.entityDao = entityDao;
 		this.entityForm = entityForm;
+		this.root = new DefaultMutableTreeNode(rootTitle.label());
+		this.treeModel = new DefaultTreeModel(root);
+		this.tree = new JTree(treeModel);
 		tree.setCellRenderer(renderer);
 		tree.addTreeSelectionListener(this::nodeSelected);
+		context.addListener(this);
 		createUI();
 		fillTree();
 	}
@@ -67,6 +81,15 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E> extends JPan
 		if (isEntityNode(selNode)) {
 			entitySelected((G) ((DefaultMutableTreeNode) selNode.getParent()).getUserObject(),
 					(E) selNode.getUserObject());
+		}
+	}
+
+	@Override
+	public void onEvent(ContextEvent e) {
+		switch (e.getEventType()) {
+		case RELOAD_DATABASE:
+			fillTree();
+			break;
 		}
 	}
 

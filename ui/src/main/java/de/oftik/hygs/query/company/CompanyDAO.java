@@ -20,7 +20,7 @@ public class CompanyDAO extends DAO<Company> {
 	}
 
 	@Override
-	protected Column getPkColumn() {
+	protected Column<?> getPkColumn() {
 		return CompanyColumn.cmp_id;
 	}
 }

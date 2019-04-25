@@ -17,6 +17,7 @@ import de.oftik.hygs.query.cap.Capability;
 import de.oftik.hygs.query.cap.CapabilityDAO;
 import de.oftik.hygs.ui.ApplicationContext;
 import de.oftik.hygs.ui.GroupedEntityPanel;
+import de.oftik.hygs.ui.I18N;
 
 public class CapabilityPanel extends GroupedEntityPanel<Category, Capability> {
 	static class CapabilityTreeCellRenderer implements TreeCellRenderer {
@@ -47,8 +48,8 @@ public class CapabilityPanel extends GroupedEntityPanel<Category, Capability> {
 	}
 
 	public CapabilityPanel(ApplicationContext context) {
-		super(context, new CategoryDAO(context), new CapabilityDAO(context), new CapabilityForm(context::getBroker),
-				new CapabilityTreeCellRenderer());
+		super(context, I18N.CATEGORY, new CategoryDAO(context), new CapabilityDAO(context),
+				new CapabilityForm(context::getBroker), new CapabilityTreeCellRenderer());
 		broker().registerListener(new NotificationListener() {
 			@Override
 			public CommandTarget target() {

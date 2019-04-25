@@ -5,7 +5,10 @@ import java.util.function.Supplier;
 
 import javax.swing.JTextField;
 
+import de.oftik.hygs.cmd.Command;
 import de.oftik.hygs.cmd.CommandBroker;
+import de.oftik.hygs.cmd.company.CreateCompanyCmd;
+import de.oftik.hygs.cmd.company.SaveCompanyCmd;
 import de.oftik.hygs.query.company.Company;
 import de.oftik.hygs.ui.EntityForm;
 import de.oftik.hygs.ui.I18N;
@@ -41,6 +44,18 @@ public class CompanyForm extends EntityForm<Company> {
 		add(cityField, gbc.nextColumn().end());
 		addLabel(I18N.ZIP, gbc.nextColumn());
 		add(zipField, gbc.nextColumn().remainderX().end());
+	}
+
+	@Override
+	public Command createEntityCommand() {
+		return new CreateCompanyCmd(nameField.getText(), streetField.getText(), cityField.getText(),
+				zipField.getText());
+	}
+
+	@Override
+	public Command saveEntityCommand() {
+		return new SaveCompanyCmd(Long.parseLong(idField.getText()), nameField.getText(), streetField.getText(),
+				cityField.getText(), zipField.getText());
 	}
 
 	@Override

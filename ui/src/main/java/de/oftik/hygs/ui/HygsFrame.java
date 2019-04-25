@@ -2,6 +2,7 @@ package de.oftik.hygs.ui;
 
 import java.awt.BorderLayout;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
@@ -28,5 +29,16 @@ public class HygsFrame extends JFrame {
 		centerPane.add(I18N.CAPABILITY.title(), new CapabilityPanel(applicationContext));
 		centerPane.add(I18N.EXPORT.title(), new ExportPanel(applicationContext));
 		return this;
+	}
+
+	public void startContext() {
+		if (applicationContext.hasDatabase()) {
+			return;
+		}
+		final JFileChooser jfc = new JFileChooser(System.getProperty("user.home"));
+		int result;
+		while ((result = jfc.showOpenDialog(this)) != JFileChooser.APPROVE_OPTION) {
+		}
+		applicationContext.reInit(jfc.getSelectedFile());
 	}
 }

@@ -12,7 +12,7 @@
 		<junit.version>4.12</junit.version>
 		<hamcrest.version>1.3</hamcrest.version>
 		<sqlite.version>3.27.2</sqlite.version>
-		<keijukainen.version>1.0.4-SNAPSHOT</keijukainen.version>
+		<kehys.version>1.0.4-SNAPSHOT</kehys.version>
 		<pmd.version>3.11.0</pmd.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -30,8 +30,14 @@
 		<dependency>
 			<groupId>de.oftik</groupId>
 			<artifactId>keijukainen</artifactId>
-			<version>${keijukainen.version}</version>
+			<version>${kehys.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>de.oftik</groupId>
+			<artifactId>lippu</artifactId>
+			<version>${kehys.version}</version>
+		</dependency>
+
 
 		<!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
 		<dependency>

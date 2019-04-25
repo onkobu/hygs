@@ -41,7 +41,15 @@ public enum I18N {
 
 	DLG_ERROR,
 
-	DLG_INFO;
+	DLG_INFO,
+
+	SAVE_CHANGES,
+
+	NEW_ENTITY,
+
+	OK,
+
+	CANCEL;
 
 	public String title() {
 		return getBundle().getString(name() + ".title");

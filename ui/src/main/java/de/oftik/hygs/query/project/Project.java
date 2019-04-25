@@ -2,7 +2,9 @@ package de.oftik.hygs.query.project;
 
 import java.time.LocalDate;
 
-public class Project {
+import de.oftik.hygs.query.Identifiable;
+
+public class Project implements Identifiable {
 	private final long id;
 	private final String name;
 	private final LocalDate from;

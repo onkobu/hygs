@@ -1,14 +1,18 @@
 package de.oftik.hygs.ui.cap;
 
 import java.awt.Component;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.function.Supplier;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 
@@ -19,6 +23,7 @@ import de.oftik.hygs.cmd.Notification;
 import de.oftik.hygs.cmd.NotificationListener;
 import de.oftik.hygs.cmd.cat.CreateCategoryCmd;
 import de.oftik.hygs.query.cap.Capability;
+import de.oftik.hygs.ui.ComponentFactory;
 import de.oftik.hygs.ui.GroupedEntityForm;
 import de.oftik.hygs.ui.I18N;
 import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
@@ -39,8 +44,9 @@ public class CapabilityForm extends GroupedEntityForm<Category, Capability> {
 		@Override
 		public Component getListCellRendererComponent(JList<? extends Category> list, Category value, int index,
 				boolean isSelected, boolean cellHasFocus) {
-			return rendererDelegate.getListCellRendererComponent(list, value.getName(), index, isSelected,
-					cellHasFocus);
+			return value == null ? new JLabel()
+					: rendererDelegate.getListCellRendererComponent(list, value.getName(), index, isSelected,
+							cellHasFocus);
 		}
 	}
 
@@ -77,7 +83,10 @@ public class CapabilityForm extends GroupedEntityForm<Category, Capability> {
 
 		add(I18N.CATEGORY, categories, gbc.nextRow());
 
-		addButton(I18N.CREATE_CATEGORY, this::createCategory, gbc.nextRow());
+		final JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new GridLayout(1, 8));
+		buttonPanel.add(ComponentFactory.createButton(I18N.CREATE_CATEGORY, this::createCategory));
+		add(buttonPanel, gbc.nextRow().remainderX().end());
 	}
 
 	@Override
@@ -96,7 +105,7 @@ public class CapabilityForm extends GroupedEntityForm<Category, Capability> {
 		categories.setSelectedIndex(-1);
 	}
 
-	public void createCategory() {
+	public void createCategory(ActionEvent event) {
 		final String catName = JOptionPane.showInputDialog(this, I18N.CATEGORY.label());
 		if (catName == null || catName.trim().length() == 0) {
 			return;

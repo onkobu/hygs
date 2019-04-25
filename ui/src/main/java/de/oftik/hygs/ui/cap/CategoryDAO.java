@@ -19,7 +19,7 @@ public class CategoryDAO extends DAO<Category> {
 	}
 
 	@Override
-	protected Column getPkColumn() {
+	protected Column<?> getPkColumn() {
 		return CategoryColumn.cat_id;
 	}
 

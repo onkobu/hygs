@@ -1,6 +1,8 @@
 package de.oftik.hygs.query.company;
 
-public class Company {
+import de.oftik.hygs.query.Identifiable;
+
+public class Company implements Identifiable {
 	private final long id;
 	private final String name;
 	private final String street;

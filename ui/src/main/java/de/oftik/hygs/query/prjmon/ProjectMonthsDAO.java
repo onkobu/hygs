@@ -21,7 +21,7 @@ public class ProjectMonthsDAO extends DAO<ProjectMonth> {
 	}
 
 	@Override
-	protected Column getPkColumn() {
+	protected Column<?> getPkColumn() {
 		return ProjectColumn.prj_id;
 	}
 

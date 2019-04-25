@@ -2,13 +2,23 @@ package de.oftik.hygs.cmd;
 
 import java.util.List;
 
+import de.oftik.kehys.lippu.Immutable;
+
+@Immutable
 public class ErrorNotification implements Notification {
 	private final CommandTarget target;
 	private final EnqueueResult result;
+	private final NotificationType type;
 
-	ErrorNotification(CommandTarget target, EnqueueResult res) {
+	ErrorNotification(NotificationType type, CommandTarget target, EnqueueResult res) {
 		this.target = target;
 		this.result = res;
+		this.type = type;
+	}
+
+	@Override
+	public NotificationType type() {
+		return type;
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+import de.oftik.hygs.cmd.Command;
 import de.oftik.hygs.cmd.CommandBroker;
 import de.oftik.hygs.query.Converters;
 import de.oftik.hygs.query.project.AssignedCapability;
@@ -56,6 +57,18 @@ public class ProjectForm extends EntityForm<Project> {
 		super(brokerSupplier);
 		capabilityTable.setModel(tableModel);
 		createUI();
+	}
+
+	@Override
+	public Command createEntityCommand() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Command saveEntityCommand() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	void setCompanyCache(CompanyCache cc) {

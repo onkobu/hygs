@@ -19,7 +19,7 @@ public class ProjectDAO extends DAO<Project> {
 	}
 
 	@Override
-	protected Column getPkColumn() {
+	protected Column<?> getPkColumn() {
 		return ProjectColumn.prj_id;
 	}
 }

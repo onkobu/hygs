@@ -27,7 +27,7 @@ public class AssignedCapabilityDAO extends DAO<AssignedCapability> {
 	}
 
 	@Override
-	protected Column getPkColumn() {
+	protected Column<?> getPkColumn() {
 		return AssignedCapabilityColumn.cap_id;
 	}
 }
