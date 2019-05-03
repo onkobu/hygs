@@ -8,6 +8,7 @@ import javax.swing.JTextField;
 import de.oftik.hygs.cmd.Command;
 import de.oftik.hygs.cmd.CommandBroker;
 import de.oftik.hygs.cmd.company.CreateCompanyCmd;
+import de.oftik.hygs.cmd.company.DeleteCompanyCmd;
 import de.oftik.hygs.cmd.company.SaveCompanyCmd;
 import de.oftik.hygs.query.company.Company;
 import de.oftik.hygs.ui.EntityForm;
@@ -59,11 +60,25 @@ public class CompanyForm extends EntityForm<Company> {
 	}
 
 	@Override
+	public Command deleteEntityCommand() {
+		return new DeleteCompanyCmd(Long.parseLong(idField.getText()));
+	}
+
+	@Override
 	public void showEntity(Company t) {
 		idField.setText(String.valueOf(t.getId()));
 		nameField.setText(t.getName());
 		streetField.setText(t.getStreet());
 		cityField.setText(t.getCity());
 		zipField.setText(t.getZip());
+	}
+
+	@Override
+	public void blank() {
+		idField.setText(null);
+		nameField.setText(null);
+		streetField.setText(null);
+		cityField.setText(null);
+		zipField.setText(null);
 	}
 }

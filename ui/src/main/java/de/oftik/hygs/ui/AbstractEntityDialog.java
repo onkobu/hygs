@@ -1,4 +1,4 @@
-package de.oftik.hygs.ui.company;
+package de.oftik.hygs.ui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -8,10 +8,6 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-
-import de.oftik.hygs.ui.ComponentFactory;
-import de.oftik.hygs.ui.EntityForm;
-import de.oftik.hygs.ui.I18N;
 
 public class AbstractEntityDialog<T> extends JDialog {
 	public enum Decision {

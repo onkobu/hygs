@@ -23,4 +23,9 @@ public class CategoryDAO extends DAO<Category> {
 		return CategoryColumn.cat_id;
 	}
 
+	@Override
+	protected Column<?> getDeletedColumn() {
+		return CategoryColumn.cat_deleted;
+	}
+
 }

@@ -31,4 +31,10 @@ public interface Command {
 		return conn.prepareStatement("UPDATE " + t.name() + " SET " + colSets + " WHERE " + pkCol.name() + "=?",
 				Statement.RETURN_GENERATED_KEYS);
 	}
+
+	default PreparedStatement delete(Connection conn, Table t, Column<?> pkCol, Column<?> delCol) throws SQLException {
+		return conn.prepareStatement(
+				"UPDATE " + t.name() + " SET " + delCol.name() + "=TRUE WHERE " + pkCol.name() + "=?",
+				Statement.RETURN_GENERATED_KEYS);
+	}
 }

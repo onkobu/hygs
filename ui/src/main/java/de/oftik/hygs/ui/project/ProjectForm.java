@@ -71,6 +71,12 @@ public class ProjectForm extends EntityForm<Project> {
 		return null;
 	}
 
+	@Override
+	public Command deleteEntityCommand() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	void setCompanyCache(CompanyCache cc) {
 		this.companyCache = cc;
 	}
@@ -119,5 +125,16 @@ public class ProjectForm extends EntityForm<Project> {
 		} catch (SQLException e) {
 			log.throwing(getClass().getSimpleName(), "showEntity", e);
 		}
+	}
+
+	@Override
+	public void blank() {
+		idField.setText(null);
+		nameField.setText(null);
+		fromModel.setValue(null);
+		toModel.setValue(null);
+		descriptionArea.setText(null);
+		companyNameField.setText(null);
+		tableModel.clear();
 	}
 }

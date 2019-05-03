@@ -30,4 +30,9 @@ public class AssignedCapabilityDAO extends DAO<AssignedCapability> {
 	protected Column<?> getPkColumn() {
 		return AssignedCapabilityColumn.cap_id;
 	}
+
+	@Override
+	protected Column<?> getDeletedColumn() {
+		throw new UnsupportedOperationException();
+	}
 }

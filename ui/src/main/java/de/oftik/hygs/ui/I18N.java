@@ -49,7 +49,19 @@ public enum I18N {
 
 	OK,
 
-	CANCEL;
+	CANCEL,
+
+	DELETE,
+
+	TRASH,
+
+	ALL_TO_RIGHT,
+
+	ALL_TO_LEFT,
+
+	TO_RIGHT,
+
+	TO_LEFT;
 
 	public String title() {
 		return getBundle().getString(name() + ".title");
@@ -81,5 +93,9 @@ public enum I18N {
 			return rawMsg;
 		}
 		return String.format(rawMsg, params);
+	}
+
+	public String description() {
+		return getBundle().getString(name() + ".description");
 	}
 }

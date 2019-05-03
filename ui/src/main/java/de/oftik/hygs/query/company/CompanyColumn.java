@@ -14,7 +14,9 @@ public enum CompanyColumn implements Column<Company> {
 
 	cmp_city,
 
-	cmp_zip;
+	cmp_zip,
+
+	cmp_deleted;
 
 	public static Company to(ResultSet rs) throws SQLException {
 		return new Company(cmp_id.asLong(rs), cmp_name.asString(rs), cmp_street.asString(rs), cmp_city.asString(rs),

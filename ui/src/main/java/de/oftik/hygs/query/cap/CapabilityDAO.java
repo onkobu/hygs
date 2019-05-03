@@ -31,4 +31,9 @@ public class CapabilityDAO extends DAO<Capability> {
 	protected Column<?> getPkColumn() {
 		return CapabilityColumn.cap_id;
 	}
+
+	@Override
+	protected Column<?> getDeletedColumn() {
+		return CapabilityColumn.cap_deleted;
+	}
 }

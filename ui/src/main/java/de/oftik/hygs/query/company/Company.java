@@ -1,8 +1,10 @@
 package de.oftik.hygs.query.company;
 
-import de.oftik.hygs.query.Identifiable;
+import de.oftik.hygs.contract.Identifiable;
+import de.oftik.hygs.contract.MappableToString;
+import de.oftik.hygs.query.Table;
 
-public class Company implements Identifiable {
+public class Company implements Identifiable, MappableToString {
 	private final long id;
 	private final String name;
 	private final String street;
@@ -22,8 +24,14 @@ public class Company implements Identifiable {
 		return name;
 	}
 
+	@Override
 	public long getId() {
 		return id;
+	}
+
+	@Override
+	public String getSource() {
+		return Table.prj_company.name();
 	}
 
 	public String getStreet() {
@@ -36,5 +44,15 @@ public class Company implements Identifiable {
 
 	public String getZip() {
 		return zip;
+	}
+
+	@Override
+	public String toShortString() {
+		return String.format("%s, %s", getName(), getCity());
+	}
+
+	@Override
+	public String toLongString() {
+		return String.format("%s, %s, %s %s", getName(), getStreet(), getZip(), getCity());
 	}
 }

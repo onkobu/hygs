@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -18,9 +19,11 @@ import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 
 import de.oftik.hygs.cmd.CommandBroker;
+import de.oftik.hygs.cmd.CommandTarget;
+import de.oftik.hygs.cmd.Notification;
+import de.oftik.hygs.cmd.NotificationListener;
+import de.oftik.hygs.contract.Identifiable;
 import de.oftik.hygs.query.DAO;
-import de.oftik.hygs.query.Identifiable;
-import de.oftik.hygs.ui.company.EntityCreateDialog;
 
 /**
  * A panel that contains a list of entities and a form next to it. Upon
@@ -37,6 +40,53 @@ public abstract class EntityListPanel<T extends Identifiable> extends JPanel imp
 	private final DAO<T> dao;
 	private final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 	private final ApplicationContext applicationContext;
+	private final JButton newButton;
+	private final JButton saveButton;
+	private final JButton deleteButton;
+
+	/**
+	 * Use this listener to bind to this class' default behavior upon notification.
+	 * 
+	 * @author onkobu
+	 *
+	 * @param <T>
+	 */
+	protected static final class EntityNotificationListener<T extends Identifiable> implements NotificationListener {
+		private final CommandTarget target;
+		private final EntityListPanel<T> reference;
+
+		public EntityNotificationListener(CommandTarget target, EntityListPanel<T> ref) {
+			this.target = target;
+			this.reference = ref;
+		}
+
+		@Override
+		public CommandTarget target() {
+			return target;
+		}
+
+		@Override
+		public void onEnqueueError(Notification notification) {
+			// FormPanel will handle this
+		}
+
+		@Override
+		public void onSuccess(Notification notification) {
+			switch (notification.type()) {
+			case INSERT:
+				reference.onEntityInsert(notification.getIds());
+				break;
+			case UPDATE:
+				reference.onEntityUpdate(notification.getIds());
+				break;
+			case DELETE:
+				reference.onEntityDelete(notification.getIds());
+				break;
+			default:
+
+			}
+		}
+	}
 
 	public EntityListPanel(ApplicationContext context, DAO<T> dao, ListCellRenderer<T> cellRenderer) {
 		this.applicationContext = context;
@@ -48,6 +98,11 @@ public abstract class EntityListPanel<T extends Identifiable> extends JPanel imp
 			showEntity(entityList.getSelectedValue());
 		});
 		context.addListener(this);
+		newButton = createButton(I18N.NEW_ENTITY, this::createEntity);
+		saveButton = createButton(I18N.SAVE_CHANGES, this::saveEntity);
+		deleteButton = createButton(I18N.DELETE, this::deleteEntity);
+		saveButton.setEnabled(false);
+		deleteButton.setEnabled(false);
 		createUI();
 		fillList();
 	}
@@ -66,6 +121,11 @@ public abstract class EntityListPanel<T extends Identifiable> extends JPanel imp
 		selectById(ids.get(0));
 	}
 
+	public void onEntityDelete(List<Long> ids) {
+		fillList();
+		deleteSelection();
+	}
+
 	public void selectById(Long id) {
 		for (int i = 0; i < listModel.getSize(); i++) {
 			if (listModel.get(i).getId() == id.longValue()) {
@@ -75,8 +135,16 @@ public abstract class EntityListPanel<T extends Identifiable> extends JPanel imp
 		}
 	}
 
+	public void deleteSelection() {
+
+	}
+
 	public void saveEntity(ActionEvent evt) {
 		entityForm.saveEntity();
+	}
+
+	public void deleteEntity(ActionEvent evt) {
+		entityForm.deleteEntity();
 	}
 
 	public EntityCreateDialog<T> wrapFormAsCreateDialog() {
@@ -98,17 +166,23 @@ public abstract class EntityListPanel<T extends Identifiable> extends JPanel imp
 	protected final JPanel createActionPanel() {
 		final JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout(FlowLayout.TRAILING));
-		panel.add(createButton(I18N.NEW_ENTITY, this::createEntity));
-		panel.add(createButton(I18N.SAVE_CHANGES, this::saveEntity));
+		panel.add(newButton);
+		panel.add(saveButton);
+		panel.add(deleteButton);
 		return panel;
 	}
 
 	private void showEntity(T t) {
 		// Upon clear or remove removing of selection yields null entities
 		if (t == null) {
+			saveButton.setEnabled(false);
+			deleteButton.setEnabled(false);
+			entityForm.blank();
 			return;
 		}
 		entityForm.showEntity(t);
+		saveButton.setEnabled(true);
+		deleteButton.setEnabled(true);
 	}
 
 	private void createUI() {
@@ -124,13 +198,11 @@ public abstract class EntityListPanel<T extends Identifiable> extends JPanel imp
 
 	private void fillList() {
 		listModel.clear();
-		final List<T> all;
 		try {
-			all = getDAO().findAll();
+			getDAO().consumeAll(listModel::addElement);
 		} catch (SQLException e) {
 			throw new IllegalStateException(e);
 		}
-		all.stream().forEach(listModel::addElement);
 	}
 
 	@Override

@@ -25,4 +25,8 @@ public class ProjectMonthsDAO extends DAO<ProjectMonth> {
 		return ProjectColumn.prj_id;
 	}
 
+	@Override
+	protected Column<?> getDeletedColumn() {
+		throw new UnsupportedOperationException();
+	}
 }

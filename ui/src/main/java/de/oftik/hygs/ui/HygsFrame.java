@@ -9,6 +9,7 @@ import javax.swing.JTabbedPane;
 import de.oftik.hygs.ui.cap.CapabilityPanel;
 import de.oftik.hygs.ui.company.CompanyPanel;
 import de.oftik.hygs.ui.project.ProjectPanel;
+import de.oftik.hygs.ui.trash.TrashPanel;
 
 public class HygsFrame extends JFrame {
 	private final ApplicationContext applicationContext;
@@ -28,6 +29,7 @@ public class HygsFrame extends JFrame {
 		centerPane.add(I18N.PROJECT.title(), new ProjectPanel(applicationContext));
 		centerPane.add(I18N.CAPABILITY.title(), new CapabilityPanel(applicationContext));
 		centerPane.add(I18N.EXPORT.title(), new ExportPanel(applicationContext));
+		centerPane.add(I18N.TRASH.title(), new TrashPanel(applicationContext));
 		return this;
 	}
 

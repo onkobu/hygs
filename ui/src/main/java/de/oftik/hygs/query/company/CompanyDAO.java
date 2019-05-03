@@ -23,4 +23,9 @@ public class CompanyDAO extends DAO<Company> {
 	protected Column<?> getPkColumn() {
 		return CompanyColumn.cmp_id;
 	}
+
+	@Override
+	protected Column<?> getDeletedColumn() {
+		return CompanyColumn.cmp_deleted;
+	}
 }

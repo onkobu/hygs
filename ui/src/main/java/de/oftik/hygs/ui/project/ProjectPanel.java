@@ -51,14 +51,7 @@ public class ProjectPanel extends EntityListPanel<Project> implements CompanyCac
 
 	@Override
 	public void createEntity(ActionEvent evt) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void saveEntity(ActionEvent evt) {
-		// TODO Auto-generated method stub
-
+		wrapFormAsCreateDialog().showAndWaitForDecision();
 	}
 
 	@Override

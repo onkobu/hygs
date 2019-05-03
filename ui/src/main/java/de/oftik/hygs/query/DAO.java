@@ -69,7 +69,23 @@ public abstract class DAO<T> {
 			try (Connection conn = createConnection();) {
 				final Statement statement = conn.createStatement();
 				statement.setQueryTimeout(30);
-				final ResultSet rs = statement.executeQuery("SELECT * FROM " + table.name() + ";");
+				final ResultSet rs = statement.executeQuery(
+						"SELECT * FROM " + table.name() + " WHERE " + getDeletedColumn().name() + " = FALSE;");
+				while (rs.next()) {
+					consumer.accept(map(rs));
+				}
+			}
+			return null;
+		}, null);
+	}
+
+	public void consumeDeleted(Consumer<T> consumer) throws SQLException {
+		this.<Void>onlyIfAvailable(() -> {
+			try (Connection conn = createConnection();) {
+				final Statement statement = conn.createStatement();
+				statement.setQueryTimeout(30);
+				final ResultSet rs = statement
+						.executeQuery("SELECT * FROM " + table.name() + " WHERE " + getDeletedColumn().name() + ";");
 				while (rs.next()) {
 					consumer.accept(map(rs));
 				}
@@ -79,6 +95,8 @@ public abstract class DAO<T> {
 	}
 
 	protected abstract Column<?> getPkColumn();
+
+	protected abstract Column<?> getDeletedColumn();
 
 	protected final Connection createConnection() throws SQLException {
 		return DriverManager.getConnection("jdbc:sqlite:" + context.dbPath());

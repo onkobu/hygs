@@ -2,7 +2,8 @@ package de.oftik.hygs.query.project;
 
 import java.time.LocalDate;
 
-import de.oftik.hygs.query.Identifiable;
+import de.oftik.hygs.contract.Identifiable;
+import de.oftik.hygs.query.Table;
 
 public class Project implements Identifiable {
 	private final long id;
@@ -24,8 +25,14 @@ public class Project implements Identifiable {
 		this.weight = weight;
 	}
 
+	@Override
 	public long getId() {
 		return id;
+	}
+
+	@Override
+	public String getSource() {
+		return Table.cap_project.name();
 	}
 
 	public String getName() {

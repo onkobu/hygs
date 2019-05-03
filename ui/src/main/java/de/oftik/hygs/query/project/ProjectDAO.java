@@ -22,4 +22,9 @@ public class ProjectDAO extends DAO<Project> {
 	protected Column<?> getPkColumn() {
 		return ProjectColumn.prj_id;
 	}
+
+	@Override
+	protected Column<?> getDeletedColumn() {
+		return ProjectColumn.prj_deleted;
+	}
 }
