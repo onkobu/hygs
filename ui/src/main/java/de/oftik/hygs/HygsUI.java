@@ -2,14 +2,14 @@ package de.oftik.hygs;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
 import de.oftik.hygs.cmd.CommandBroker;
-import de.oftik.hygs.cmd.cat.CategoryQueue;
-import de.oftik.hygs.cmd.company.CompanyQueue;
+import de.oftik.hygs.cmd.CommandTargetDefinition;
 import de.oftik.hygs.ui.ApplicationContext;
 import de.oftik.hygs.ui.ApplicationContextListener;
 import de.oftik.hygs.ui.ContextEvent;
@@ -37,8 +37,7 @@ public class HygsUI {
 		}
 
 		final CommandBroker cmdBroker = new CommandBroker();
-		cmdBroker.registerQueue(new CategoryQueue(ctx));
-		cmdBroker.registerQueue(new CompanyQueue(ctx));
+		Arrays.stream(CommandTargetDefinition.values()).map((dfn) -> dfn.queue(ctx)).forEach(cmdBroker::registerQueue);
 
 		ctx.registerBroker(cmdBroker);
 

@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -48,6 +49,14 @@ public class FormPanel extends JPanel {
 	}
 
 	protected void addRowTextField(I18N label, JTextField field, GridBagConstraintFactory gbc) {
+		addRowComponent(label, field, gbc);
+	}
+
+	protected void addRowCombobox(I18N label, JComboBox<?> box, GridBagConstraintFactory gbc) {
+		addRowComponent(label, box, gbc);
+	}
+
+	private void addRowComponent(I18N label, JComponent field, GridBagConstraintFactory gbc) {
 		addLabel(label, gbc);
 		add(field, gbc.nextColumn().fillHorizontal().weightx(1.0).remainderX().end());
 	}

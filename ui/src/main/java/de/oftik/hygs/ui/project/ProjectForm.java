@@ -9,6 +9,7 @@ import java.util.Properties;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -19,12 +20,15 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import de.oftik.hygs.cmd.Command;
 import de.oftik.hygs.cmd.CommandBroker;
+import de.oftik.hygs.cmd.project.DeleteProjectCmd;
 import de.oftik.hygs.query.Converters;
+import de.oftik.hygs.query.company.Company;
 import de.oftik.hygs.query.project.AssignedCapability;
 import de.oftik.hygs.query.project.AssignedCapabilityDAO;
 import de.oftik.hygs.query.project.Project;
 import de.oftik.hygs.ui.EntityForm;
 import de.oftik.hygs.ui.I18N;
+import de.oftik.hygs.ui.MappableToStringRenderer;
 import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
 import de.oftik.kehys.keijukainen.gui.ListTableModel;
 
@@ -40,7 +44,7 @@ public class ProjectForm extends EntityForm<Project> {
 			new DateFormatter());
 	private final JDatePickerImpl toPicker = new JDatePickerImpl(new JDatePanelImpl(toModel, new Properties()),
 			new DateFormatter());
-	private final JTextField companyNameField = new JTextField();
+	private final JComboBox<Company> companyBox = new JComboBox<Company>();
 
 	private final String[] identifiers = new String[] { I18N.CAPABILITY.label(), I18N.VERSION.label(),
 			I18N.WEIGHT.label() };
@@ -53,9 +57,12 @@ public class ProjectForm extends EntityForm<Project> {
 			createDescription(identifiers[1], String.class, AssignedCapability::getVersion),
 			createDescription(identifiers[2], Integer.TYPE, AssignedCapability::getWeight));
 
+	private Project currentProject;
+
 	public ProjectForm(Supplier<CommandBroker> brokerSupplier) {
 		super(brokerSupplier);
 		capabilityTable.setModel(tableModel);
+		companyBox.setRenderer(new MappableToStringRenderer());
 		createUI();
 	}
 
@@ -73,12 +80,20 @@ public class ProjectForm extends EntityForm<Project> {
 
 	@Override
 	public Command deleteEntityCommand() {
-		// TODO Auto-generated method stub
-		return null;
+		return new DeleteProjectCmd(Long.parseLong(idField.getText()));
 	}
 
 	void setCompanyCache(CompanyCache cc) {
 		this.companyCache = cc;
+		this.companyCache.addCacheListener(() -> {
+			companyBox.removeAllItems();
+			this.companyCache.consumeAll(companyBox::addItem);
+			if (currentProject == null) {
+				companyBox.setSelectedIndex(-1);
+				return;
+			}
+			companyBox.setSelectedItem(currentProject);
+		});
 	}
 
 	void setAssignedCapabilityDAO(AssignedCapabilityDAO assCapDao) {
@@ -100,19 +115,20 @@ public class ProjectForm extends EntityForm<Project> {
 
 		addDescriptionArea(I18N.DESCRIPTION, descriptionArea, gbc.nextRow());
 
-		addRowTextField(I18N.COMPANY, companyNameField, gbc.nextRow());
+		addRowCombobox(I18N.COMPANY, companyBox, gbc.nextRow());
 
 		add(I18N.CAPABILITY, capabilityTable, gbc.nextRow());
 	}
 
 	@Override
 	public void showEntity(Project t) {
+		this.currentProject = t;
 		idField.setText(String.valueOf(t.getId()));
 		nameField.setText(t.getName());
 		fromModel.setValue(Converters.dateFromLocalDate(t.getFrom()));
 		toModel.setValue(Converters.dateFromLocalDate(t.getTo()));
 		descriptionArea.setText(t.getDescription());
-		companyNameField.setText(companyCache.getCompanyById(t.getCompanyId()).getName());
+		companyBox.setSelectedItem(companyCache.getCompanyById(t.getCompanyId()));
 
 		try {
 			final List<AssignedCapability> caps = assignedCapabilityDAO.findByProject(t);
@@ -129,12 +145,13 @@ public class ProjectForm extends EntityForm<Project> {
 
 	@Override
 	public void blank() {
+		currentProject = null;
 		idField.setText(null);
 		nameField.setText(null);
 		fromModel.setValue(null);
 		toModel.setValue(null);
 		descriptionArea.setText(null);
-		companyNameField.setText(null);
+		companyBox.setSelectedIndex(-1);
 		tableModel.clear();
 	}
 }

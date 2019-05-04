@@ -5,22 +5,19 @@ import static de.oftik.hygs.ui.EnabledConstraints.enableIfFilled;
 import static de.oftik.hygs.ui.EnabledConstraints.enableIfSelected;
 import static de.oftik.hygs.ui.ListModels.transferAll;
 
-import java.awt.Component;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 
 import javax.swing.BoxLayout;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ListCellRenderer;
 
 import de.oftik.hygs.contract.Identifiable;
-import de.oftik.hygs.contract.MappableToString;
 import de.oftik.hygs.query.company.CompanyDAO;
+import de.oftik.hygs.query.project.ProjectDAO;
 import de.oftik.hygs.ui.ApplicationContext;
 import de.oftik.hygs.ui.ApplicationContextListener;
 import de.oftik.hygs.ui.ComponentFactory;
@@ -28,6 +25,8 @@ import de.oftik.hygs.ui.ContextEvent;
 import de.oftik.hygs.ui.EnabledConstraints.ConstraintContext;
 import de.oftik.hygs.ui.I18N;
 import de.oftik.hygs.ui.ListModels;
+import de.oftik.hygs.ui.MappableToStringRenderer;
+import de.oftik.hygs.ui.cap.CategoryDAO;
 import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
 
 public class TrashPanel extends JPanel implements ApplicationContextListener {
@@ -38,24 +37,14 @@ public class TrashPanel extends JPanel implements ApplicationContextListener {
 	private final JList<Identifiable> toDelete;
 	private final CompanyDAO companyDao;
 	private final ConstraintContext cCtx = new ConstraintContext();
-
-	static class MappableToStringRenderer implements ListCellRenderer<Identifiable> {
-		private final DefaultListCellRenderer delegate = new DefaultListCellRenderer();
-
-		@Override
-		public Component getListCellRendererComponent(JList<? extends Identifiable> list, Identifiable value, int index,
-				boolean isSelected, boolean cellHasFocus) {
-			if (value instanceof MappableToString) {
-				return delegate.getListCellRendererComponent(list, ((MappableToString) value).toShortString(), index,
-						isSelected, cellHasFocus);
-			}
-			return delegate.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-		}
-	}
+	private final CategoryDAO categoryDao;
+	private final ProjectDAO projectDao;
 
 	public TrashPanel(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
+		this.categoryDao = new CategoryDAO(applicationContext);
 		this.companyDao = new CompanyDAO(applicationContext);
+		this.projectDao = new ProjectDAO(applicationContext);
 		trash = new JList<>(trashListModel);
 		trash.setCellRenderer(new MappableToStringRenderer());
 		toDelete = new JList<>(toDeleteListModel);
@@ -86,7 +75,9 @@ public class TrashPanel extends JPanel implements ApplicationContextListener {
 
 	private final void fillList() {
 		try {
+			categoryDao.consumeDeleted(trashListModel::addElement);
 			companyDao.consumeDeleted(trashListModel::addElement);
+			projectDao.consumeDeleted(trashListModel::addElement);
 		} catch (SQLException e) {
 			throw new IllegalStateException(e);
 		}

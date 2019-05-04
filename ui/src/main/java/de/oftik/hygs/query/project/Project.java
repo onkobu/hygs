@@ -3,9 +3,10 @@ package de.oftik.hygs.query.project;
 import java.time.LocalDate;
 
 import de.oftik.hygs.contract.Identifiable;
+import de.oftik.hygs.contract.MappableToString;
 import de.oftik.hygs.query.Table;
 
-public class Project implements Identifiable {
+public class Project implements Identifiable, MappableToString {
 	private final long id;
 	private final String name;
 	private final LocalDate from;
@@ -57,5 +58,15 @@ public class Project implements Identifiable {
 
 	public int getWeight() {
 		return weight;
+	}
+
+	@Override
+	public String toShortString() {
+		return getName();
+	}
+
+	@Override
+	public String toLongString() {
+		return String.format("%s %td.%<tm.%<tY-%td.%<tm.%<tY", getName(), getFrom(), getTo());
 	}
 }
