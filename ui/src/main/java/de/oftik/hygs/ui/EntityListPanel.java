@@ -82,6 +82,9 @@ public abstract class EntityListPanel<T extends Identifiable> extends JPanel imp
 			case DELETE:
 				reference.onEntityDelete(notification.getIds());
 				break;
+			case RESURRECT:
+				reference.onEntityResurrected(notification.getIds());
+				break;
 			default:
 
 			}
@@ -122,6 +125,11 @@ public abstract class EntityListPanel<T extends Identifiable> extends JPanel imp
 	}
 
 	public void onEntityDelete(List<Long> ids) {
+		fillList();
+		deleteSelection();
+	}
+
+	public void onEntityResurrected(List<Long> ids) {
 		fillList();
 		deleteSelection();
 	}

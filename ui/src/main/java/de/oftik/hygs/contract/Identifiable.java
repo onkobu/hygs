@@ -17,5 +17,5 @@ public interface Identifiable {
 	 * 
 	 * @return Source to make it distinct from other identifiables of other sources.
 	 */
-	String getSource();
+	EntitySource getSource();
 }

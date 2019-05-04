@@ -2,6 +2,7 @@ package de.oftik.hygs.query.project;
 
 import java.time.LocalDate;
 
+import de.oftik.hygs.contract.EntitySource;
 import de.oftik.hygs.contract.Identifiable;
 import de.oftik.hygs.contract.MappableToString;
 import de.oftik.hygs.query.Table;
@@ -32,8 +33,8 @@ public class Project implements Identifiable, MappableToString {
 	}
 
 	@Override
-	public String getSource() {
-		return Table.cap_project.name();
+	public EntitySource getSource() {
+		return Table.cap_project;
 	}
 
 	public String getName() {

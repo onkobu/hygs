@@ -15,6 +15,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import de.oftik.hygs.cmd.ResurrectEntityCmd;
 import de.oftik.hygs.contract.Identifiable;
 import de.oftik.hygs.query.company.CompanyDAO;
 import de.oftik.hygs.query.project.ProjectDAO;
@@ -32,9 +33,9 @@ import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
 public class TrashPanel extends JPanel implements ApplicationContextListener {
 	private final ApplicationContext applicationContext;
 	private final DefaultListModel<Identifiable> trashListModel = new DefaultListModel<>();
-	private final DefaultListModel<Identifiable> toDeleteListModel = new DefaultListModel<>();
+	private final DefaultListModel<Identifiable> toProcessListModel = new DefaultListModel<>();
 	private final JList<Identifiable> trash;
-	private final JList<Identifiable> toDelete;
+	private final JList<Identifiable> toProcess;
 	private final CompanyDAO companyDao;
 	private final ConstraintContext cCtx = new ConstraintContext();
 	private final CategoryDAO categoryDao;
@@ -47,8 +48,8 @@ public class TrashPanel extends JPanel implements ApplicationContextListener {
 		this.projectDao = new ProjectDAO(applicationContext);
 		trash = new JList<>(trashListModel);
 		trash.setCellRenderer(new MappableToStringRenderer());
-		toDelete = new JList<>(toDeleteListModel);
-		toDelete.setCellRenderer(new MappableToStringRenderer());
+		toProcess = new JList<>(toProcessListModel);
+		toProcess.setCellRenderer(new MappableToStringRenderer());
 		createUI();
 		fillList();
 		applicationContext.addListener(this);
@@ -59,18 +60,19 @@ public class TrashPanel extends JPanel implements ApplicationContextListener {
 		final GridBagConstraintFactory gbc = GridBagConstraintFactory.gridBagConstraints();
 		add(ComponentFactory.description(I18N.TRASH), gbc.remainderX().weighty(0.1).fillBoth().end());
 		add(ComponentFactory.label(I18N.TRASH), gbc.nextRow().end());
-		add(ComponentFactory.label(I18N.DELETE), gbc.nextColumn().nextColumn().end());
+		add(ComponentFactory.label(I18N.PROCESS), gbc.nextColumn().nextColumn().end());
 
 		add(new JScrollPane(trash), gbc.nextRow().fillBoth().weightx(0.5).weighty(1.0).remainderY().end());
 		final JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 		buttonPanel.add(enableIfFilled(cCtx, createButton(I18N.ALL_TO_RIGHT, this::allToRight), trash));
 		buttonPanel.add(enableIfSelected(cCtx, createButton(I18N.TO_RIGHT, this::toRight), trash));
-		buttonPanel.add(enableIfSelected(cCtx, createButton(I18N.TO_LEFT, this::toLeft), toDelete));
-		buttonPanel.add(enableIfFilled(cCtx, createButton(I18N.ALL_TO_LEFT, this::allToLeft), toDelete));
-		buttonPanel.add(enableIfFilled(cCtx, createButton(I18N.OK, this::makeItSo), toDelete));
+		buttonPanel.add(enableIfSelected(cCtx, createButton(I18N.TO_LEFT, this::toLeft), toProcess));
+		buttonPanel.add(enableIfFilled(cCtx, createButton(I18N.ALL_TO_LEFT, this::allToLeft), toProcess));
+		buttonPanel.add(enableIfFilled(cCtx, createButton(I18N.RESURRECT, this::resurrect), toProcess));
+		buttonPanel.add(enableIfFilled(cCtx, createButton(I18N.DELETE, this::delete), toProcess));
 		add(buttonPanel, gbc.nextColumn().end());
-		add(new JScrollPane(toDelete), gbc.nextColumn().remainderY().fillBoth().weightx(0.5).weighty(1.0).end());
+		add(new JScrollPane(toProcess), gbc.nextColumn().remainderY().fillBoth().weightx(0.5).weighty(1.0).end());
 	}
 
 	private final void fillList() {
@@ -85,22 +87,32 @@ public class TrashPanel extends JPanel implements ApplicationContextListener {
 	}
 
 	public void allToRight(ActionEvent evt) {
-		transferAll(trashListModel, toDeleteListModel);
+		transferAll(trashListModel, toProcessListModel);
 	}
 
 	public void allToLeft(ActionEvent evt) {
-		transferAll(toDeleteListModel, trashListModel);
+		transferAll(toProcessListModel, trashListModel);
 	}
 
 	public void toRight(ActionEvent evt) {
-		ListModels.transferSelected(trash, toDelete);
+		ListModels.transferSelected(trash, toProcess);
 	}
 
 	public void toLeft(ActionEvent evt) {
-		ListModels.transferSelected(toDelete, trash);
+		ListModels.transferSelected(toProcess, trash);
 	}
 
-	public void makeItSo(ActionEvent evt) {
+	public void delete(ActionEvent evt) {
+	}
+
+	public void resurrect(ActionEvent evt) {
+		if (toProcessListModel.size() == 0) {
+			return;
+		}
+		for (int i = 0; i < toProcessListModel.getSize(); i++) {
+			applicationContext.getBroker().execute(new ResurrectEntityCmd(toProcessListModel.get(i)));
+		}
+		toProcessListModel.clear();
 	}
 
 	@Override

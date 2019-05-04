@@ -19,5 +19,10 @@ public enum NotificationType {
 	/**
 	 * Type is irrelevant, technical notification like errors during enqueue.
 	 */
-	TECHNICAL;
+	TECHNICAL,
+
+	/**
+	 * An inactive/ deleted/ invalid entity was brought back to life.
+	 */
+	RESURRECT;
 }

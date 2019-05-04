@@ -61,7 +61,11 @@ public enum I18N {
 
 	TO_RIGHT,
 
-	TO_LEFT;
+	TO_LEFT,
+
+	PROCESS,
+
+	RESURRECT;
 
 	public String title() {
 		return getBundle().getString(name() + ".title");

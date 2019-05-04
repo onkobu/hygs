@@ -1,5 +1,6 @@
 package de.oftik.hygs.query.company;
 
+import de.oftik.hygs.contract.EntitySource;
 import de.oftik.hygs.contract.Identifiable;
 import de.oftik.hygs.contract.MappableToString;
 import de.oftik.hygs.query.Table;
@@ -30,8 +31,8 @@ public class Company implements Identifiable, MappableToString {
 	}
 
 	@Override
-	public String getSource() {
-		return Table.prj_company.name();
+	public EntitySource getSource() {
+		return Table.prj_company;
 	}
 
 	public String getStreet() {
