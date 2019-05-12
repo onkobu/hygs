@@ -7,7 +7,9 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.logging.Logger;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -22,6 +24,7 @@ import de.oftik.hygs.cmd.CommandBroker;
 import de.oftik.hygs.cmd.CommandTarget;
 import de.oftik.hygs.cmd.Notification;
 import de.oftik.hygs.cmd.NotificationListener;
+import de.oftik.hygs.cmd.NotificationType;
 import de.oftik.hygs.contract.Identifiable;
 import de.oftik.hygs.query.DAO;
 
@@ -33,10 +36,13 @@ import de.oftik.hygs.query.DAO;
  *
  * @param <T>
  */
-public abstract class EntityListPanel<T extends Identifiable> extends JPanel implements ApplicationContextListener {
+public abstract class EntityListPanel<T extends Identifiable, F extends EntityForm<T>> extends JPanel
+		implements ApplicationContextListener {
+	private static final Logger log = Logger.getLogger(EntityListPanel.class.getName());
+
 	private final DefaultListModel<T> listModel = new DefaultListModel<>();
 	private final JList<T> entityList = new JList<>(listModel);
-	private final EntityForm<T> entityForm;
+	private final F entityForm;
 	private final DAO<T> dao;
 	private final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 	private final ApplicationContext applicationContext;
@@ -51,11 +57,12 @@ public abstract class EntityListPanel<T extends Identifiable> extends JPanel imp
 	 *
 	 * @param <T>
 	 */
-	protected static final class EntityNotificationListener<T extends Identifiable> implements NotificationListener {
+	protected static final class EntityNotificationListener<T extends Identifiable, F extends EntityForm<T>>
+			implements NotificationListener {
 		private final CommandTarget target;
-		private final EntityListPanel<T> reference;
+		private final EntityListPanel<T, F> reference;
 
-		public EntityNotificationListener(CommandTarget target, EntityListPanel<T> ref) {
+		public EntityNotificationListener(CommandTarget target, EntityListPanel<T, F> ref) {
 			this.target = target;
 			this.reference = ref;
 		}
@@ -86,8 +93,68 @@ public abstract class EntityListPanel<T extends Identifiable> extends JPanel imp
 				reference.onEntityResurrected(notification.getIds());
 				break;
 			default:
-
+				log.warning("unhandled notification type " + notification);
 			}
+		}
+	}
+
+	protected static final class SubElementNotificationListener implements NotificationListener {
+		private final CommandTarget target;
+		private final Consumer<Notification> successConsumer;
+		private final Consumer<Notification> errorConsumer;
+
+		public SubElementNotificationListener(CommandTarget target, Consumer<Notification> successConsumer,
+				Consumer<Notification> errorConsumer) {
+			super();
+			this.target = target;
+			this.successConsumer = successConsumer;
+			this.errorConsumer = errorConsumer;
+		}
+
+		@Override
+		public CommandTarget target() {
+			return target;
+		}
+
+		@Override
+		public void onEnqueueError(Notification notification) {
+			errorConsumer.accept(notification);
+		}
+
+		@Override
+		public void onSuccess(Notification notification) {
+			successConsumer.accept(notification);
+		}
+	}
+
+	protected static final class AssignmentNotificationListener<N extends Notification>
+			implements NotificationListener {
+		private final CommandTarget target;
+
+		private final Consumer<N> assignmentConsumer;
+
+		public AssignmentNotificationListener(CommandTarget target, Consumer<N> assignmentConsumer) {
+			super();
+			this.target = target;
+			this.assignmentConsumer = assignmentConsumer;
+		}
+
+		@Override
+		public CommandTarget target() {
+			return target;
+		}
+
+		@Override
+		public void onEnqueueError(Notification notification) {
+			// someone else will handle this
+		}
+
+		@Override
+		public void onSuccess(Notification notification) {
+			if (notification.type() != NotificationType.ASSIGNED) {
+				return;
+			}
+			assignmentConsumer.accept((N) notification);
 		}
 	}
 
@@ -110,7 +177,7 @@ public abstract class EntityListPanel<T extends Identifiable> extends JPanel imp
 		fillList();
 	}
 
-	public abstract EntityForm<T> createForm(Supplier<CommandBroker> brokerSupplier);
+	public abstract F createForm(Supplier<CommandBroker> brokerSupplier);
 
 	public abstract void createEntity(ActionEvent evt);
 
@@ -155,11 +222,11 @@ public abstract class EntityListPanel<T extends Identifiable> extends JPanel imp
 		entityForm.deleteEntity();
 	}
 
-	public EntityCreateDialog<T> wrapFormAsCreateDialog() {
+	public EntityCreateDialog<T, F> wrapFormAsCreateDialog() {
 		return new EntityCreateDialog<>(this, createForm(applicationContext::getBroker));
 	}
 
-	public EntityCreateDialog<T> wrapFormAsSaveDialog() {
+	public EntityCreateDialog<T, F> wrapFormAsSaveDialog() {
 		return new EntityCreateDialog<>(this, createForm(applicationContext::getBroker));
 	}
 
@@ -167,7 +234,7 @@ public abstract class EntityListPanel<T extends Identifiable> extends JPanel imp
 		return applicationContext.getBroker();
 	}
 
-	protected EntityForm<T> getForm() {
+	protected F getForm() {
 		return entityForm;
 	}
 

@@ -1,6 +1,11 @@
 package de.oftik.hygs.query.cap;
 
-public class Capability {
+import de.oftik.hygs.contract.EntitySource;
+import de.oftik.hygs.contract.Identifiable;
+import de.oftik.hygs.contract.MappableToString;
+import de.oftik.hygs.query.Table;
+
+public class Capability implements Identifiable, MappableToString {
 	private final long id;
 	private final String name;
 	private final long categoryId;
@@ -14,6 +19,7 @@ public class Capability {
 		this.version = version;
 	}
 
+	@Override
 	public long getId() {
 		return id;
 	}
@@ -28,5 +34,20 @@ public class Capability {
 
 	public String getVersion() {
 		return version;
+	}
+
+	@Override
+	public String toShortString() {
+		return version == null ? getName() : String.format("%s (%s)", getName(), getVersion());
+	}
+
+	@Override
+	public String toLongString() {
+		return toShortString();
+	}
+
+	@Override
+	public EntitySource getSource() {
+		return Table.cap_capability;
 	}
 }

@@ -65,7 +65,11 @@ public enum I18N {
 
 	PROCESS,
 
-	RESURRECT;
+	RESURRECT,
+
+	ADD,
+
+	SELECT_CAPABILITY;
 
 	public String title() {
 		return getBundle().getString(name() + ".title");

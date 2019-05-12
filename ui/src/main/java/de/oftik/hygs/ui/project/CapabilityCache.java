@@ -3,12 +3,12 @@ package de.oftik.hygs.ui.project;
 import java.util.function.Consumer;
 
 import de.oftik.hygs.contract.CacheListener;
-import de.oftik.hygs.query.company.Company;
+import de.oftik.hygs.query.cap.Capability;
 
-public interface CompanyCache {
-	Company getCompanyById(long id);
+public interface CapabilityCache {
+	Capability getCapabilityById(long id);
 
-	void consumeAllCompanies(Consumer<Company> consumer);
+	void consumeAllCapabilities(Consumer<Capability> consumer);
 
 	void addCacheListener(CacheListener listener);
 

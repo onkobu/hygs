@@ -82,7 +82,7 @@ public class FormPanel extends JPanel {
 
 	protected void add(I18N label, JTable table, GridBagConstraintFactory gbc) {
 		addLabel(label, gbc);
-		add(new JScrollPane(table), gbc.nextRow().fillBoth().remainderX().remainderY().weightx(1.0).weighty(1.0).end());
+		add(new JScrollPane(table), gbc.nextRow().fillBoth().remainderX().weightx(1.0).weighty(1.0).end());
 	}
 
 	protected CommandBroker broker() {
