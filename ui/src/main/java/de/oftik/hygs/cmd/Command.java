@@ -8,8 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import de.oftik.hygs.query.Column;
 import de.oftik.hygs.query.Table;
+import de.oftik.keyhs.kersantti.Column;
 
 public interface Command {
 

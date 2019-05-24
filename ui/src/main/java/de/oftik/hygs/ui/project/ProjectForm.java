@@ -30,7 +30,6 @@ import de.oftik.hygs.cmd.project.ChangeWeightCmd;
 import de.oftik.hygs.cmd.project.DeleteProjectCmd;
 import de.oftik.hygs.contract.CacheListener;
 import de.oftik.hygs.contract.CacheType;
-import de.oftik.hygs.query.Converters;
 import de.oftik.hygs.query.cap.Capability;
 import de.oftik.hygs.query.company.Company;
 import de.oftik.hygs.query.project.AssignedCapability;
@@ -42,6 +41,7 @@ import de.oftik.hygs.ui.I18N;
 import de.oftik.hygs.ui.MappableToStringRenderer;
 import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
 import de.oftik.kehys.keijukainen.gui.ListTableModel;
+import de.oftik.keyhs.kersantti.query.Converters;
 
 public class ProjectForm extends EntityForm<Project> {
 	private static final Logger log = Logger.getLogger(ProjectForm.class.getName());

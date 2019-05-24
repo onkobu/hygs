@@ -23,7 +23,7 @@ import javax.swing.tree.TreePath;
 import de.oftik.hygs.cmd.CommandBroker;
 import de.oftik.hygs.cmd.Notification;
 import de.oftik.hygs.contract.Identifiable;
-import de.oftik.hygs.query.DAO;
+import de.oftik.keyhs.kersantti.query.DAO;
 
 /**
  * A panel with a tree-like structure on one side, grouping entities. Next to it

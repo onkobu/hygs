@@ -5,13 +5,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import de.oftik.hygs.query.Column;
-import de.oftik.hygs.query.DAO;
+import de.oftik.hygs.query.AbstractDao;
 import de.oftik.hygs.query.Table;
 import de.oftik.hygs.ui.ApplicationContext;
 import de.oftik.hygs.ui.cap.Category;
+import de.oftik.keyhs.kersantti.Column;
 
-public class CapabilityDAO extends DAO<Capability> {
+public class CapabilityDAO extends AbstractDao<Capability> {
 	public CapabilityDAO(ApplicationContext context) {
 		super(context, Table.cap_capability);
 	}

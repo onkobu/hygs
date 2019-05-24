@@ -37,6 +37,11 @@
 			<artifactId>lippu</artifactId>
 			<version>${kehys.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>de.oftik</groupId>
+			<artifactId>kersantti</artifactId>
+			<version>${kehys.version}</version>
+		</dependency>
 
 
 		<!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
