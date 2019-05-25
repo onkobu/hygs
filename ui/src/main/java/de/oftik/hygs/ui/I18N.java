@@ -69,7 +69,9 @@ public enum I18N {
 
 	ADD,
 
-	SELECT_CAPABILITY;
+	SELECT_CAPABILITY,
+
+	SEARCH;
 
 	public String title() {
 		return getBundle().getString(name() + ".title");
@@ -105,5 +107,9 @@ public enum I18N {
 
 	public String description() {
 		return getBundle().getString(name() + ".description");
+	}
+
+	public String placeholder() {
+		return getBundle().getString(name() + ".placeholder");
 	}
 }

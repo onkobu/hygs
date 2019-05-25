@@ -1,6 +1,8 @@
 package de.oftik.hygs.ui;
 
 import java.awt.BorderLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,16 +15,17 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import de.oftik.hygs.cmd.CommandBroker;
 import de.oftik.hygs.cmd.Notification;
 import de.oftik.hygs.contract.Identifiable;
+import de.oftik.hygs.contract.MappableToString;
 import de.oftik.keyhs.kersantti.query.DAO;
 
 /**
@@ -34,19 +37,20 @@ import de.oftik.keyhs.kersantti.query.DAO;
  * @param <G>
  * @param <E>
  */
-public abstract class GroupedEntityPanel<G extends Identifiable, E> extends JPanel
-		implements ApplicationContextListener {
+public abstract class GroupedEntityPanel<G extends Identifiable, E extends Identifiable & MappableToString>
+		extends JPanel implements ApplicationContextListener {
 	private static final Logger log = Logger.getLogger(GroupedEntityPanel.class.getName());
 
-	private final DefaultMutableTreeNode root;
-	private final DefaultTreeModel treeModel;
+	private final FilterNode root;
+	private final FilterTreeModel treeModel;
 	private final JTree tree;
 	private final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+	private final JTextField filterField = ComponentFactory.textField(I18N.SEARCH);
 	private final GroupedEntityForm<G, E> entityForm;
 	private final DAO<G> groupDao;
 	private final DAO<E> entityDao;
 
-	private final Map<Long, DefaultMutableTreeNode> groupMap = new HashMap<>();
+	private final Map<Long, FilterNode> groupMap = new HashMap<>();
 
 	private final ApplicationContext applicationContext;
 
@@ -56,8 +60,8 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E> extends JPan
 		this.groupDao = groupDao;
 		this.entityDao = entityDao;
 		this.entityForm = entityForm;
-		this.root = new DefaultMutableTreeNode(rootTitle.label());
-		this.treeModel = new DefaultTreeModel(root);
+		this.root = new FilterNode(rootTitle.label());
+		this.treeModel = new FilterTreeModel(root, true, true);
 		this.tree = new JTree(treeModel);
 		tree.setCellRenderer(renderer);
 		tree.addTreeSelectionListener(this::nodeSelected);
@@ -120,9 +124,28 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E> extends JPan
 
 	private void createUI() {
 		setLayout(new BorderLayout());
-		splitPane.setLeftComponent(new JScrollPane(tree));
+		final JPanel treePanel = new JPanel();
+		treePanel.setLayout(new BorderLayout());
+		treePanel.add(new JScrollPane(tree), BorderLayout.CENTER);
+		treePanel.add(filterField, BorderLayout.NORTH);
+		filterField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (filterField.getText().trim().length() < 3) {
+					treeModel.setFiltering(false);
+					return;
+				}
+				treeModel.setFiltering(true);
+				filterTree(filterField.getText().trim());
+			}
+		});
+		splitPane.setLeftComponent(treePanel);
 		splitPane.setRightComponent(entityForm);
 		add(splitPane, BorderLayout.CENTER);
+	}
+
+	private void filterTree(String term) {
+		treeModel.filter(term);
 	}
 
 	protected void refreshGroupIds(Notification notification) {
@@ -165,7 +188,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E> extends JPan
 		final List<G> groups = new ArrayList<>();
 		try {
 			groupDao.consumeAll((g) -> {
-				final DefaultMutableTreeNode tn = toGroupNode(g);
+				final FilterNode tn = toGroupNode(g);
 				groups.add(g);
 				registerGroup(tn);
 				List<E> entities = null;
@@ -186,19 +209,19 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E> extends JPan
 		entityForm.setGroups(groups);
 	}
 
-	protected DefaultMutableTreeNode registerGroup(final DefaultMutableTreeNode tn) {
+	protected FilterNode registerGroup(final FilterNode tn) {
 		root.add(tn);
 		return groupMap.put(((G) tn.getUserObject()).getId(), tn);
 	}
 
-	protected DefaultMutableTreeNode toGroupNode(G g) {
-		final DefaultMutableTreeNode tn = new DefaultMutableTreeNode();
+	protected FilterNode toGroupNode(G g) {
+		final FilterNode tn = new FilterNode();
 		tn.setUserObject(g);
 		return tn;
 	}
 
-	private static DefaultMutableTreeNode toNode(Object obj) {
-		final DefaultMutableTreeNode tn = new DefaultMutableTreeNode();
+	private static FilterNode toNode(Object obj) {
+		final FilterNode tn = new FilterNode();
 		tn.setUserObject(obj);
 		return tn;
 	}

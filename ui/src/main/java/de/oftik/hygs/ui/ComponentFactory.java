@@ -7,6 +7,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 
+import de.oftik.kehys.keijukainen.gui.PlaceHolderField;
+
 /**
  * Creates components with more context.
  * 
@@ -31,5 +33,9 @@ public class ComponentFactory {
 		final JTextArea descArea = new JTextArea(i18n.description(), 5, 40);
 		descArea.setEditable(false);
 		return descArea;
+	}
+
+	public static PlaceHolderField textField(I18N i18n) {
+		return new PlaceHolderField().setPlaceholder(i18n.placeholder());
 	}
 }
