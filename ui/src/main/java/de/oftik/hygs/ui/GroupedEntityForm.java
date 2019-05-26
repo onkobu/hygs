@@ -3,6 +3,7 @@ package de.oftik.hygs.ui;
 import java.util.List;
 import java.util.function.Supplier;
 
+import de.oftik.hygs.cmd.Command;
 import de.oftik.hygs.cmd.CommandBroker;
 
 public abstract class GroupedEntityForm<G, E> extends FormPanel {
@@ -15,4 +16,23 @@ public abstract class GroupedEntityForm<G, E> extends FormPanel {
 	protected abstract void setGroups(List<G> groups);
 
 	public abstract void clearEntity();
+
+	public abstract Command createEntityCommand();
+
+	public abstract Command saveEntityCommand();
+
+	public abstract Command deleteEntityCommand();
+
+	public void createEntity() {
+		broker().execute(createEntityCommand());
+	}
+
+	public void saveEntity() {
+		broker().execute(saveEntityCommand());
+	}
+
+	public void deleteEntity() {
+		broker().execute(deleteEntityCommand());
+	}
+
 }

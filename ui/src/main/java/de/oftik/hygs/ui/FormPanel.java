@@ -18,13 +18,18 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import de.oftik.hygs.cmd.CommandBroker;
 import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
 
-public class FormPanel extends JPanel {
+public abstract class FormPanel extends JPanel {
 	private final Supplier<CommandBroker> brokerSupplier;
 
 	public FormPanel(Supplier<CommandBroker> brokerSupplier) {
 		this.brokerSupplier = brokerSupplier;
 		setLayout(new GridBagLayout());
 	}
+
+	/**
+	 * Unregister listeners, clean up a finished form.
+	 */
+	public abstract void destroy();
 
 	protected void addIDField(JTextField field, GridBagConstraintFactory gbc) {
 		addLabel(I18N.ID, gbc);

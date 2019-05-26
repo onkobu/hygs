@@ -1,6 +1,9 @@
 package de.oftik.hygs.ui;
 
+import static de.oftik.hygs.ui.ComponentFactory.createButton;
+
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
@@ -9,9 +12,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -37,7 +42,7 @@ import de.oftik.keyhs.kersantti.query.DAO;
  * @param <G>
  * @param <E>
  */
-public abstract class GroupedEntityPanel<G extends Identifiable, E extends Identifiable & MappableToString>
+public abstract class GroupedEntityPanel<G extends Identifiable, E extends Identifiable & MappableToString, F extends GroupedEntityForm<G, E>>
 		extends JPanel implements ApplicationContextListener {
 	private static final Logger log = Logger.getLogger(GroupedEntityPanel.class.getName());
 
@@ -46,7 +51,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 	private final JTree tree;
 	private final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 	private final JTextField filterField = ComponentFactory.textField(I18N.SEARCH);
-	private final GroupedEntityForm<G, E> entityForm;
+	private final F entityForm;
 	private final DAO<G> groupDao;
 	private final DAO<E> entityDao;
 
@@ -54,20 +59,43 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 
 	private final ApplicationContext applicationContext;
 
+	private final JButton newButton;
+
+	private final JButton saveButton;
+
+	private final JButton deleteButton;
+
 	public GroupedEntityPanel(ApplicationContext context, I18N rootTitle, DAO<G> groupDao, DAO<E> entityDao,
-			GroupedEntityForm<G, E> entityForm, TreeCellRenderer renderer) {
+			TreeCellRenderer renderer) {
 		this.applicationContext = context;
 		this.groupDao = groupDao;
 		this.entityDao = entityDao;
-		this.entityForm = entityForm;
+		this.entityForm = createForm(context::getBroker);
 		this.root = new FilterNode(rootTitle.label());
 		this.treeModel = new FilterTreeModel(root, true, true);
 		this.tree = new JTree(treeModel);
 		tree.setCellRenderer(renderer);
 		tree.addTreeSelectionListener(this::nodeSelected);
 		context.addListener(this);
+
+		this.newButton = createButton(I18N.NEW_ENTITY, this::createEntity);
+		this.saveButton = createButton(I18N.SAVE_CHANGES, this::saveEntity);
+		this.deleteButton = createButton(I18N.DELETE, this::deleteEntity);
+		saveButton.setEnabled(false);
+		deleteButton.setEnabled(false);
+
 		createUI();
 		fillTree();
+	}
+
+	public abstract void createEntity(ActionEvent evt);
+
+	public void saveEntity(ActionEvent evt) {
+		entityForm.saveEntity();
+	}
+
+	public void deleteEntity(ActionEvent evt) {
+		entityForm.deleteEntity();
 	}
 
 	private void nodeSelected(TreeSelectionEvent evt) {
@@ -85,7 +113,9 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 		if (isEntityNode(selNode)) {
 			entitySelected((G) ((DefaultMutableTreeNode) selNode.getParent()).getUserObject(),
 					(E) selNode.getUserObject());
+			return;
 		}
+		selectionCleared();
 	}
 
 	@Override
@@ -102,13 +132,19 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 	protected abstract boolean isGroupNode(DefaultMutableTreeNode node);
 
 	protected void groupSelected(G g) {
+		saveButton.setEnabled(false);
+		deleteButton.setEnabled(false);
 	}
 
 	protected void entitySelected(G g, E e) {
+		saveButton.setEnabled(true);
+		deleteButton.setEnabled(true);
 		entityForm.showEntity(g, e);
 	}
 
 	protected void selectionCleared() {
+		saveButton.setEnabled(false);
+		deleteButton.setEnabled(false);
 		entityForm.clearEntity();
 	}
 
@@ -140,8 +176,20 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 			}
 		});
 		splitPane.setLeftComponent(treePanel);
-		splitPane.setRightComponent(entityForm);
+
+		final JPanel centerPanel = new JPanel();
+		centerPanel.setLayout(new BorderLayout());
+		centerPanel.add(entityForm, BorderLayout.CENTER);
+		centerPanel.add(EntityListPanel.createActionPanel(newButton, saveButton, deleteButton), BorderLayout.SOUTH);
+
+		splitPane.setRightComponent(centerPanel);
 		add(splitPane, BorderLayout.CENTER);
+	}
+
+	public abstract F createForm(Supplier<CommandBroker> brokerSupplier);
+
+	public GroupedEntityCreateDialog<G, E, F> wrapFormAsCreateDialog() {
+		return new GroupedEntityCreateDialog<>(this, createForm(applicationContext::getBroker));
 	}
 
 	private void filterTree(String term) {

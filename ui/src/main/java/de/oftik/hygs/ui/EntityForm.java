@@ -40,8 +40,4 @@ public abstract class EntityForm<T> extends FormPanel {
 	 */
 	public abstract void blank();
 
-	/**
-	 * Unregister listeners, clean up a finished form.
-	 */
-	public abstract void destroy();
 }

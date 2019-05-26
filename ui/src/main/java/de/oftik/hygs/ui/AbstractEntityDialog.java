@@ -9,7 +9,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-public class AbstractEntityDialog<T, F extends EntityForm<T>> extends JDialog {
+public class AbstractEntityDialog<T, F extends FormPanel> extends JDialog {
 	public enum Decision {
 		OK, CANCEL;
 	}

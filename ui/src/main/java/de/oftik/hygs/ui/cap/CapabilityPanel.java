@@ -1,14 +1,17 @@
 package de.oftik.hygs.ui.cap;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.function.Supplier;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
+import de.oftik.hygs.cmd.CommandBroker;
 import de.oftik.hygs.cmd.CommandTarget;
 import de.oftik.hygs.cmd.CommandTargetDefinition;
 import de.oftik.hygs.cmd.Notification;
@@ -16,10 +19,11 @@ import de.oftik.hygs.cmd.NotificationListener;
 import de.oftik.hygs.query.cap.Capability;
 import de.oftik.hygs.query.cap.CapabilityDAO;
 import de.oftik.hygs.ui.ApplicationContext;
+import de.oftik.hygs.ui.GroupedEntityCreateDialog;
 import de.oftik.hygs.ui.GroupedEntityPanel;
 import de.oftik.hygs.ui.I18N;
 
-public class CapabilityPanel extends GroupedEntityPanel<Category, Capability> {
+public class CapabilityPanel extends GroupedEntityPanel<Category, Capability, CapabilityForm> {
 	static class CapabilityTreeCellRenderer implements TreeCellRenderer {
 		private final DefaultTreeCellRenderer rendererDelegate = new DefaultTreeCellRenderer();
 
@@ -49,7 +53,7 @@ public class CapabilityPanel extends GroupedEntityPanel<Category, Capability> {
 
 	public CapabilityPanel(ApplicationContext context) {
 		super(context, I18N.CATEGORY, new CategoryDAO(context), new CapabilityDAO(context),
-				new CapabilityForm(context::getBroker), new CapabilityTreeCellRenderer());
+				new CapabilityTreeCellRenderer());
 		broker().registerListener(new NotificationListener() {
 			@Override
 			public CommandTarget target() {
@@ -69,6 +73,11 @@ public class CapabilityPanel extends GroupedEntityPanel<Category, Capability> {
 	}
 
 	@Override
+	public CapabilityForm createForm(Supplier<CommandBroker> brokerSupplier) {
+		return new CapabilityForm(brokerSupplier);
+	}
+
+	@Override
 	protected boolean isEntityNode(DefaultMutableTreeNode node) {
 		return node.getUserObject() != null && node.getUserObject() instanceof Capability;
 	}
@@ -81,6 +90,14 @@ public class CapabilityPanel extends GroupedEntityPanel<Category, Capability> {
 	@Override
 	protected List<Capability> loadForGroup(Category g) throws SQLException {
 		return ((CapabilityDAO) entityDao()).findByCategory(g);
+	}
+
+	@Override
+	public void createEntity(ActionEvent evt) {
+		final GroupedEntityCreateDialog<Category, Capability, CapabilityForm> dlg = wrapFormAsCreateDialog();
+//		dlg.getForm().setCompanyCache(this);
+//		dlg.getForm().setCapabilityCache(this);
+		dlg.showAndWaitForDecision();
 	}
 
 }

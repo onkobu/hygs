@@ -238,7 +238,7 @@ public abstract class EntityListPanel<T extends Identifiable, F extends EntityFo
 		return entityForm;
 	}
 
-	protected final JPanel createActionPanel() {
+	static final JPanel createActionPanel(JButton newButton, JButton saveButton, JButton deleteButton) {
 		final JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout(FlowLayout.TRAILING));
 		panel.add(newButton);
@@ -266,7 +266,7 @@ public abstract class EntityListPanel<T extends Identifiable, F extends EntityFo
 		final JPanel centerPanel = new JPanel();
 		centerPanel.setLayout(new BorderLayout());
 		centerPanel.add(entityForm, BorderLayout.CENTER);
-		centerPanel.add(createActionPanel(), BorderLayout.SOUTH);
+		centerPanel.add(createActionPanel(newButton, saveButton, deleteButton), BorderLayout.SOUTH);
 		splitPane.setRightComponent(centerPanel);
 		add(splitPane, BorderLayout.CENTER);
 	}
