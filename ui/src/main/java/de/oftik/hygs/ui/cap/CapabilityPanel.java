@@ -70,6 +70,7 @@ public class CapabilityPanel extends GroupedEntityPanel<Category, Capability, Ca
 				refreshGroupIds(notification);
 			}
 		});
+		broker().registerListener(new EntityNotificationListener<>(CommandTargetDefinition.capability, this));
 	}
 
 	@Override

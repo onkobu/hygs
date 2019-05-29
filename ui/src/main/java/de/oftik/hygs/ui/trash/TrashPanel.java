@@ -17,6 +17,7 @@ import javax.swing.JScrollPane;
 
 import de.oftik.hygs.cmd.ResurrectEntityCmd;
 import de.oftik.hygs.contract.Identifiable;
+import de.oftik.hygs.query.cap.CapabilityDAO;
 import de.oftik.hygs.query.company.CompanyDAO;
 import de.oftik.hygs.query.project.ProjectDAO;
 import de.oftik.hygs.ui.ApplicationContext;
@@ -40,12 +41,14 @@ public class TrashPanel extends JPanel implements ApplicationContextListener {
 	private final ConstraintContext cCtx = new ConstraintContext();
 	private final CategoryDAO categoryDao;
 	private final ProjectDAO projectDao;
+	private final CapabilityDAO capabilityDao;
 
 	public TrashPanel(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
 		this.categoryDao = new CategoryDAO(applicationContext);
 		this.companyDao = new CompanyDAO(applicationContext);
 		this.projectDao = new ProjectDAO(applicationContext);
+		this.capabilityDao = new CapabilityDAO(applicationContext);
 		trash = new JList<>(trashListModel);
 		trash.setCellRenderer(new MappableToStringRenderer());
 		toProcess = new JList<>(toProcessListModel);
@@ -80,6 +83,7 @@ public class TrashPanel extends JPanel implements ApplicationContextListener {
 			categoryDao.consumeDeleted(trashListModel::addElement);
 			companyDao.consumeDeleted(trashListModel::addElement);
 			projectDao.consumeDeleted(trashListModel::addElement);
+			capabilityDao.consumeDeleted(trashListModel::addElement);
 		} catch (SQLException e) {
 			throw new IllegalStateException(e);
 		}

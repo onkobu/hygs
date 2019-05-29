@@ -1,5 +1,6 @@
 package de.oftik.hygs.cmd;
 
+import de.oftik.hygs.cmd.cap.CapabilityQueue;
 import de.oftik.hygs.cmd.cat.CategoryQueue;
 import de.oftik.hygs.cmd.company.CompanyQueue;
 import de.oftik.hygs.cmd.project.ProjectCapMappingQueue;
@@ -34,6 +35,13 @@ public enum CommandTargetDefinition implements CommandTarget {
 		@Override
 		public CommandQueue queue(ApplicationContext ctx) {
 			return new ProjectCapMappingQueue(ctx);
+		}
+	},
+
+	capability(Table.cap_capability) {
+		@Override
+		public CommandQueue queue(ApplicationContext ctx) {
+			return new CapabilityQueue(ctx);
 		}
 	};
 

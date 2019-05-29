@@ -22,6 +22,7 @@ import de.oftik.hygs.cmd.CommandTarget;
 import de.oftik.hygs.cmd.CommandTargetDefinition;
 import de.oftik.hygs.cmd.Notification;
 import de.oftik.hygs.cmd.NotificationListener;
+import de.oftik.hygs.cmd.cap.DeleteCapabilityCmd;
 import de.oftik.hygs.cmd.cat.CreateCategoryCmd;
 import de.oftik.hygs.query.cap.Capability;
 import de.oftik.hygs.ui.ComponentFactory;
@@ -143,13 +144,11 @@ public class CapabilityForm extends GroupedEntityForm<Category, Capability> {
 
 	@Override
 	public Command deleteEntityCommand() {
-		// TODO Auto-generated method stub
-		return null;
+		return new DeleteCapabilityCmd(Long.parseLong(idField.getText()));
 	}
 
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
-
+		// clear caches
 	}
 }

@@ -8,7 +8,7 @@ public abstract class AbstractCommand implements Command {
 	}
 
 	@Override
-	public CommandTarget target() {
+	public final CommandTarget target() {
 		return target;
 	}
 

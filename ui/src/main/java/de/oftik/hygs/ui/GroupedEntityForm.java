@@ -23,15 +23,15 @@ public abstract class GroupedEntityForm<G, E> extends FormPanel {
 
 	public abstract Command deleteEntityCommand();
 
-	public void createEntity() {
+	public final void createEntity() {
 		broker().execute(createEntityCommand());
 	}
 
-	public void saveEntity() {
+	public final void saveEntity() {
 		broker().execute(saveEntityCommand());
 	}
 
-	public void deleteEntity() {
+	public final void deleteEntity() {
 		broker().execute(deleteEntityCommand());
 	}
 

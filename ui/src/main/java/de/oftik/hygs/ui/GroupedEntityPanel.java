@@ -28,7 +28,9 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import de.oftik.hygs.cmd.CommandBroker;
+import de.oftik.hygs.cmd.CommandTarget;
 import de.oftik.hygs.cmd.Notification;
+import de.oftik.hygs.cmd.NotificationListener;
 import de.oftik.hygs.contract.Identifiable;
 import de.oftik.hygs.contract.MappableToString;
 import de.oftik.keyhs.kersantti.query.DAO;
@@ -65,6 +67,54 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 
 	private final JButton deleteButton;
 
+	/**
+	 * Use this listener to bind to this class' default behavior upon notification.
+	 * 
+	 * @author onkobu
+	 *
+	 * @param <T>
+	 */
+	protected static final class EntityNotificationListener<G extends Identifiable, E extends Identifiable & MappableToString, F extends GroupedEntityForm<G, E>>
+			implements NotificationListener {
+		private final CommandTarget target;
+		private final GroupedEntityPanel<G, E, F> reference;
+
+		public EntityNotificationListener(CommandTarget target, GroupedEntityPanel<G, E, F> ref) {
+			this.target = target;
+			this.reference = ref;
+		}
+
+		@Override
+		public CommandTarget target() {
+			return target;
+		}
+
+		@Override
+		public void onEnqueueError(Notification notification) {
+			// FormPanel will handle this
+		}
+
+		@Override
+		public void onSuccess(Notification notification) {
+			switch (notification.type()) {
+			case INSERT:
+				reference.onEntityInsert(notification.getIds());
+				break;
+			case UPDATE:
+				reference.onEntityUpdate(notification.getIds());
+				break;
+			case DELETE:
+				reference.onEntityDelete(notification.getIds());
+				break;
+			case RESURRECT:
+				reference.onEntityResurrected(notification.getIds());
+				break;
+			default:
+				log.warning("unhandled notification type " + notification);
+			}
+		}
+	}
+
 	public GroupedEntityPanel(ApplicationContext context, I18N rootTitle, DAO<G> groupDao, DAO<E> entityDao,
 			TreeCellRenderer renderer) {
 		this.applicationContext = context;
@@ -85,6 +135,23 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 		deleteButton.setEnabled(false);
 
 		createUI();
+		fillTree();
+	}
+
+	public void onEntityResurrected(List<Long> ids) {
+		fillTree();
+	}
+
+	public void onEntityDelete(List<Long> ids) {
+		selectionCleared();
+		fillTree();
+	}
+
+	public void onEntityUpdate(List<Long> ids) {
+		fillTree();
+	}
+
+	public void onEntityInsert(List<Long> ids) {
 		fillTree();
 	}
 
