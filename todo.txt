@@ -1,3 +1,4 @@
+- search in capabilities/ filter tree
 - employer assignment view
 - timeline of technology
 - perl interface, export XML

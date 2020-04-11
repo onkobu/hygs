@@ -16,11 +16,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 
+import de.oftik.hygs.cmd.Command;
 import de.oftik.hygs.cmd.CommandBroker;
 import de.oftik.hygs.cmd.CommandTarget;
 import de.oftik.hygs.cmd.CommandTargetDefinition;
 import de.oftik.hygs.cmd.Notification;
 import de.oftik.hygs.cmd.NotificationListener;
+import de.oftik.hygs.cmd.cap.DeleteCapabilityCmd;
 import de.oftik.hygs.cmd.cat.CreateCategoryCmd;
 import de.oftik.hygs.query.cap.Capability;
 import de.oftik.hygs.ui.ComponentFactory;
@@ -126,5 +128,27 @@ public class CapabilityForm extends GroupedEntityForm<Category, Capability> {
 	private void categoryCreated(Notification notification) {
 		JOptionPane.showMessageDialog(this, notification.result().name(), I18N.DLG_INFO.title(),
 				JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	@Override
+	public Command createEntityCommand() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Command saveEntityCommand() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Command deleteEntityCommand() {
+		return new DeleteCapabilityCmd(Long.parseLong(idField.getText()));
+	}
+
+	@Override
+	public void destroy() {
+		// clear caches
 	}
 }

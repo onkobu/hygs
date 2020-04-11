@@ -3,7 +3,7 @@ package de.oftik.hygs.query.cap;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import de.oftik.hygs.query.Column;
+import de.oftik.keyhs.kersantti.Column;
 
 public enum CapabilityColumn implements Column<Capability> {
 	cap_id,

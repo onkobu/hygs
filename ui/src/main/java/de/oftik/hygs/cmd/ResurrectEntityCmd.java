@@ -7,8 +7,8 @@ import java.util.List;
 
 import de.oftik.hygs.contract.EntitySource;
 import de.oftik.hygs.contract.Identifiable;
-import de.oftik.hygs.query.Column;
 import de.oftik.hygs.query.Table;
+import de.oftik.keyhs.kersantti.Column;
 
 public class ResurrectEntityCmd implements Command {
 	private final CommandTarget target;

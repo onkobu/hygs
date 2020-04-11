@@ -11,8 +11,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import de.oftik.hygs.query.Column;
 import de.oftik.hygs.query.Table;
+import de.oftik.keyhs.kersantti.Column;
 import mockit.Mocked;
 import mockit.Verifications;
 

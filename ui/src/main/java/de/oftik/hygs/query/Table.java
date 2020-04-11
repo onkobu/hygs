@@ -5,8 +5,9 @@ import de.oftik.hygs.query.cap.CapabilityColumn;
 import de.oftik.hygs.query.company.CompanyColumn;
 import de.oftik.hygs.query.project.ProjectColumn;
 import de.oftik.hygs.ui.cap.CategoryColumn;
+import de.oftik.keyhs.kersantti.Column;
 
-public enum Table implements EntitySource {
+public enum Table implements de.oftik.keyhs.kersantti.Table, EntitySource {
 	prj_company(CompanyColumn.cmp_id, CompanyColumn.cmp_deleted),
 
 	prj_months,

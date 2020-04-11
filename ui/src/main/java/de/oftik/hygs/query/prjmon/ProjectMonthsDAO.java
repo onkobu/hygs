@@ -3,13 +3,13 @@ package de.oftik.hygs.query.prjmon;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import de.oftik.hygs.query.Column;
-import de.oftik.hygs.query.DAO;
+import de.oftik.hygs.query.AbstractDao;
 import de.oftik.hygs.query.Table;
 import de.oftik.hygs.query.project.ProjectColumn;
 import de.oftik.hygs.ui.ApplicationContext;
+import de.oftik.keyhs.kersantti.Column;
 
-public class ProjectMonthsDAO extends DAO<ProjectMonth> {
+public class ProjectMonthsDAO extends AbstractDao<ProjectMonth> {
 
 	public ProjectMonthsDAO(ApplicationContext context) {
 		super(context, Table.prj_months);

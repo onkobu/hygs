@@ -81,4 +81,9 @@ public class CompanyForm extends EntityForm<Company> {
 		cityField.setText(null);
 		zipField.setText(null);
 	}
+
+	@Override
+	public void destroy() {
+		// nothing to do here
+	}
 }

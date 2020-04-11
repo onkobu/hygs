@@ -18,13 +18,13 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import de.oftik.hygs.query.QueryStatistics;
 import de.oftik.hygs.query.prjmon.ProjectMonth;
 import de.oftik.hygs.query.prjmon.ProjectMonthsDAO;
 import de.oftik.hygs.ui.ApplicationContext;
 import de.oftik.hygs.ui.ExportError;
 import de.oftik.hygs.ui.TimerConsumerWrapper;
 import de.oftik.kehys.keijukainen.function.Pair;
+import de.oftik.keyhs.kersantti.query.QueryStatistics;
 
 public class ProjectMonthsExporter {
 	private ProjectMonthsDAO dao;

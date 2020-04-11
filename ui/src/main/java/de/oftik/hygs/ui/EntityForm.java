@@ -39,4 +39,5 @@ public abstract class EntityForm<T> extends FormPanel {
 	 * Blank all fields due to empty selection.
 	 */
 	public abstract void blank();
+
 }

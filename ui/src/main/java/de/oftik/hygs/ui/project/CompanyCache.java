@@ -8,7 +8,9 @@ import de.oftik.hygs.query.company.Company;
 public interface CompanyCache {
 	Company getCompanyById(long id);
 
-	void consumeAll(Consumer<Company> consumer);
+	void consumeAllCompanies(Consumer<Company> consumer);
 
 	void addCacheListener(CacheListener listener);
+
+	void removeCacheListener(CacheListener listener);
 }

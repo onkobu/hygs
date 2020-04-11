@@ -5,14 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-import de.oftik.hygs.cmd.Command;
-import de.oftik.hygs.cmd.CommandTarget;
+import de.oftik.hygs.cmd.AbstractCommand;
 import de.oftik.hygs.cmd.CommandTargetDefinition;
 import de.oftik.hygs.cmd.Notification;
 import de.oftik.hygs.query.Table;
 import de.oftik.hygs.query.company.CompanyColumn;
 
-public class SaveCompanyCmd implements Command {
+public class SaveCompanyCmd extends AbstractCommand {
 	private final long id;
 	private final String name;
 	private final String street;
@@ -20,17 +19,12 @@ public class SaveCompanyCmd implements Command {
 	private final String zip;
 
 	public SaveCompanyCmd(long id, String name, String street, String city, String zip) {
-		super();
+		super(CommandTargetDefinition.company);
 		this.id = id;
 		this.name = name;
 		this.street = street;
 		this.city = city;
 		this.zip = zip;
-	}
-
-	@Override
-	public CommandTarget target() {
-		return CommandTargetDefinition.company;
 	}
 
 	@Override

@@ -9,7 +9,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-public class AbstractEntityDialog<T> extends JDialog {
+public class AbstractEntityDialog<T, F extends FormPanel> extends JDialog {
 	public enum Decision {
 		OK, CANCEL;
 	}
@@ -19,10 +19,10 @@ public class AbstractEntityDialog<T> extends JDialog {
 	}
 
 	private Decision decision;
-	private final EntityForm<T> form;
+	private final F form;
 	private final OkCallback callback;
 
-	public AbstractEntityDialog(JComponent parent, EntityForm<T> main, OkCallback callback) {
+	public AbstractEntityDialog(JComponent parent, F main, OkCallback callback) {
 		super(SwingUtilities.getWindowAncestor(parent));
 		setModal(true);
 		setLayout(new BorderLayout());
@@ -46,6 +46,10 @@ public class AbstractEntityDialog<T> extends JDialog {
 		decision = Decision.CANCEL;
 	}
 
+	public F getForm() {
+		return form;
+	}
+
 	public Decision showAndWaitForDecision() {
 		decision = null;
 		pack();
@@ -53,6 +57,7 @@ public class AbstractEntityDialog<T> extends JDialog {
 		if (decision == Decision.OK) {
 			callback.okPressed();
 		}
+		form.destroy();
 		return decision;
 	}
 }

@@ -5,24 +5,18 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-import de.oftik.hygs.cmd.Command;
-import de.oftik.hygs.cmd.CommandTarget;
+import de.oftik.hygs.cmd.AbstractCommand;
 import de.oftik.hygs.cmd.CommandTargetDefinition;
 import de.oftik.hygs.cmd.Notification;
 import de.oftik.hygs.query.Table;
 import de.oftik.hygs.query.company.CompanyColumn;
 
-public class DeleteCompanyCmd implements Command {
+public class DeleteCompanyCmd extends AbstractCommand {
 	private final long id;
 
 	public DeleteCompanyCmd(long id) {
-		super();
+		super(CommandTargetDefinition.company);
 		this.id = id;
-	}
-
-	@Override
-	public CommandTarget target() {
-		return CommandTargetDefinition.company;
 	}
 
 	@Override

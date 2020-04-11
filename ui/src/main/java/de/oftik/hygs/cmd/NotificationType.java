@@ -24,5 +24,10 @@ public enum NotificationType {
 	/**
 	 * An inactive/ deleted/ invalid entity was brought back to life.
 	 */
-	RESURRECT;
+	RESURRECT,
+
+	/**
+	 * One entity was assigned/ linked to another.
+	 */
+	ASSIGNED;
 }

@@ -3,7 +3,7 @@ package de.oftik.hygs.query.project;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import de.oftik.hygs.query.Column;
+import de.oftik.keyhs.kersantti.Column;
 
 public enum AssignedCapabilityColumn implements Column<AssignedCapability> {
 	prj_id,
