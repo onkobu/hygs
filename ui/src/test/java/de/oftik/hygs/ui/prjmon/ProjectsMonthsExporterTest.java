@@ -1,7 +1,7 @@
 package de.oftik.hygs.ui.prjmon;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
 
 import java.io.StringWriter;
 import java.sql.SQLException;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import org.hamcrest.Matchers;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import de.oftik.hygs.query.prjmon.ProjectMonth;
 import de.oftik.hygs.query.prjmon.ProjectMonthsDAO;

@@ -78,6 +78,13 @@ I thank the collegue who pointed out that unique feature, to carry around an ent
 * test locally with a sample database, incl. upgrade.sh
 * record the script in install.template and invoke gen_install.sh to populate installation script(s)
 
+## Eclipse/ Java-UI
+
+* Needs a JDK-11 and Maven 3.6
+* Pulls all other dependencies from the web, so without Internet you're lost
+* ``mvn clean install`` – builds everything
+* To run tests in Eclipse, -javaagent: needs to be set to a recent JMockit-JAR (use your home directory/ .m2/org/jmockit/...)
+
 ## Schemaspy
 
 * make sure, Java 8 (or later) is installed on your system

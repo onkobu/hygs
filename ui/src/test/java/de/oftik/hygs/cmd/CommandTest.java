@@ -1,15 +1,15 @@
 package de.oftik.hygs.cmd;
 
 import static de.oftik.kehys.testi.UnexpectedCall.unexpectedCall;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import de.oftik.hygs.query.Column;
 import de.oftik.hygs.query.Table;
