@@ -71,7 +71,13 @@ public enum I18N {
 
 	SELECT_CAPABILITY,
 
-	SEARCH;
+	SEARCH,
+
+	MENU_DATABASE,
+
+	ACTION_OPEN_DATABASE,
+
+	ACTION_CLOSE_DATABASE;
 
 	public String title() {
 		return getBundle().getString(name() + ".title");

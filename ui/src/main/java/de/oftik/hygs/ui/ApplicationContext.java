@@ -18,4 +18,6 @@ public interface ApplicationContext extends DatabaseContext {
 	void addListener(ApplicationContextListener lstnr);
 
 	void removeListener(ApplicationContextListener lstnr);
+
+	void destroy();
 }

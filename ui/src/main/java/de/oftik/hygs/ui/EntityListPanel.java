@@ -31,7 +31,7 @@ import de.oftik.keyhs.kersantti.query.DAO;
 /**
  * A panel that contains a list of entities and a form next to it. Upon
  * selection of an entity in the list the form displays all details.
- * 
+ *
  * @author onkobu
  *
  * @param <T>
@@ -52,7 +52,7 @@ public abstract class EntityListPanel<T extends Identifiable, F extends EntityFo
 
 	/**
 	 * Use this listener to bind to this class' default behavior upon notification.
-	 * 
+	 *
 	 * @author onkobu
 	 *
 	 * @param <T>
@@ -272,7 +272,6 @@ public abstract class EntityListPanel<T extends Identifiable, F extends EntityFo
 	}
 
 	private void fillList() {
-		listModel.clear();
 		try {
 			getDAO().consumeAll(listModel::addElement);
 		} catch (SQLException e) {
@@ -280,11 +279,19 @@ public abstract class EntityListPanel<T extends Identifiable, F extends EntityFo
 		}
 	}
 
+	private void clearList() {
+		listModel.clear();
+	}
+
 	@Override
 	public void onEvent(ContextEvent e) {
 		switch (e.getEventType()) {
 		case RELOAD_DATABASE:
+			clearList();
 			fillList();
+			break;
+		case CLOSED_DATABASE:
+			clearList();
 			break;
 		}
 	}

@@ -90,6 +90,11 @@ public class TrashPanel extends JPanel implements ApplicationContextListener {
 		cCtx.init();
 	}
 
+	private final void clearList() {
+		trashListModel.removeAllElements();
+		cCtx.init();
+	}
+
 	public void allToRight(ActionEvent evt) {
 		transferAll(trashListModel, toProcessListModel);
 	}
@@ -124,6 +129,9 @@ public class TrashPanel extends JPanel implements ApplicationContextListener {
 		switch (e.getEventType()) {
 		case RELOAD_DATABASE:
 			fillList();
+			break;
+		case CLOSED_DATABASE:
+			clearList();
 			break;
 		}
 	}

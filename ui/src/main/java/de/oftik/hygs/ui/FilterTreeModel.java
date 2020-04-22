@@ -1,13 +1,7 @@
 package de.oftik.hygs.ui;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
-
-import de.oftik.hygs.contract.MappableToString;
 
 public class FilterTreeModel extends DefaultTreeModel {
 
@@ -27,39 +21,9 @@ public class FilterTreeModel extends DefaultTreeModel {
 	}
 
 	public void filter(String term) {
-		final Enumeration<TreeNode> groups = ((FilterNode) getRoot()).children();
-		final String lcTerm;
-		if (term == null) {
-			lcTerm = null;
-		} else {
-			lcTerm = term.toLowerCase();
-		}
-		boolean changed = false;
-		while (groups.hasMoreElements()) {
-			changed |= visitAll((FilterNode) groups.nextElement(), lcTerm);
-		}
+		final boolean changed = ((FilterNode) getRoot()).visitAll(term);
 		if (changed) {
 			fireTreeStructureChanged(this, null, null, null);
-		}
-	}
-
-	private boolean visitAll(FilterNode node, String term) {
-		if (node.isLeaf()) {
-			final MappableToString mts = (MappableToString) node.getUserObject();
-			final boolean oldState = node.isVisible();
-			node.setVisible(term == null || mts.toShortString().toLowerCase().contains(term));
-			return oldState != node.isVisible();
-		} else {
-			final Enumeration<TreeNode> children = node.children();
-			List<FilterNode> changedChildren = new ArrayList<>();
-			while (children.hasMoreElements()) {
-				final FilterNode child = (FilterNode) children.nextElement();
-				if (visitAll(child, term)) {
-					changedChildren.add(child);
-				}
-			}
-			node.setVisible(!node.isEmpty());
-			return false;
 		}
 	}
 

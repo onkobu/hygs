@@ -2,7 +2,9 @@ package de.oftik.hygs.ui;
 
 public final class ContextEvent extends Event {
 	public enum ContextEventType {
-		RELOAD_DATABASE;
+		RELOAD_DATABASE,
+
+		CLOSED_DATABASE;
 	}
 
 	private final ContextEventType eventType;
@@ -18,6 +20,10 @@ public final class ContextEvent extends Event {
 
 	public static ContextEvent reloadDatabase() {
 		return new ContextEvent(ContextEventType.RELOAD_DATABASE);
+	}
+
+	public static ContextEvent closedDatabase() {
+		return new ContextEvent(ContextEventType.CLOSED_DATABASE);
 	}
 
 }

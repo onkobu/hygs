@@ -75,6 +75,12 @@ public class HygsUI {
 		}
 
 		@Override
+		public void destroy() {
+			dbPath = null;
+			publish(ContextEvent.closedDatabase());
+		}
+
+		@Override
 		public boolean hasDatabase() {
 			return Validators.isValidPath(dbPath());
 		}

@@ -1,13 +1,26 @@
-- search in capabilities/ filter tree
+# User Stories
+
+## To be implemented
+
+As smart user I want to compare an open database with another to know which is
+the most recent version
+
+- table with continuous history/ audit-table?
+- output/ display?
+
+As smart user I want to import/ merge another database into the currently
+opened to make it the most recent version
+
+## Backlog/ Various
 - employer assignment view
 - timeline of technology
 - perl interface, export XML
-- backup
 - wiki, i18n part of table, standalone without translation resources=personal
   table
 
 # Done
 
+- search in capabilities/ filter tree
 - en, will not break current upgrade.sh, as it filters by locale-specific
   upgrade.lst
 - capability view, grouped by name, joined with category

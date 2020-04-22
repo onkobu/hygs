@@ -8,6 +8,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,7 @@ import de.oftik.keyhs.kersantti.query.DAO;
 /**
  * A panel with a tree-like structure on one side, grouping entities. Next to it
  * a form shows details of a selected entity.
- * 
+ *
  * @author onkobu
  *
  * @param <G>
@@ -69,7 +70,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 
 	/**
 	 * Use this listener to bind to this class' default behavior upon notification.
-	 * 
+	 *
 	 * @author onkobu
 	 *
 	 * @param <T>
@@ -190,6 +191,9 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 		switch (e.getEventType()) {
 		case RELOAD_DATABASE:
 			fillTree();
+			break;
+		case CLOSED_DATABASE:
+			clearTree();
 			break;
 		}
 	}
@@ -322,6 +326,12 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 		}
 		treeModel.nodeStructureChanged(root);
 		entityForm.setGroups(groups);
+	}
+
+	private void clearTree() {
+		root.removeAllChildren();
+		treeModel.nodeStructureChanged(root);
+		entityForm.setGroups(Collections.emptyList());
 	}
 
 	protected FilterNode registerGroup(final FilterNode tn) {
