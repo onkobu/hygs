@@ -1,3 +1,17 @@
+# Bugs
+
+## Entity Actions not disabled while no Database open
+
+1. Do not open a database upon startup or close an open database
+1. Pick any view that creates entities, e.g. Company
+1. Click New & fill in form
+1. Finish with Ok
+1. Exception occurs
+
+Instead all actions on all entity views must be disabled when no database is
+open.
+
+
 # User Stories
 
 ## To be implemented
