@@ -28,7 +28,7 @@ public class ProjectCapMappingQueue extends AbstractCommandQueue {
 			final PreparedStatement stmt = cmd.prepare(conn);
 			stmt.execute();
 			conn.commit();
-			return cmd.toNotification(extractKeys(stmt));
+			return cmd.toNotification(conn, extractKeys(stmt));
 		} catch (SQLException e) {
 			// throwing only uses FINER
 			log.log(Level.SEVERE, "handleCommand", e);

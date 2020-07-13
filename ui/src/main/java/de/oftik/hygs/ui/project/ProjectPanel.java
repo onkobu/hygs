@@ -26,12 +26,13 @@ import de.oftik.hygs.ui.ApplicationContext;
 import de.oftik.hygs.ui.ContextEvent;
 import de.oftik.hygs.ui.EntityCreateDialog;
 import de.oftik.hygs.ui.EntityListPanel;
+import de.oftik.keyhs.kersantti.ForeignKey;
 
 public class ProjectPanel extends EntityListPanel<Project, ProjectForm> implements CompanyCache, CapabilityCache {
 	private final CompanyDAO companyDao;
 	private final CapabilityDAO capabilityDao;
-	private final Map<Long, Company> companyCache = new HashMap<>();
-	private final Map<Long, Capability> capabilityCache = new HashMap<>();
+	private final Map<String, Company> companyCache = new HashMap<>();
+	private final Map<String, Capability> capabilityCache = new HashMap<>();
 	private final List<CacheListener> cacheListener = new ArrayList<>();
 
 	public enum Cache implements CacheType {
@@ -103,8 +104,8 @@ public class ProjectPanel extends EntityListPanel<Project, ProjectForm> implemen
 	}
 
 	@Override
-	public Company getCompanyById(long id) {
-		return companyCache.get(id);
+	public Company getCompany(ForeignKey<Company> companyKey) {
+		return companyCache.get(companyKey.getParentId());
 	}
 
 	@Override

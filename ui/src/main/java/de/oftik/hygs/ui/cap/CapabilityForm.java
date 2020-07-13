@@ -144,7 +144,7 @@ public class CapabilityForm extends GroupedEntityForm<Category, Capability> {
 
 	@Override
 	public Command deleteEntityCommand() {
-		return new DeleteCapabilityCmd(Long.parseLong(idField.getText()));
+		return new DeleteCapabilityCmd(Capability.withId(idField.getText()));
 	}
 
 	@Override

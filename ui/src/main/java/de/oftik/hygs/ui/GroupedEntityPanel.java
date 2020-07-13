@@ -58,7 +58,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 	private final DAO<G> groupDao;
 	private final DAO<E> entityDao;
 
-	private final Map<Long, FilterNode> groupMap = new HashMap<>();
+	private final Map<String, FilterNode> groupMap = new HashMap<>();
 
 	private final ApplicationContext applicationContext;
 
@@ -139,20 +139,20 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 		fillTree();
 	}
 
-	public void onEntityResurrected(List<Long> ids) {
+	public void onEntityResurrected(List<String> ids) {
 		fillTree();
 	}
 
-	public void onEntityDelete(List<Long> ids) {
+	public void onEntityDelete(List<String> ids) {
 		selectionCleared();
 		fillTree();
 	}
 
-	public void onEntityUpdate(List<Long> ids) {
+	public void onEntityUpdate(List<String> ids) {
 		fillTree();
 	}
 
-	public void onEntityInsert(List<Long> ids) {
+	public void onEntityInsert(List<String> ids) {
 		fillTree();
 	}
 

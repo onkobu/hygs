@@ -1,10 +1,12 @@
 package de.oftik.hygs.ui;
 
+import de.oftik.keyhs.kersantti.Identifiable;
+
 public class ExportError {
 	private final Throwable throwable;
-	private final Long entityId;
+	private final Identifiable entityId;
 
-	public ExportError(Throwable t, Long entityId) {
+	public ExportError(Throwable t, Identifiable entityId) {
 		this.throwable = t;
 		this.entityId = entityId;
 	}
@@ -13,7 +15,7 @@ public class ExportError {
 		this(t, null);
 	}
 
-	public Long getEntityId() {
+	public Identifiable getEntityId() {
 		return entityId;
 	}
 

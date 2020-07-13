@@ -1,38 +1,22 @@
 package de.oftik.hygs.query.project;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import de.oftik.hygs.query.AbstractDao;
-import de.oftik.hygs.query.Table;
 import de.oftik.hygs.ui.ApplicationContext;
-import de.oftik.keyhs.kersantti.Column;
+import de.oftik.keyhs.kersantti.query.DAO;
 
-public class AssignedCapabilityDAO extends AbstractDao<AssignedCapability> {
+public class AssignedCapabilityDAO extends DAO<AssignedCapability> {
 	public AssignedCapabilityDAO(ApplicationContext context) {
-		super(context, Table.v_prj_cap);
+		super(context, AssignedCapabilityTable.TABLE);
 	}
 
 	public List<AssignedCapability> findByProject(Project prj) throws SQLException {
-		try (Connection conn = createConnection()) {
-			return findBy(conn, AssignedCapabilityColumn.prj_id, prj.getId());
-		}
+		return findBy(AssignedCapabilityColumn.prj_id, prj.getId());
 	}
 
 	@Override
-	protected AssignedCapability map(ResultSet rs) throws SQLException {
-		return AssignedCapabilityColumn.to(rs);
-	}
-
-	@Override
-	protected Column<?> getPkColumn() {
-		return AssignedCapabilityColumn.cap_id;
-	}
-
-	@Override
-	protected Column<?> getDeletedColumn() {
-		throw new UnsupportedOperationException();
+	protected AssignedCapability instantiate() {
+		return new AssignedCapability();
 	}
 }

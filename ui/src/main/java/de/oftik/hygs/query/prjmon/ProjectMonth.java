@@ -5,30 +5,31 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import de.oftik.keyhs.kersantti.Identifiable;
+
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ProjectMonth {
+public class ProjectMonth implements Identifiable {
 	@XmlAttribute
-	private final long id;
+	private String id;
 
 	@XmlAttribute
-	private final String projectName;
+	private String projectName;
 
 	@XmlAttribute
-	private final int months;
+	private int months;
 
 	public ProjectMonth() {
-		throw new UnsupportedOperationException("Utterwise JAX-B whines like likkel gjal");
 	}
 
-	public ProjectMonth(long id, String projectName, int months) {
+	public ProjectMonth(String id, String projectName, int months) {
 		super();
 		this.id = id;
 		this.projectName = projectName;
 		this.months = months;
 	}
 
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 
@@ -38,5 +39,20 @@ public class ProjectMonth {
 
 	public int getMonths() {
 		return months;
+	}
+
+	public void createId() {
+	}
+
+	void setId(String id) {
+		this.id = id;
+	}
+
+	void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	void setMonths(int months) {
+		this.months = months;
 	}
 }

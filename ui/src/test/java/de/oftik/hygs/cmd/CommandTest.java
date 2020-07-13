@@ -6,13 +6,18 @@ import static org.hamcrest.Matchers.equalTo;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import de.oftik.hygs.query.Table;
+import de.oftik.hygs.contract.Identifiable;
 import de.oftik.keyhs.kersantti.Column;
+import de.oftik.keyhs.kersantti.ColumnType;
+import de.oftik.keyhs.kersantti.Constraint;
+import de.oftik.keyhs.kersantti.Table;
 import mockit.Mocked;
 import mockit.Verifications;
 
@@ -30,12 +35,12 @@ public class CommandTest {
 		}
 
 		@Override
-		public Notification toNotification(List<Long> generatedKeys) {
+		public Notification toNotification(Connection conn, List<String> generatedKeys) {
 			return unexpectedCall();
 		}
 	}
 
-	public static final class TestColumn implements Column<Object> {
+	public static final class TestColumn implements Column<Identifiable> {
 		private final String name;
 
 		private TestColumn(String name) {
@@ -47,11 +52,50 @@ public class CommandTest {
 		public String name() {
 			return name;
 		}
+
+		@Override
+		public void map(Identifiable t, ResultSet rs) throws SQLException {
+
+		}
+
+		@Override
+		public void map(Identifiable t, int idx, PreparedStatement stmt) throws SQLException {
+
+		}
+
+		@Override
+		public ColumnType type() {
+			return null;
+		}
+	}
+
+	static class TestTable implements Table<Identifiable> {
+		static final TestTable TABLE = new TestTable();
+
+		@Override
+		public String name() {
+			return getClass().getSimpleName();
+		}
+
+		@Override
+		public Column<Identifiable> getPkColumn() {
+			return unexpectedCall();
+		}
+
+		@Override
+		public Column<Identifiable>[] columns() {
+			return unexpectedCall();
+		}
+
+		@Override
+		public Collection<Constraint> constraints() {
+			return unexpectedCall();
+		}
 	}
 
 	@Test
 	public void renderInsert(@Mocked Connection conn) throws Exception {
-		new TestCommand().insert(conn, Table.prj_company, new TestColumn("id"), new TestColumn("value1"),
+		new TestCommand().insert(conn, TestTable.TABLE, new TestColumn("id"), new TestColumn("value1"),
 				new TestColumn("value2"), new TestColumn("value3"));
 		new Verifications() {
 			{
@@ -64,7 +108,7 @@ public class CommandTest {
 
 	@Test
 	public void renderUpdateSingleColumn(@Mocked Connection conn) throws Exception {
-		new TestCommand().update(conn, Table.prj_company, new TestColumn("id"), new TestColumn("value"));
+		new TestCommand().update(conn, TestTable.TABLE, new TestColumn("id"), new TestColumn("value"));
 		new Verifications() {
 			{
 				String s;
@@ -76,7 +120,7 @@ public class CommandTest {
 
 	@Test
 	public void renderUpdate(@Mocked Connection conn) throws Exception {
-		new TestCommand().update(conn, Table.prj_company, new TestColumn("id"), new TestColumn("value1"),
+		new TestCommand().update(conn, TestTable.TABLE, new TestColumn("id"), new TestColumn("value1"),
 				new TestColumn("value2"), new TestColumn("value3"));
 		new Verifications() {
 			{

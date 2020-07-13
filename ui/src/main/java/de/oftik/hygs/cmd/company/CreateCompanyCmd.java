@@ -8,8 +8,9 @@ import java.util.List;
 import de.oftik.hygs.cmd.AbstractCommand;
 import de.oftik.hygs.cmd.CommandTargetDefinition;
 import de.oftik.hygs.cmd.Notification;
-import de.oftik.hygs.query.Table;
+import de.oftik.hygs.query.company.Company;
 import de.oftik.hygs.query.company.CompanyColumn;
+import de.oftik.hygs.query.company.CompanyTable;
 
 public class CreateCompanyCmd extends AbstractCommand {
 	private final String name;
@@ -27,8 +28,8 @@ public class CreateCompanyCmd extends AbstractCommand {
 
 	@Override
 	public PreparedStatement prepare(Connection conn) throws SQLException {
-		final PreparedStatement stmt = insert(conn, Table.prj_company, CompanyColumn.cmp_name, CompanyColumn.cmp_street,
-				CompanyColumn.cmp_city, CompanyColumn.cmp_zip);
+		final PreparedStatement stmt = insert(conn, CompanyTable.TABLE, CompanyColumn.cmp_name,
+				CompanyColumn.cmp_street, CompanyColumn.cmp_city, CompanyColumn.cmp_zip);
 		stmt.setString(1, name);
 		stmt.setString(2, street);
 		stmt.setString(3, city);
@@ -37,8 +38,14 @@ public class CreateCompanyCmd extends AbstractCommand {
 	}
 
 	@Override
-	public Notification toNotification(List<Long> generatedKeys) {
-		return new CompanyCreated(generatedKeys.get(0));
+	public Notification toNotification(Connection conn, List<String> generatedKeys) {
+		try {
+			return new CompanyCreated(
+					AbstractCommand.loadSingle(conn, CompanyTable.TABLE, generatedKeys, new Company()).get());
+		} catch (SQLException e) {
+			handleException(e);
+		}
+		return null;
 	}
 
 }

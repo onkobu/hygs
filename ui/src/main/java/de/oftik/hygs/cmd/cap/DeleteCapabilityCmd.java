@@ -8,27 +8,28 @@ import java.util.List;
 import de.oftik.hygs.cmd.AbstractCommand;
 import de.oftik.hygs.cmd.CommandTargetDefinition;
 import de.oftik.hygs.cmd.Notification;
-import de.oftik.hygs.query.Table;
+import de.oftik.hygs.query.cap.Capability;
 import de.oftik.hygs.query.cap.CapabilityColumn;
+import de.oftik.hygs.query.cap.CapabilityTable;
 
 public class DeleteCapabilityCmd extends AbstractCommand {
-	private final long id;
+	private final Capability capability;
 
-	public DeleteCapabilityCmd(long id) {
+	public DeleteCapabilityCmd(Capability cap) {
 		super(CommandTargetDefinition.capability);
-		this.id = id;
+		this.capability = cap;
 	}
 
 	@Override
 	public PreparedStatement prepare(Connection conn) throws SQLException {
-		final PreparedStatement stmt = delete(conn, Table.cap_capability, CapabilityColumn.cap_id,
+		final PreparedStatement stmt = delete(conn, CapabilityTable.TABLE, CapabilityColumn.cap_id,
 				CapabilityColumn.cap_deleted);
-		stmt.setLong(1, id);
+		stmt.setString(1, capability.getId());
 		return stmt;
 	}
 
 	@Override
-	public Notification toNotification(List<Long> generatedKeys) {
-		return new CapabilityDeleted(id);
+	public Notification toNotification(Connection conn, List<String> generatedKeys) {
+		return new CapabilityDeleted(capability);
 	}
 }

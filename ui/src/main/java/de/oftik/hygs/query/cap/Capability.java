@@ -3,15 +3,18 @@ package de.oftik.hygs.query.cap;
 import de.oftik.hygs.contract.EntitySource;
 import de.oftik.hygs.contract.Identifiable;
 import de.oftik.hygs.contract.MappableToString;
-import de.oftik.hygs.query.Table;
 
 public class Capability implements Identifiable, MappableToString {
-	private final long id;
-	private final String name;
-	private final long categoryId;
-	private final String version;
+	private String id;
+	private String name;
+	private long categoryId;
+	private String version;
+	private boolean deleted;
 
-	public Capability(long id, String name, long categoryId, String version) {
+	public Capability() {
+	}
+
+	public Capability(String id, String name, long categoryId, String version) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -20,7 +23,7 @@ public class Capability implements Identifiable, MappableToString {
 	}
 
 	@Override
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 
@@ -36,9 +39,34 @@ public class Capability implements Identifiable, MappableToString {
 		return version;
 	}
 
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+
 	@Override
 	public String toShortString() {
 		return version == null ? getName() : String.format("%s (%s)", getName(), getVersion());
+	}
+
+	Capability setId(String id) {
+		this.id = id;
+		return this;
+	}
+
+	void setName(String name) {
+		this.name = name;
+	}
+
+	void setCategoryId(long categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	void setVersion(String version) {
+		this.version = version;
 	}
 
 	@Override
@@ -47,7 +75,11 @@ public class Capability implements Identifiable, MappableToString {
 	}
 
 	@Override
-	public EntitySource getSource() {
-		return Table.cap_capability;
+	public EntitySource<Capability> getSource() {
+		return CapabilityTable.TABLE;
+	}
+
+	public static Capability withId(String id2) {
+		return new Capability().setId(id2);
 	}
 }

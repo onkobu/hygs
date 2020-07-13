@@ -1,14 +1,16 @@
 package de.oftik.hygs.contract;
 
-import de.oftik.hygs.query.Table;
 import de.oftik.keyhs.kersantti.Column;
+import de.oftik.keyhs.kersantti.Table;
 
-public interface EntitySource {
+public interface EntitySource<T extends Identifiable> {
 	String name();
 
-	Table getTable();
+	Table<T> getTable();
 
-	Column<?> getPrimaryKeyColumn();
+	default Column<T> getPrimaryKeyColumn() {
+		return getTable().getPkColumn();
+	}
 
-	Column<?> getDeleteColumn();
+	Column<T> getDeleteColumn();
 }

@@ -9,15 +9,16 @@ import de.oftik.hygs.cmd.Command;
 import de.oftik.hygs.cmd.CommandTarget;
 import de.oftik.hygs.cmd.CommandTargetDefinition;
 import de.oftik.hygs.cmd.Notification;
-import de.oftik.hygs.query.Table;
+import de.oftik.hygs.query.project.Project;
 import de.oftik.hygs.query.project.ProjectColumn;
+import de.oftik.hygs.query.project.ProjectTable;
 
 public class DeleteProjectCmd implements Command {
-	private final long id;
+	private final Project prj;
 
-	public DeleteProjectCmd(long id) {
+	public DeleteProjectCmd(Project prj) {
 		super();
-		this.id = id;
+		this.prj = prj;
 	}
 
 	@Override
@@ -27,13 +28,14 @@ public class DeleteProjectCmd implements Command {
 
 	@Override
 	public PreparedStatement prepare(Connection conn) throws SQLException {
-		final PreparedStatement stmt = delete(conn, Table.cap_project, ProjectColumn.prj_id, ProjectColumn.prj_deleted);
-		stmt.setLong(1, id);
+		final PreparedStatement stmt = delete(conn, ProjectTable.TABLE, ProjectColumn.prj_id,
+				ProjectColumn.prj_deleted);
+		stmt.setString(1, prj.getId());
 		return stmt;
 	}
 
 	@Override
-	public Notification toNotification(List<Long> generatedKeys) {
-		return new ProjectDeleted(id);
+	public Notification toNotification(Connection conn, List<String> generatedKeys) {
+		return new ProjectDeleted(prj);
 	}
 }

@@ -8,26 +8,28 @@ import java.util.List;
 import de.oftik.hygs.cmd.AbstractCommand;
 import de.oftik.hygs.cmd.CommandTargetDefinition;
 import de.oftik.hygs.cmd.Notification;
-import de.oftik.hygs.query.Table;
+import de.oftik.hygs.query.company.Company;
 import de.oftik.hygs.query.company.CompanyColumn;
+import de.oftik.hygs.query.company.CompanyTable;
 
 public class DeleteCompanyCmd extends AbstractCommand {
-	private final long id;
+	private final String id;
 
-	public DeleteCompanyCmd(long id) {
+	public DeleteCompanyCmd(Company comp) {
 		super(CommandTargetDefinition.company);
-		this.id = id;
+		this.id = comp.getId();
 	}
 
 	@Override
 	public PreparedStatement prepare(Connection conn) throws SQLException {
-		final PreparedStatement stmt = delete(conn, Table.prj_company, CompanyColumn.cmp_id, CompanyColumn.cmp_deleted);
-		stmt.setLong(1, id);
+		final PreparedStatement stmt = delete(conn, CompanyTable.TABLE, CompanyColumn.cmp_id,
+				CompanyColumn.cmp_deleted);
+		stmt.setString(1, id);
 		return stmt;
 	}
 
 	@Override
-	public Notification toNotification(List<Long> generatedKeys) {
-		return new CompanyDeleted(id);
+	public Notification toNotification(Connection conn, List<String> generatedKeys) {
+		return new CompanyDeleted(Company.withId(id));
 	}
 }

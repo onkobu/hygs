@@ -9,5 +9,5 @@ public interface Notification {
 
 	EnqueueResult result();
 
-	List<Long> getIds();
+	List<String> getIds();
 }

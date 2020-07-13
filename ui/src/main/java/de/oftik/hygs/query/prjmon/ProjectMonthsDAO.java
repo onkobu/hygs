@@ -1,32 +1,16 @@
 package de.oftik.hygs.query.prjmon;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import de.oftik.hygs.query.AbstractDao;
-import de.oftik.hygs.query.Table;
-import de.oftik.hygs.query.project.ProjectColumn;
 import de.oftik.hygs.ui.ApplicationContext;
-import de.oftik.keyhs.kersantti.Column;
+import de.oftik.keyhs.kersantti.query.DAO;
 
-public class ProjectMonthsDAO extends AbstractDao<ProjectMonth> {
+public class ProjectMonthsDAO extends DAO<ProjectMonth> {
 
 	public ProjectMonthsDAO(ApplicationContext context) {
-		super(context, Table.prj_months);
+		super(context, ProjectMonthTable.TABLE);
 	}
 
 	@Override
-	protected ProjectMonth map(ResultSet rs) throws SQLException {
-		return ProjectMonthColumn.to(rs);
-	}
-
-	@Override
-	protected Column<?> getPkColumn() {
-		return ProjectColumn.prj_id;
-	}
-
-	@Override
-	protected Column<?> getDeletedColumn() {
-		throw new UnsupportedOperationException();
+	protected ProjectMonth instantiate() {
+		return new ProjectMonth();
 	}
 }

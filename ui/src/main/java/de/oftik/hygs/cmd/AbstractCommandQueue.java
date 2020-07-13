@@ -43,11 +43,11 @@ public abstract class AbstractCommandQueue implements CommandQueue {
 		return DriverManager.getConnection("jdbc:sqlite:" + context.dbPath());
 	}
 
-	protected List<Long> extractKeys(PreparedStatement stmt) throws SQLException {
+	protected List<String> extractKeys(PreparedStatement stmt) throws SQLException {
 		final ResultSet keyRes = stmt.getGeneratedKeys();
-		List<Long> keys = new ArrayList<>();
+		List<String> keys = new ArrayList<>();
 		while (keyRes.next()) {
-			keys.add(keyRes.getLong(1));
+			keys.add(keyRes.getString(1));
 		}
 		return keys;
 	}

@@ -1,23 +1,84 @@
 package de.oftik.hygs.query.cap;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import de.oftik.keyhs.kersantti.Column;
+import de.oftik.keyhs.kersantti.ColumnType;
+import de.oftik.keyhs.kersantti.SqlType;
 
 public enum CapabilityColumn implements Column<Capability> {
-	cap_id,
+	cap_id(ColumnType.PK_TYPE) {
+		@Override
+		public void map(Capability t, ResultSet rs) throws SQLException {
+			t.setId(asString(rs));
+		}
 
-	cap_name,
+		@Override
+		public void map(Capability t, int idx, PreparedStatement stmt) throws SQLException {
+			stmt.setString(idx, t.getId());
+		}
+	},
 
-	cap_category,
+	cap_name(SqlType.VARCHAR.deriveType(64)) {
 
-	cap_version,
+		@Override
+		public void map(Capability t, ResultSet rs) throws SQLException {
+			t.setName(asString(rs));
+		}
 
-	cap_deleted;
+		@Override
+		public void map(Capability t, int idx, PreparedStatement stmt) throws SQLException {
+			stmt.setString(idx, t.getName());
+		}
+	},
 
-	public static Capability to(ResultSet rs) throws SQLException {
-		return new Capability(cap_id.asLong(rs), cap_name.asString(rs), cap_category.asLong(rs),
-				cap_version.asString(rs));
+	cap_category(SqlType.INTEGER.deriveType()) {
+		@Override
+		public void map(Capability t, ResultSet rs) throws SQLException {
+			t.setCategoryId(asLong(rs));
+		}
+
+		@Override
+		public void map(Capability t, int idx, PreparedStatement stmt) throws SQLException {
+			stmt.setLong(idx, t.getCategoryId());
+		}
+	},
+
+	cap_version(SqlType.VARCHAR.deriveType(32)) {
+
+		@Override
+		public void map(Capability t, ResultSet rs) throws SQLException {
+			t.setVersion(asString(rs));
+		}
+
+		@Override
+		public void map(Capability t, int idx, PreparedStatement stmt) throws SQLException {
+			stmt.setString(idx, t.getVersion());
+		}
+	},
+
+	cap_deleted(SqlType.BOOLEAN.deriveType()) {
+		@Override
+		public void map(Capability t, ResultSet rs) throws SQLException {
+			t.setDeleted(Boolean.TRUE.equals(asBoolean(rs)));
+		}
+
+		@Override
+		public void map(Capability t, int idx, PreparedStatement stmt) throws SQLException {
+			stmt.setBoolean(idx, t.isDeleted());
+		}
+	};
+
+	private final ColumnType type;
+
+	private CapabilityColumn(ColumnType type) {
+		this.type = type;
+	}
+
+	@Override
+	public ColumnType type() {
+		return type;
 	}
 }

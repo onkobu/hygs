@@ -7,15 +7,15 @@ import java.util.List;
 
 import de.oftik.hygs.contract.EntitySource;
 import de.oftik.hygs.contract.Identifiable;
-import de.oftik.hygs.query.Table;
 import de.oftik.keyhs.kersantti.Column;
+import de.oftik.keyhs.kersantti.Table;
 
 public class ResurrectEntityCmd implements Command {
 	private final CommandTarget target;
 	private final Table table;
 	private final Column<?> primaryKeyColumn;
 	private final Column<?> deleteColumn;
-	private final long id;
+	private final Identifiable id;
 
 	public ResurrectEntityCmd(Identifiable identifiable) {
 		super();
@@ -24,7 +24,7 @@ public class ResurrectEntityCmd implements Command {
 		this.table = eSrc.getTable();
 		this.primaryKeyColumn = eSrc.getPrimaryKeyColumn();
 		this.deleteColumn = eSrc.getDeleteColumn();
-		this.id = identifiable.getId();
+		this.id = identifiable;
 	}
 
 	@Override
@@ -35,12 +35,12 @@ public class ResurrectEntityCmd implements Command {
 	@Override
 	public PreparedStatement prepare(Connection conn) throws SQLException {
 		final PreparedStatement stmt = resurrect(conn, table, primaryKeyColumn, deleteColumn);
-		stmt.setLong(1, id);
+		stmt.setString(1, id.getId());
 		return stmt;
 	}
 
 	@Override
-	public Notification toNotification(List<Long> generatedKeys) {
-		return new EntityResurrected(target, generatedKeys.get(0));
+	public Notification toNotification(Connection conn, List<String> generatedKeys) {
+		return new EntityResurrected(target, id);
 	}
 }

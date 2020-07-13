@@ -5,32 +5,37 @@ import de.oftik.hygs.cmd.cat.CategoryQueue;
 import de.oftik.hygs.cmd.company.CompanyQueue;
 import de.oftik.hygs.cmd.project.ProjectCapMappingQueue;
 import de.oftik.hygs.cmd.project.ProjectQueue;
-import de.oftik.hygs.query.Table;
+import de.oftik.hygs.query.cap.CapabilityTable;
+import de.oftik.hygs.query.company.CompanyTable;
+import de.oftik.hygs.query.project.ProjectCapTable;
+import de.oftik.hygs.query.project.ProjectTable;
 import de.oftik.hygs.ui.ApplicationContext;
+import de.oftik.hygs.ui.cap.CategoryTable;
+import de.oftik.keyhs.kersantti.Table;
 
 public enum CommandTargetDefinition implements CommandTarget {
-	category(Table.cap_category) {
+	category(CategoryTable.TABLE) {
 		@Override
 		public CommandQueue queue(ApplicationContext ctx) {
 			return new CategoryQueue(ctx);
 		}
 	},
 
-	company(Table.prj_company) {
+	company(CompanyTable.TABLE) {
 		@Override
 		public CommandQueue queue(ApplicationContext ctx) {
 			return new CompanyQueue(ctx);
 		}
 	},
 
-	project(Table.cap_project) {
+	project(ProjectTable.TABLE) {
 		@Override
 		public CommandQueue queue(ApplicationContext ctx) {
 			return new ProjectQueue(ctx);
 		}
 	},
 
-	project_capability(Table.prj_cap_mapping) {
+	project_capability(ProjectCapTable.TABLE) {
 
 		@Override
 		public CommandQueue queue(ApplicationContext ctx) {
@@ -38,7 +43,7 @@ public enum CommandTargetDefinition implements CommandTarget {
 		}
 	},
 
-	capability(Table.cap_capability) {
+	capability(CapabilityTable.TABLE) {
 		@Override
 		public CommandQueue queue(ApplicationContext ctx) {
 			return new CapabilityQueue(ctx);

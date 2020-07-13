@@ -84,7 +84,7 @@ public class ProjectMonthsExporter {
 				marshaller.marshal(pm, xsw);
 				xsw.writeCharacters("\r\n");
 			} catch (JAXBException | XMLStreamException e) {
-				allErrors.add(new ExportError(e, pm.getId()));
+				allErrors.add(new ExportError(e, pm));
 			}
 		});
 		dao.consumeAll(tcw);

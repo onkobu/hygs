@@ -32,7 +32,7 @@ public class ProjectsMonthsExporterTest {
 
 	@Test
 	public void writeSingleEmptyEntity() throws Exception {
-		final int id = 17;
+		final String id = String.valueOf(17);
 		final String name = "prjName";
 		final int months = 7;
 		final ProjectMonthsDAOFixture dao = new ProjectMonthsDAOFixture(
@@ -51,7 +51,7 @@ public class ProjectsMonthsExporterTest {
 	@Test
 	public void writeSingleEntity() throws Exception {
 		final ProjectMonthsDAOFixture dao = new ProjectMonthsDAOFixture(
-				Arrays.asList(new ProjectMonth(70L, "heal the world", 16)));
+				Arrays.asList(new ProjectMonth(String.valueOf(70L), "heal the world", 16)));
 		final StringWriter sw = new StringWriter();
 		final ArrayList<ExportError> errs = new ArrayList<>();
 		new ProjectMonthsExporter(dao).marshal("UTF-8", errs, sw);

@@ -2,6 +2,9 @@ package de.oftik.hygs;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -95,6 +98,17 @@ public class HygsUI {
 		@Override
 		public CommandBroker getBroker() {
 			return commandBroker;
+		}
+
+		@Override
+		public Connection getOrCreateConnection() throws SQLException {
+			String url = "jdbc:sqlite:" + dbPath();
+			return DriverManager.getConnection(url);
+		}
+
+		@Override
+		public boolean isDatabaseAvailable() {
+			return true;
 		}
 	}
 }

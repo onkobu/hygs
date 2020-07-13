@@ -1,29 +1,120 @@
 package de.oftik.hygs.query.project;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import de.oftik.keyhs.kersantti.Column;
+import de.oftik.keyhs.kersantti.ColumnType;
+import de.oftik.keyhs.kersantti.SqlType;
 
 public enum ProjectColumn implements Column<Project> {
-	prj_name,
+	prj_name(SqlType.VARCHAR.deriveType(64)) {
 
-	prj_from,
+		@Override
+		public void map(Project t, ResultSet rs) throws SQLException {
+			t.setName(asString(rs));
+		}
 
-	prj_to,
+		@Override
+		public void map(Project t, int idx, PreparedStatement stmt) throws SQLException {
+			stmt.setString(idx, t.getName());
+		}
+	},
 
-	prj_company,
+	prj_from(SqlType.TIMESTAMP.deriveType()) {
+		@Override
+		public void map(Project t, ResultSet rs) throws SQLException {
+			t.setFrom(asLocalDate(rs));
+		}
 
-	prj_id,
+		@Override
+		public void map(Project t, int idx, PreparedStatement stmt) throws SQLException {
+			stmt.setTimestamp(idx, timestampFrom(t.getFrom()));
+		}
+	},
 
-	prj_description,
+	prj_to(SqlType.TIMESTAMP.deriveType()) {
+		@Override
+		public void map(Project t, ResultSet rs) throws SQLException {
+			t.setTo(asLocalDate(rs));
+		}
 
-	prj_weight,
+		@Override
+		public void map(Project t, int idx, PreparedStatement stmt) throws SQLException {
+			stmt.setTimestamp(idx, timestampFrom(t.getTo()));
+		}
+	},
 
-	prj_deleted;
+	prj_company(ColumnType.FK_TYPE) {
+		@Override
+		public void map(Project t, ResultSet rs) throws SQLException {
+			t.setCompany(asForeignKey(rs));
+		}
 
-	public static Project to(ResultSet rs) throws SQLException {
-		return new Project(prj_id.asLong(rs), prj_name.asString(rs), prj_from.asLocalDate(rs), prj_to.asLocalDate(rs),
-				prj_company.asLong(rs), prj_description.asString(rs), prj_weight.asInt(rs));
+		@Override
+		public void map(Project t, int idx, PreparedStatement stmt) throws SQLException {
+			stmt.setString(idx, t.getCompany().getParentId());
+		}
+	},
+
+	prj_id(ColumnType.PK_TYPE) {
+		@Override
+		public void map(Project t, ResultSet rs) throws SQLException {
+			t.setId(asString(rs));
+		}
+
+		@Override
+		public void map(Project t, int idx, PreparedStatement stmt) throws SQLException {
+			stmt.setString(idx, t.getId());
+		}
+	},
+
+	prj_description(SqlType.VARCHAR.deriveType(255)) {
+		@Override
+		public void map(Project t, ResultSet rs) throws SQLException {
+			t.setDescription(asString(rs));
+		}
+
+		@Override
+		public void map(Project t, int idx, PreparedStatement stmt) throws SQLException {
+			stmt.setString(idx, t.getDescription());
+		}
+	},
+
+	prj_weight(SqlType.INTEGER.deriveType()) {
+		@Override
+		public void map(Project t, ResultSet rs) throws SQLException {
+			t.setWeight(asInt(rs));
+		}
+
+		@Override
+		public void map(Project t, int idx, PreparedStatement stmt) throws SQLException {
+			stmt.setInt(idx, t.getWeight());
+		}
+	},
+
+	prj_deleted(SqlType.BOOLEAN.deriveType()) {
+		@Override
+		public void map(Project t, ResultSet rs) throws SQLException {
+			t.setDeleted(Boolean.TRUE.equals(asBoolean(rs)));
+		}
+
+		@Override
+		public void map(Project t, int idx, PreparedStatement stmt) throws SQLException {
+			stmt.setBoolean(idx, t.isDeleted());
+		}
+	};
+
+	private final ColumnType type;
+
+	private ProjectColumn(ColumnType type) {
+		this.type = type;
 	}
+
+	@Override
+	public ColumnType type() {
+		return type;
+	}
+
 }

@@ -181,29 +181,29 @@ public abstract class EntityListPanel<T extends Identifiable, F extends EntityFo
 
 	public abstract void createEntity(ActionEvent evt);
 
-	public void onEntityInsert(List<Long> ids) {
+	public void onEntityInsert(List<String> ids) {
 		fillList();
 		selectById(ids.get(0));
 	}
 
-	public void onEntityUpdate(List<Long> ids) {
+	public void onEntityUpdate(List<String> ids) {
 		fillList();
 		selectById(ids.get(0));
 	}
 
-	public void onEntityDelete(List<Long> ids) {
+	public void onEntityDelete(List<String> ids) {
 		fillList();
 		deleteSelection();
 	}
 
-	public void onEntityResurrected(List<Long> ids) {
+	public void onEntityResurrected(List<String> ids) {
 		fillList();
 		deleteSelection();
 	}
 
-	public void selectById(Long id) {
+	public void selectById(String id) {
 		for (int i = 0; i < listModel.getSize(); i++) {
-			if (listModel.get(i).getId() == id.longValue()) {
+			if (listModel.get(i).getId().equals(id)) {
 				entityList.setSelectedValue(listModel.get(i), true);
 				break;
 			}

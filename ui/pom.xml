@@ -14,8 +14,8 @@
 
 	<properties>
 		<jmockit.version>1.49</jmockit.version>
-		<jdk.major>9</jdk.major>
-		<java.version>1.${jdk.major}</java.version>
+		<jdk.major>11</jdk.major>
+		<java.version>11</java.version>
 		<jaxb.version>2.3.1</jaxb.version>
 		<jaxb.core.version>2.3.0.1</jaxb.core.version>
 		<jmockit.version>1.46</jmockit.version>

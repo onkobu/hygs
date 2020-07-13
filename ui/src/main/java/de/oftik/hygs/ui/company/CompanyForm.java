@@ -55,13 +55,13 @@ public class CompanyForm extends EntityForm<Company> {
 
 	@Override
 	public Command saveEntityCommand() {
-		return new SaveCompanyCmd(Long.parseLong(idField.getText()), nameField.getText(), streetField.getText(),
-				cityField.getText(), zipField.getText());
+		return new SaveCompanyCmd(idField.getText(), nameField.getText(), streetField.getText(), cityField.getText(),
+				zipField.getText());
 	}
 
 	@Override
 	public Command deleteEntityCommand() {
-		return new DeleteCompanyCmd(Long.parseLong(idField.getText()));
+		return new DeleteCompanyCmd(Company.withId(idField.getText()));
 	}
 
 	@Override

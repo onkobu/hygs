@@ -3,31 +3,51 @@ package de.oftik.hygs.ui.cap;
 import de.oftik.hygs.contract.EntitySource;
 import de.oftik.hygs.contract.Identifiable;
 import de.oftik.hygs.contract.MappableToString;
-import de.oftik.hygs.query.Table;
 
 public class Category implements Identifiable, MappableToString {
-	private final long id;
+	private String id;
 
-	private final String name;
+	private String name;
 
-	public Category(long id, String name) {
+	private boolean deleted;
+
+	public Category() {
+	}
+
+	public Category(String id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
 	}
 
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+
 	@Override
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 
 	@Override
 	public EntitySource getSource() {
-		return Table.cap_category;
+		return CategoryTable.TABLE;
 	}
 
 	public String getName() {
 		return name;
+	}
+
+	void setId(String id) {
+		this.id = id;
+	}
+
+	void setName(String name) {
+		this.name = name;
 	}
 
 	@Override

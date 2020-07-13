@@ -8,10 +8,10 @@ import de.oftik.kehys.lippu.Immutable;
 @Immutable
 public class SuccessNotification implements Notification {
 	private final CommandTarget target;
-	private final List<Long> ids;
+	private final List<String> ids;
 	private final NotificationType type;
 
-	protected SuccessNotification(NotificationType type, CommandTarget target, long id) {
+	protected SuccessNotification(NotificationType type, CommandTarget target, String id) {
 		super();
 		this.target = target;
 		ids = Arrays.asList(id);
@@ -34,7 +34,7 @@ public class SuccessNotification implements Notification {
 	}
 
 	@Override
-	public List<Long> getIds() {
+	public List<String> getIds() {
 		return ids;
 	}
 }

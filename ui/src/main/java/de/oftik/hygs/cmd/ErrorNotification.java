@@ -32,7 +32,7 @@ public class ErrorNotification implements Notification {
 	}
 
 	@Override
-	public List<Long> getIds() {
+	public List<String> getIds() {
 		throw new UnsupportedOperationException("It was an error, requesting IDs does not make sense.");
 	}
 }

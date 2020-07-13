@@ -141,7 +141,7 @@ public class ProjectForm extends EntityForm<Project> {
 
 	@Override
 	public Command deleteEntityCommand() {
-		return new DeleteProjectCmd(Long.parseLong(idField.getText()));
+		return new DeleteProjectCmd(Project.withId(idField.getText()));
 	}
 
 	void setCompanyCache(CompanyCache cc) {
@@ -207,7 +207,7 @@ public class ProjectForm extends EntityForm<Project> {
 		fromModel.setValue(Converters.dateFromLocalDate(t.getFrom()));
 		toModel.setValue(Converters.dateFromLocalDate(t.getTo()));
 		descriptionArea.setText(t.getDescription());
-		companyBox.setSelectedItem(companyCache.getCompanyById(t.getCompanyId()));
+		companyBox.setSelectedItem(companyCache.getCompany(t.getCompany()));
 		refreshCapabilities();
 	}
 
