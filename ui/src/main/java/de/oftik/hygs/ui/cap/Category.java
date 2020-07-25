@@ -3,8 +3,9 @@ package de.oftik.hygs.ui.cap;
 import de.oftik.hygs.contract.EntitySource;
 import de.oftik.hygs.contract.Identifiable;
 import de.oftik.hygs.contract.MappableToString;
+import de.oftik.keyhs.kersantti.AbstractIdentifiable;
 
-public class Category implements Identifiable, MappableToString {
+public class Category extends AbstractIdentifiable implements Identifiable<Category>, MappableToString {
 	private String id;
 
 	private String name;
@@ -34,7 +35,7 @@ public class Category implements Identifiable, MappableToString {
 	}
 
 	@Override
-	public EntitySource getSource() {
+	public EntitySource<Category> getSource() {
 		return CategoryTable.TABLE;
 	}
 

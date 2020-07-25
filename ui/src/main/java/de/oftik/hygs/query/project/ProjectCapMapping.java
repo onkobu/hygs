@@ -1,8 +1,8 @@
 package de.oftik.hygs.query.project;
 
 import de.oftik.hygs.query.cap.Capability;
+import de.oftik.keyhs.kersantti.AbstractIdentifiable;
 import de.oftik.keyhs.kersantti.ForeignKey;
-import de.oftik.keyhs.kersantti.Identifiable;
 
 /**
  * Weighted assignment of a capability to a project.
@@ -10,7 +10,7 @@ import de.oftik.keyhs.kersantti.Identifiable;
  * @author onkobu
  *
  */
-public class ProjectCapMapping implements Identifiable {
+public class ProjectCapMapping extends AbstractIdentifiable {
 	private ForeignKey<Project> project;
 	private ForeignKey<Capability> capability;
 	private int assignedWeight;

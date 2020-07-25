@@ -13,7 +13,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import de.oftik.hygs.contract.EntitySource;
 import de.oftik.hygs.contract.Identifiable;
+import de.oftik.keyhs.kersantti.AbstractIdentifiable;
 import de.oftik.keyhs.kersantti.Column;
 import de.oftik.keyhs.kersantti.ColumnType;
 import de.oftik.keyhs.kersantti.Constraint;
@@ -40,7 +42,20 @@ public class CommandTest {
 		}
 	}
 
-	public static final class TestColumn implements Column<Identifiable> {
+	public static final class SampleIdentifiable extends AbstractIdentifiable
+			implements Identifiable<SampleIdentifiable> {
+		@Override
+		public String getId() {
+			return unexpectedCall();
+		}
+
+		@Override
+		public EntitySource<SampleIdentifiable> getSource() {
+			return unexpectedCall();
+		}
+	}
+
+	public static final class TestColumn implements Column<SampleIdentifiable> {
 		private final String name;
 
 		private TestColumn(String name) {
@@ -54,12 +69,12 @@ public class CommandTest {
 		}
 
 		@Override
-		public void map(Identifiable t, ResultSet rs) throws SQLException {
+		public void map(SampleIdentifiable t, ResultSet rs) throws SQLException {
 
 		}
 
 		@Override
-		public void map(Identifiable t, int idx, PreparedStatement stmt) throws SQLException {
+		public void map(SampleIdentifiable t, int idx, PreparedStatement stmt) throws SQLException {
 
 		}
 
@@ -69,7 +84,7 @@ public class CommandTest {
 		}
 	}
 
-	static class TestTable implements Table<Identifiable> {
+	static class TestTable implements Table<SampleIdentifiable> {
 		static final TestTable TABLE = new TestTable();
 
 		@Override
@@ -78,12 +93,12 @@ public class CommandTest {
 		}
 
 		@Override
-		public Column<Identifiable> getPkColumn() {
+		public Column<SampleIdentifiable> getPkColumn() {
 			return unexpectedCall();
 		}
 
 		@Override
-		public Column<Identifiable>[] columns() {
+		public Column<SampleIdentifiable>[] columns() {
 			return unexpectedCall();
 		}
 
@@ -101,7 +116,7 @@ public class CommandTest {
 			{
 				String s;
 				conn.prepareStatement(s = withCapture(), anyInt);
-				assertThat(s, equalTo("INSERT INTO prj_company (id,value1,value2,value3) VALUES (?,?,?,?)"));
+				assertThat(s, equalTo("INSERT INTO TestTable (id,value1,value2,value3) VALUES (?,?,?,?)"));
 			}
 		};
 	}
@@ -113,7 +128,7 @@ public class CommandTest {
 			{
 				String s;
 				conn.prepareStatement(s = withCapture(), anyInt);
-				assertThat(s, equalTo("UPDATE prj_company SET value=? WHERE id=?"));
+				assertThat(s, equalTo("UPDATE TestTable SET value=? WHERE id=?"));
 			}
 		};
 	}
@@ -126,7 +141,7 @@ public class CommandTest {
 			{
 				String s;
 				conn.prepareStatement(s = withCapture(), anyInt);
-				assertThat(s, equalTo("UPDATE prj_company SET value1=?,value2=?,value3=? WHERE id=?"));
+				assertThat(s, equalTo("UPDATE TestTable SET value1=?,value2=?,value3=? WHERE id=?"));
 			}
 		};
 	}

@@ -1,10 +1,10 @@
 package de.oftik.hygs.query.project;
 
 import de.oftik.hygs.query.cap.Capability;
+import de.oftik.keyhs.kersantti.AbstractIdentifiable;
 import de.oftik.keyhs.kersantti.ForeignKey;
-import de.oftik.keyhs.kersantti.Identifiable;
 
-public class AssignedCapability implements Identifiable {
+public class AssignedCapability extends AbstractIdentifiable {
 	private String id;
 	private ForeignKey<Project> project;
 	private ForeignKey<Capability> capability;

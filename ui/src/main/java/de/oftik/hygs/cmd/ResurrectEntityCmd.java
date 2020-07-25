@@ -12,14 +12,14 @@ import de.oftik.keyhs.kersantti.Table;
 
 public class ResurrectEntityCmd implements Command {
 	private final CommandTarget target;
-	private final Table table;
+	private final Table<?> table;
 	private final Column<?> primaryKeyColumn;
 	private final Column<?> deleteColumn;
-	private final Identifiable id;
+	private final Identifiable<?> id;
 
-	public ResurrectEntityCmd(Identifiable identifiable) {
+	public ResurrectEntityCmd(Identifiable<?> identifiable) {
 		super();
-		final EntitySource eSrc = identifiable.getSource();
+		final EntitySource<?> eSrc = identifiable.getSource();
 		this.target = CommandTargetDefinition.targetForTable(eSrc.getTable());
 		this.table = eSrc.getTable();
 		this.primaryKeyColumn = eSrc.getPrimaryKeyColumn();

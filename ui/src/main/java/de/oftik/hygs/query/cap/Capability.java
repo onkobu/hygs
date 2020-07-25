@@ -3,8 +3,9 @@ package de.oftik.hygs.query.cap;
 import de.oftik.hygs.contract.EntitySource;
 import de.oftik.hygs.contract.Identifiable;
 import de.oftik.hygs.contract.MappableToString;
+import de.oftik.keyhs.kersantti.AbstractIdentifiable;
 
-public class Capability implements Identifiable, MappableToString {
+public class Capability extends AbstractIdentifiable implements Identifiable<Capability>, MappableToString {
 	private String id;
 	private String name;
 	private long categoryId;

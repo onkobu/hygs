@@ -3,8 +3,9 @@ package de.oftik.hygs.query.company;
 import de.oftik.hygs.contract.EntitySource;
 import de.oftik.hygs.contract.Identifiable;
 import de.oftik.hygs.contract.MappableToString;
+import de.oftik.keyhs.kersantti.AbstractIdentifiable;
 
-public class Company implements Identifiable, MappableToString {
+public class Company extends AbstractIdentifiable implements Identifiable<Company>, MappableToString {
 	private String id;
 	private String name;
 	private String street;
@@ -42,7 +43,7 @@ public class Company implements Identifiable, MappableToString {
 	}
 
 	@Override
-	public EntitySource getSource() {
+	public EntitySource<Company> getSource() {
 		return CompanyTable.TABLE;
 	}
 

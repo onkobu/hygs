@@ -10,7 +10,7 @@ import de.oftik.keyhs.kersantti.Column;
 import de.oftik.keyhs.kersantti.DatabaseContext;
 import de.oftik.keyhs.kersantti.query.DAO;
 
-public abstract class AbstractDao<T extends Identifiable> extends DAO<T> {
+public abstract class AbstractDao<T extends Identifiable<T>> extends DAO<T> {
 
 	private final Column<T> deletedColumn;
 

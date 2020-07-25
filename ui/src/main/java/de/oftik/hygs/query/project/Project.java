@@ -6,9 +6,10 @@ import de.oftik.hygs.contract.EntitySource;
 import de.oftik.hygs.contract.Identifiable;
 import de.oftik.hygs.contract.MappableToString;
 import de.oftik.hygs.query.company.Company;
+import de.oftik.keyhs.kersantti.AbstractIdentifiable;
 import de.oftik.keyhs.kersantti.ForeignKey;
 
-public class Project implements Identifiable, MappableToString {
+public class Project extends AbstractIdentifiable implements Identifiable<Project>, MappableToString {
 	private String id;
 	private String name;
 	private LocalDate from;
@@ -39,7 +40,7 @@ public class Project implements Identifiable, MappableToString {
 	}
 
 	@Override
-	public EntitySource getSource() {
+	public EntitySource<Project> getSource() {
 		return ProjectTable.TABLE;
 	}
 

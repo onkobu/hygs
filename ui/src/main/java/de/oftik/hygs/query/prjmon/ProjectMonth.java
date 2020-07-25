@@ -5,11 +5,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.oftik.keyhs.kersantti.Identifiable;
+import de.oftik.keyhs.kersantti.AbstractIdentifiable;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ProjectMonth implements Identifiable {
+public class ProjectMonth extends AbstractIdentifiable {
 	@XmlAttribute
 	private String id;
 
