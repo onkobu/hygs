@@ -166,6 +166,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 		entityForm.deleteEntity();
 	}
 
+	@SuppressWarnings("PMD.UnusedFormalParameter")
 	private void nodeSelected(TreeSelectionEvent evt) {
 		final TreePath sp = tree.getSelectionPath();
 		if (sp == null) {
@@ -299,6 +300,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 		}
 	}
 
+	@SuppressWarnings("PMD.UnusedFormalParameter")
 	private void delete(G g) {
 		throw new UnsupportedOperationException("Not ready yet");
 	}

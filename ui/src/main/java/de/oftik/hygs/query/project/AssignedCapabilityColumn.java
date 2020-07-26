@@ -83,7 +83,7 @@ public enum AssignedCapabilityColumn implements Column<AssignedCapability> {
 
 	private final ColumnType type;
 
-	private AssignedCapabilityColumn(ColumnType type) {
+	AssignedCapabilityColumn(ColumnType type) {
 		this.type = type;
 	}
 

@@ -47,7 +47,7 @@ public enum ProjectMonthColumn implements Column<ProjectMonth> {
 
 	private final ColumnType type;
 
-	private ProjectMonthColumn(ColumnType type) {
+	ProjectMonthColumn(ColumnType type) {
 		this.type = type;
 	}
 

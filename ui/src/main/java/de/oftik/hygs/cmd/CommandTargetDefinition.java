@@ -52,7 +52,7 @@ public enum CommandTargetDefinition implements CommandTarget {
 
 	private final Table table;
 
-	private CommandTargetDefinition(Table table) {
+	CommandTargetDefinition(Table table) {
 		this.table = table;
 	}
 

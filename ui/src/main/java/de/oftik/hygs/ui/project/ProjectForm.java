@@ -190,10 +190,9 @@ public class ProjectForm extends EntityForm<Project> {
 		add(editCapPanel, gbc.nextRow().nextColumn().remainderX().end());
 	}
 
-	public void addCapability(ActionEvent evt) {
-		if (createMode) {
-
-		} else {
+	@SuppressWarnings("PMD.UnusedFormalParameter")
+ 	public void addCapability(ActionEvent evt) {
+		if (!createMode) {
 			broker().execute(new AssignCapabilityCmd(currentProject, (Capability) capabilityBox.getSelectedItem()));
 		}
 	}

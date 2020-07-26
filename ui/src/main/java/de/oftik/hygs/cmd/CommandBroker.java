@@ -10,7 +10,7 @@ public final class CommandBroker {
 	private final Map<String, CommandQueue> queues = new HashMap<>();
 	private final Map<String, List<NotificationListener>> listenerMap = new HashMap<>();
 
-	public final void registerQueue(CommandQueue queue) {
+	public void registerQueue(CommandQueue queue) {
 		queues.putIfAbsent(queue.target().name(), queue);
 	}
 

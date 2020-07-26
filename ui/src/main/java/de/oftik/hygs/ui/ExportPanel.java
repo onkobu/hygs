@@ -39,6 +39,7 @@ public class ExportPanel extends JPanel {
 				gbc.nextRow().remainderX().remainderY().weightx(1.0).weighty(1.0).fillBoth().end());
 	}
 
+	@SuppressWarnings("PMD.UnusedFormalParameter")
 	private void exportProjectMonths(ActionEvent evt) {
 		resultArea.setText("");
 		final JFileChooser chooser = new JFileChooser();

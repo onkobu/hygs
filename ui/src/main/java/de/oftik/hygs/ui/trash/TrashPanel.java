@@ -78,7 +78,7 @@ public class TrashPanel extends JPanel implements ApplicationContextListener {
 		add(new JScrollPane(toProcess), gbc.nextColumn().remainderY().fillBoth().weightx(0.5).weighty(1.0).end());
 	}
 
-	private final void fillList() {
+	private void fillList() {
 		try {
 			categoryDao.consumeDeleted(trashListModel::addElement);
 			companyDao.consumeDeleted(trashListModel::addElement);
@@ -90,7 +90,7 @@ public class TrashPanel extends JPanel implements ApplicationContextListener {
 		cCtx.init();
 	}
 
-	private final void clearList() {
+	private void clearList() {
 		trashListModel.removeAllElements();
 		cCtx.init();
 	}
