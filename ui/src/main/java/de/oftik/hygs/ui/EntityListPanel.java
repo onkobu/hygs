@@ -36,7 +36,7 @@ import de.oftik.keyhs.kersantti.query.DAO;
  *
  * @param <T>
  */
-public abstract class EntityListPanel<T extends Identifiable, F extends EntityForm<T>> extends JPanel
+public abstract class EntityListPanel<T extends Identifiable<T>, F extends EntityForm<T>> extends JPanel
 		implements ApplicationContextListener {
 	private static final Logger log = Logger.getLogger(EntityListPanel.class.getName());
 
@@ -57,7 +57,7 @@ public abstract class EntityListPanel<T extends Identifiable, F extends EntityFo
 	 *
 	 * @param <T>
 	 */
-	protected static final class EntityNotificationListener<T extends Identifiable, F extends EntityForm<T>>
+	protected static final class EntityNotificationListener<T extends Identifiable<T>, F extends EntityForm<T>>
 			implements NotificationListener {
 		private final CommandTarget target;
 		private final EntityListPanel<T, F> reference;

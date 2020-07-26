@@ -45,7 +45,7 @@ import de.oftik.keyhs.kersantti.query.DAO;
  * @param <G>
  * @param <E>
  */
-public abstract class GroupedEntityPanel<G extends Identifiable, E extends Identifiable & MappableToString, F extends GroupedEntityForm<G, E>>
+public abstract class GroupedEntityPanel<G extends Identifiable<G>, E extends Identifiable<E> & MappableToString, F extends GroupedEntityForm<G, E>>
 		extends JPanel implements ApplicationContextListener {
 	private static final Logger log = Logger.getLogger(GroupedEntityPanel.class.getName());
 
@@ -75,7 +75,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 	 *
 	 * @param <T>
 	 */
-	protected static final class EntityNotificationListener<G extends Identifiable, E extends Identifiable & MappableToString, F extends GroupedEntityForm<G, E>>
+	protected static final class EntityNotificationListener<G extends Identifiable<G>, E extends Identifiable<E> & MappableToString, F extends GroupedEntityForm<G, E>>
 			implements NotificationListener {
 		private final CommandTarget target;
 		private final GroupedEntityPanel<G, E, F> reference;

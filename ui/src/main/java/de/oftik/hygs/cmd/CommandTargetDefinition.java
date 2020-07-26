@@ -50,15 +50,15 @@ public enum CommandTargetDefinition implements CommandTarget {
 		}
 	};
 
-	private final Table table;
+	private final Table<?> table;
 
-	CommandTargetDefinition(Table table) {
+	CommandTargetDefinition(Table<?> table) {
 		this.table = table;
 	}
 
 	public abstract CommandQueue queue(ApplicationContext ctx);
 
-	public static CommandTarget targetForTable(Table t) {
+	public static CommandTarget targetForTable(Table<?> t) {
 		for (CommandTargetDefinition dfn : values()) {
 			if (dfn.table == t) {
 				return dfn;

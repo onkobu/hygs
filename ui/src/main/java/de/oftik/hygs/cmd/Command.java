@@ -42,7 +42,7 @@ public interface Command {
 				Statement.RETURN_GENERATED_KEYS);
 	}
 
-	default PreparedStatement resurrect(Connection conn, Table t, Column<?> pkCol, Column<?> delCol)
+	default PreparedStatement resurrect(Connection conn, Table<?> t, Column<?> pkCol, Column<?> delCol)
 			throws SQLException {
 		return conn.prepareStatement(
 				"UPDATE " + t.name() + " SET " + delCol.name() + "=FALSE WHERE " + pkCol.name() + "=?",

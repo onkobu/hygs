@@ -33,10 +33,10 @@ import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
 
 public class TrashPanel extends JPanel implements ApplicationContextListener {
 	private final ApplicationContext applicationContext;
-	private final DefaultListModel<Identifiable> trashListModel = new DefaultListModel<>();
-	private final DefaultListModel<Identifiable> toProcessListModel = new DefaultListModel<>();
-	private final JList<Identifiable> trash;
-	private final JList<Identifiable> toProcess;
+	private final DefaultListModel<Identifiable<?>> trashListModel = new DefaultListModel<>();
+	private final DefaultListModel<Identifiable<?>> toProcessListModel = new DefaultListModel<>();
+	private final JList<Identifiable<?>> trash;
+	private final JList<Identifiable<?>> toProcess;
 	private final CompanyDAO companyDao;
 	private final ConstraintContext cCtx = new ConstraintContext();
 	private final CategoryDAO categoryDao;
