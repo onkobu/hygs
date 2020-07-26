@@ -166,7 +166,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable<G>, E extends Id
 		entityForm.deleteEntity();
 	}
 
-	@SuppressWarnings("PMD.UnusedFormalParameter")
+	@SuppressWarnings({ "PMD.UnusedFormalParameter", "unchecked" })
 	private void nodeSelected(TreeSelectionEvent evt) {
 		final TreePath sp = tree.getSelectionPath();
 		if (sp == null) {
@@ -285,6 +285,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable<G>, E extends Id
 		entityForm.setGroups(extractGroups());
 	}
 
+	@SuppressWarnings("unchecked")
 	private List<G> extractGroups() {
 		final List<G> groups = new ArrayList<>();
 		for (int i = 0; i < root.getChildCount(); i++) {
@@ -336,6 +337,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable<G>, E extends Id
 		entityForm.setGroups(Collections.emptyList());
 	}
 
+	@SuppressWarnings("unchecked")
 	protected FilterNode registerGroup(final FilterNode tn) {
 		root.add(tn);
 		return groupMap.put(((G) tn.getUserObject()).getId(), tn);

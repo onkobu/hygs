@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,17 +20,17 @@ public interface Command {
 
 	Notification toNotification(Connection conn, List<String> generatedKeys);
 
-	default <T extends Identifiable> PreparedStatement insert(Connection conn, Table<T> t, Column<T>... cols)
+	default <T extends Identifiable> PreparedStatement insert(Connection conn, Table<T> t, Collection<Column<T>> cols)
 			throws SQLException {
-		final String colNames = Arrays.stream(cols).map(Column::name).collect(Collectors.joining(","));
-		final String placeHolders = Arrays.stream(cols).map((c) -> "?").collect(Collectors.joining(","));
+		final String colNames = cols.stream().map(Column::name).collect(Collectors.joining(","));
+		final String placeHolders = cols.stream().map((c) -> "?").collect(Collectors.joining(","));
 		return conn.prepareStatement("INSERT INTO " + t.name() + " (" + colNames + ") VALUES (" + placeHolders + ")",
 				Statement.RETURN_GENERATED_KEYS);
 	}
 
 	default <T extends Identifiable> PreparedStatement update(Connection conn, Table<T> t, Column<T> pkCol,
-			Column<T>... cols) throws SQLException {
-		final String colSets = Arrays.stream(cols).map((col) -> col.name() + "=?").collect(Collectors.joining(","));
+			Collection<Column<T>> cols) throws SQLException {
+		final String colSets = cols.stream().map((col) -> col.name() + "=?").collect(Collectors.joining(","));
 		return conn.prepareStatement("UPDATE " + t.name() + " SET " + colSets + " WHERE " + pkCol.name() + "=?",
 				Statement.RETURN_GENERATED_KEYS);
 	}

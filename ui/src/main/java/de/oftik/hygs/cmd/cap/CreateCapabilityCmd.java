@@ -3,6 +3,7 @@ package de.oftik.hygs.cmd.cap;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 import de.oftik.hygs.cmd.AbstractCommand;
@@ -27,8 +28,8 @@ public class CreateCapabilityCmd extends AbstractCommand {
 
 	@Override
 	public PreparedStatement prepare(Connection conn) throws SQLException {
-		final PreparedStatement stmt = insert(conn, CapabilityTable.TABLE, CapabilityColumn.cap_name,
-				CapabilityColumn.cap_version, CapabilityColumn.cap_category);
+		final PreparedStatement stmt = insert(conn, CapabilityTable.TABLE,
+				Arrays.asList(CapabilityColumn.cap_name, CapabilityColumn.cap_version, CapabilityColumn.cap_category));
 		stmt.setString(1, name);
 		stmt.setString(2, version);
 		stmt.setString(3, category.getId());

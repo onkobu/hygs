@@ -149,6 +149,7 @@ public abstract class EntityListPanel<T extends Identifiable<T>, F extends Entit
 			// someone else will handle this
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public void onSuccess(Notification notification) {
 			if (notification.type() != NotificationType.ASSIGNED) {

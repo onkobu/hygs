@@ -6,7 +6,7 @@ import de.oftik.hygs.contract.CacheListener;
 import de.oftik.hygs.query.cap.Capability;
 
 public interface CapabilityCache {
-	Capability getCapabilityById(long id);
+	Capability getCapabilityById(String id);
 
 	void consumeAllCapabilities(Consumer<Capability> consumer);
 

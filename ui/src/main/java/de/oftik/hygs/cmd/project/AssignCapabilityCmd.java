@@ -3,6 +3,7 @@ package de.oftik.hygs.cmd.project;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 import de.oftik.hygs.cmd.AbstractCommand;
@@ -26,8 +27,8 @@ public class AssignCapabilityCmd extends AbstractCommand {
 
 	@Override
 	public PreparedStatement prepare(Connection conn) throws SQLException {
-		final PreparedStatement stmt = insert(conn, ProjectCapTable.TABLE, ProjectCapColumn.prj_id,
-				ProjectCapColumn.cap_id);
+		final PreparedStatement stmt = insert(conn, ProjectCapTable.TABLE,
+				Arrays.asList(ProjectCapColumn.prj_id, ProjectCapColumn.cap_id));
 		stmt.setString(1, projectId.getId());
 		stmt.setString(2, capabilityId.getId());
 		return stmt;

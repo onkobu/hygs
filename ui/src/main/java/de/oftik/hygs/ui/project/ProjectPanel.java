@@ -114,7 +114,7 @@ public class ProjectPanel extends EntityListPanel<Project, ProjectForm> implemen
 	}
 
 	@Override
-	public Capability getCapabilityById(long id) {
+	public Capability getCapabilityById(String id) {
 		return capabilityCache.get(id);
 	}
 
