@@ -27,7 +27,9 @@ import de.oftik.hygs.cmd.Command;
 import de.oftik.hygs.cmd.CommandBroker;
 import de.oftik.hygs.cmd.project.AssignCapabilityCmd;
 import de.oftik.hygs.cmd.project.ChangeWeightCmd;
+import de.oftik.hygs.cmd.project.CreateProjectCmd;
 import de.oftik.hygs.cmd.project.DeleteProjectCmd;
+import de.oftik.hygs.cmd.project.SaveProjectCmd;
 import de.oftik.hygs.contract.CacheListener;
 import de.oftik.hygs.contract.CacheType;
 import de.oftik.hygs.query.cap.Capability;
@@ -56,7 +58,7 @@ public class ProjectForm extends EntityForm<Project> {
 	private final JDatePickerImpl toPicker = new JDatePickerImpl(new JDatePanelImpl(toModel, new Properties()),
 			new DateFormatter());
 	private final JComboBox<Company> companyBox = new JComboBox<>();
-	private final JComboBox<Capability> capabilityBox = new JComboBox<>();
+	private final JComboBox<CapabilityWithCategory> capabilityBox = new JComboBox<>();
 	private final String[] identifiers = new String[] { I18N.CAPABILITY.label(), I18N.VERSION.label(),
 			I18N.WEIGHT.label() };
 
@@ -129,14 +131,14 @@ public class ProjectForm extends EntityForm<Project> {
 
 	@Override
 	public Command createEntityCommand() {
-		// TODO Auto-generated method stub
-		return null;
+		return new CreateProjectCmd(nameField.getText(), convertDate(fromModel.getValue()),
+				convertDate(toModel.getValue()), (Company) companyBox.getSelectedItem(), descriptionArea.getText(), 0);
 	}
 
 	@Override
 	public Command saveEntityCommand() {
-		// TODO Auto-generated method stub
-		return null;
+		return new SaveProjectCmd(idField.getText(), nameField.getText(), convertDate(fromModel.getValue()),
+				convertDate(toModel.getValue()), (Company) companyBox.getSelectedItem(), descriptionArea.getText(), 0);
 	}
 
 	@Override
@@ -240,7 +242,6 @@ public class ProjectForm extends EntityForm<Project> {
 				return;
 			}
 			tableModel.set(caps);
-//			tableModel.fire
 			capabilityTable.invalidate();
 		} catch (SQLException e) {
 			log.throwing(getClass().getSimpleName(), "showEntity", e);

@@ -19,7 +19,7 @@ public class AssignedCapabilityTable implements Table<AssignedCapability> {
 
 	@Override
 	public Column<AssignedCapability> getPkColumn() {
-		return AssignedCapabilityColumn.id;
+		return null;
 	}
 
 	@Override

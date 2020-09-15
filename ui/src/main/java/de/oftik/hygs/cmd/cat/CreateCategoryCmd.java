@@ -11,8 +11,8 @@ import de.oftik.hygs.cmd.Command;
 import de.oftik.hygs.cmd.CommandTarget;
 import de.oftik.hygs.cmd.CommandTargetDefinition;
 import de.oftik.hygs.cmd.Notification;
-import de.oftik.hygs.ui.cap.Category;
-import de.oftik.hygs.ui.cap.CategoryColumn;
+import de.oftik.hygs.query.cap.Category;
+import de.oftik.hygs.query.cap.CategoryColumn;
 import de.oftik.hygs.ui.cap.CategoryTable;
 
 public class CreateCategoryCmd implements Command {

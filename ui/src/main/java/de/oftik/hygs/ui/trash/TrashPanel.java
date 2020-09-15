@@ -18,6 +18,7 @@ import javax.swing.JScrollPane;
 import de.oftik.hygs.cmd.ResurrectEntityCmd;
 import de.oftik.hygs.contract.Identifiable;
 import de.oftik.hygs.query.cap.CapabilityDAO;
+import de.oftik.hygs.query.cap.CategoryDAO;
 import de.oftik.hygs.query.company.CompanyDAO;
 import de.oftik.hygs.query.project.ProjectDAO;
 import de.oftik.hygs.ui.ApplicationContext;
@@ -28,15 +29,14 @@ import de.oftik.hygs.ui.EnabledConstraints.ConstraintContext;
 import de.oftik.hygs.ui.I18N;
 import de.oftik.hygs.ui.ListModels;
 import de.oftik.hygs.ui.MappableToStringRenderer;
-import de.oftik.hygs.ui.cap.CategoryDAO;
 import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
 
 public class TrashPanel extends JPanel implements ApplicationContextListener {
 	private final ApplicationContext applicationContext;
-	private final DefaultListModel<Identifiable> trashListModel = new DefaultListModel<>();
-	private final DefaultListModel<Identifiable> toProcessListModel = new DefaultListModel<>();
-	private final JList<Identifiable> trash;
-	private final JList<Identifiable> toProcess;
+	private final DefaultListModel<Identifiable<?>> trashListModel = new DefaultListModel<>();
+	private final DefaultListModel<Identifiable<?>> toProcessListModel = new DefaultListModel<>();
+	private final JList<Identifiable<?>> trash;
+	private final JList<Identifiable<?>> toProcess;
 	private final CompanyDAO companyDao;
 	private final ConstraintContext cCtx = new ConstraintContext();
 	private final CategoryDAO categoryDao;

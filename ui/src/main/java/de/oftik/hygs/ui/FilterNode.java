@@ -3,10 +3,12 @@ package de.oftik.hygs.ui;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.function.Supplier;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
+import de.oftik.hygs.contract.Identifiable;
 import de.oftik.hygs.contract.MappableToString;
 
 public class FilterNode extends DefaultMutableTreeNode {
@@ -16,13 +18,27 @@ public class FilterNode extends DefaultMutableTreeNode {
 		this(null);
 	}
 
-	public FilterNode(Object userObject) {
+	public FilterNode(Identifiable<?> userObject) {
 		this(userObject, true, true);
 	}
 
 	public FilterNode(Object userObject, boolean allowsChildren, boolean isVisible) {
 		super(userObject, allowsChildren);
 		this.visible = isVisible;
+	}
+
+	public void add(Identifiable<?> childObj, Supplier<FilterNode> childSupplier) {
+		if (children == null) {
+			insert(childSupplier.get(), 0);
+			return;
+		}
+		for (TreeNode tn : children) {
+			FilterNode cn = (FilterNode) tn;
+			if (((Identifiable<?>) cn.getUserObject()).getId().equals(childObj.getId())) {
+				return;
+			}
+		}
+		add(childSupplier.get());
 	}
 
 	public TreeNode getChildAt(int index, boolean filterIsActive) {

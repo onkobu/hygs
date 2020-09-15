@@ -15,8 +15,9 @@ import de.oftik.hygs.cmd.Notification;
 import de.oftik.hygs.cmd.project.CapabilityAssigned;
 import de.oftik.hygs.contract.CacheListener;
 import de.oftik.hygs.contract.CacheType;
-import de.oftik.hygs.query.cap.Capability;
 import de.oftik.hygs.query.cap.CapabilityDAO;
+import de.oftik.hygs.query.cap.Category;
+import de.oftik.hygs.query.cap.CategoryDAO;
 import de.oftik.hygs.query.company.Company;
 import de.oftik.hygs.query.company.CompanyDAO;
 import de.oftik.hygs.query.project.AssignedCapabilityDAO;
@@ -31,8 +32,11 @@ import de.oftik.keyhs.kersantti.ForeignKey;
 public class ProjectPanel extends EntityListPanel<Project, ProjectForm> implements CompanyCache, CapabilityCache {
 	private final CompanyDAO companyDao;
 	private final CapabilityDAO capabilityDao;
+	private final CategoryDAO categoryDao;
+
 	private final Map<String, Company> companyCache = new HashMap<>();
-	private final Map<String, Capability> capabilityCache = new HashMap<>();
+	private final Map<String, CapabilityWithCategory> capabilityCache = new HashMap<>();
+	private final Map<String, Category> categoryCache = new HashMap<>();
 	private final List<CacheListener> cacheListener = new ArrayList<>();
 
 	public enum Cache implements CacheType {
@@ -43,6 +47,7 @@ public class ProjectPanel extends EntityListPanel<Project, ProjectForm> implemen
 		super(applicationContext, new ProjectDAO(applicationContext), new ProjectCellRenderer());
 		this.companyDao = new CompanyDAO(applicationContext);
 		this.capabilityDao = new CapabilityDAO(applicationContext);
+		this.categoryDao = new CategoryDAO(applicationContext);
 		fillCache();
 		final ProjectForm prjForm = getForm();
 		prjForm.setCompanyCache(this);
@@ -85,10 +90,17 @@ public class ProjectPanel extends EntityListPanel<Project, ProjectForm> implemen
 		} catch (SQLException ex) {
 			throw new IllegalStateException(ex);
 		}
+		categoryCache.clear();
+		try {
+			categoryDao.consumeAll((cat) -> categoryCache.put(cat.getId(), cat));
+		} catch (SQLException ex) {
+			throw new IllegalStateException(ex);
+		}
 		cacheListener.forEach((cl) -> cl.refresh(Cache.COMPANY));
 		capabilityCache.clear();
 		try {
-			capabilityDao.consumeAll((cmp) -> capabilityCache.put(cmp.getId(), cmp));
+			capabilityDao.consumeAll((cmp) -> capabilityCache.put(cmp.getId(),
+					new CapabilityWithCategory(cmp, categoryCache.get(cmp.getCategoryId()))));
 		} catch (SQLException ex) {
 			throw new IllegalStateException(ex);
 		}
@@ -114,12 +126,12 @@ public class ProjectPanel extends EntityListPanel<Project, ProjectForm> implemen
 	}
 
 	@Override
-	public Capability getCapabilityById(long id) {
+	public CapabilityWithCategory getCapabilityById(long id) {
 		return capabilityCache.get(id);
 	}
 
 	@Override
-	public void consumeAllCapabilities(Consumer<Capability> consumer) {
+	public void consumeAllCapabilities(Consumer<CapabilityWithCategory> consumer) {
 		capabilityCache.forEach((key, value) -> consumer.accept(value));
 	}
 

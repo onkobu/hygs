@@ -22,9 +22,12 @@ import de.oftik.hygs.cmd.CommandTarget;
 import de.oftik.hygs.cmd.CommandTargetDefinition;
 import de.oftik.hygs.cmd.Notification;
 import de.oftik.hygs.cmd.NotificationListener;
+import de.oftik.hygs.cmd.cap.CreateCapabilityCmd;
 import de.oftik.hygs.cmd.cap.DeleteCapabilityCmd;
+import de.oftik.hygs.cmd.cap.SaveCapabilityCmd;
 import de.oftik.hygs.cmd.cat.CreateCategoryCmd;
 import de.oftik.hygs.query.cap.Capability;
+import de.oftik.hygs.query.cap.Category;
 import de.oftik.hygs.ui.ComponentFactory;
 import de.oftik.hygs.ui.GroupedEntityForm;
 import de.oftik.hygs.ui.I18N;
@@ -97,6 +100,7 @@ public class CapabilityForm extends GroupedEntityForm<Category, Capability> {
 		idField.setText(String.valueOf(cap.getId()));
 		versionField.setText(cap.getVersion());
 		categories.setSelectedItem(cat);
+		categories.setEnabled(true);
 	}
 
 	@Override
@@ -118,6 +122,7 @@ public class CapabilityForm extends GroupedEntityForm<Category, Capability> {
 	@Override
 	protected void setGroups(List<Category> groups) {
 		groups.forEach(categoriesModel::addElement);
+		categories.setEnabled(true);
 	}
 
 	private void errorCreatingCategory(Notification notification) {
@@ -132,14 +137,14 @@ public class CapabilityForm extends GroupedEntityForm<Category, Capability> {
 
 	@Override
 	public Command createEntityCommand() {
-		// TODO Auto-generated method stub
-		return null;
+		return new CreateCapabilityCmd(nameField.getText(), nullable(versionField.getText()),
+				(Category) categories.getSelectedItem());
 	}
 
 	@Override
 	public Command saveEntityCommand() {
-		// TODO Auto-generated method stub
-		return null;
+		return new SaveCapabilityCmd(idField.getText(), nameField.getText(), nullable(versionField.getText()),
+				(Category) categories.getSelectedItem());
 	}
 
 	@Override

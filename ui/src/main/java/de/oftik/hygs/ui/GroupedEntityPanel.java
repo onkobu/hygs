@@ -49,7 +49,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 		extends JPanel implements ApplicationContextListener {
 	private static final Logger log = Logger.getLogger(GroupedEntityPanel.class.getName());
 
-	private final FilterNode root;
+	private final DefaultMutableTreeNode root;
 	private final FilterTreeModel treeModel;
 	private final JTree tree;
 	private final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
@@ -122,7 +122,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 		this.groupDao = groupDao;
 		this.entityDao = entityDao;
 		this.entityForm = createForm(context::getBroker);
-		this.root = new FilterNode(rootTitle.label());
+		this.root = new DefaultMutableTreeNode(rootTitle.label());
 		this.treeModel = new FilterTreeModel(root, true, true);
 		this.tree = new JTree(treeModel);
 		tree.setCellRenderer(renderer);
@@ -132,6 +132,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 		this.newButton = createButton(I18N.NEW_ENTITY, this::createEntity);
 		this.saveButton = createButton(I18N.SAVE_CHANGES, this::saveEntity);
 		this.deleteButton = createButton(I18N.DELETE, this::deleteEntity);
+		newButton.setEnabled(false);
 		saveButton.setEnabled(false);
 		deleteButton.setEnabled(false);
 
@@ -191,9 +192,11 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 		switch (e.getEventType()) {
 		case RELOAD_DATABASE:
 			fillTree();
+			enableActions(true);
 			break;
 		case CLOSED_DATABASE:
 			clearTree();
+			enableActions(false);
 			break;
 		}
 	}
@@ -284,7 +287,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 		entityForm.setGroups(extractGroups());
 	}
 
-	private List<G> extractGroups() {
+	protected List<G> extractGroups() {
 		final List<G> groups = new ArrayList<>();
 		for (int i = 0; i < root.getChildCount(); i++) {
 			groups.add((G) ((DefaultMutableTreeNode) root.getChildAt(i)).getUserObject());
@@ -292,11 +295,12 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 		return groups;
 	}
 
-	private void addOrReplace(G g) {
-		final DefaultMutableTreeNode existing = groupMap.get(g.getId());
+	private FilterNode addOrReplace(G g) {
+		final FilterNode existing = groupMap.get(g.getId());
 		if (existing == null) {
-			registerGroup(toGroupNode(g));
+			return registerGroup(toGroupNode(g));
 		}
+		return existing;
 	}
 
 	private void delete(G g) {
@@ -307,9 +311,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 		final List<G> groups = new ArrayList<>();
 		try {
 			groupDao.consumeAll((g) -> {
-				final FilterNode tn = toGroupNode(g);
-				groups.add(g);
-				registerGroup(tn);
+				final FilterNode tn = addOrReplace(g);
 				List<E> entities = null;
 				try {
 					entities = loadForGroup(g);
@@ -319,13 +321,13 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 				if (entities == null || entities.isEmpty()) {
 					return;
 				}
-				entities.stream().map(GroupedEntityPanel::toNode).forEach(tn::add);
+				entities.stream().forEach(e -> tn.add(e, () -> toNode(e)));
 			});
 		} catch (SQLException e) {
 			throw new IllegalStateException(e);
 		}
 		treeModel.nodeStructureChanged(root);
-		entityForm.setGroups(groups);
+		entityForm.setGroups(extractGroups());
 	}
 
 	private void clearTree() {
@@ -336,7 +338,8 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 
 	protected FilterNode registerGroup(final FilterNode tn) {
 		root.add(tn);
-		return groupMap.put(((G) tn.getUserObject()).getId(), tn);
+		groupMap.put(((G) tn.getUserObject()).getId(), tn);
+		return tn;
 	}
 
 	protected FilterNode toGroupNode(G g) {
@@ -350,4 +353,9 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 		tn.setUserObject(obj);
 		return tn;
 	}
+
+	private void enableActions(boolean state) {
+		newButton.setEnabled(state);
+	}
+
 }

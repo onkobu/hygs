@@ -8,14 +8,14 @@ import de.oftik.keyhs.kersantti.AbstractIdentifiable;
 public class Capability extends AbstractIdentifiable implements Identifiable<Capability>, MappableToString {
 	private String id;
 	private String name;
-	private long categoryId;
+	private String categoryId;
 	private String version;
 	private boolean deleted;
 
 	public Capability() {
 	}
 
-	public Capability(String id, String name, long categoryId, String version) {
+	public Capability(String id, String name, String categoryId, String version) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -32,7 +32,7 @@ public class Capability extends AbstractIdentifiable implements Identifiable<Cap
 		return name;
 	}
 
-	public long getCategoryId() {
+	public String getCategoryId() {
 		return categoryId;
 	}
 
@@ -62,7 +62,7 @@ public class Capability extends AbstractIdentifiable implements Identifiable<Cap
 		this.name = name;
 	}
 
-	void setCategoryId(long categoryId) {
+	void setCategoryId(String categoryId) {
 		this.categoryId = categoryId;
 	}
 

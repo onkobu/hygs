@@ -3,7 +3,7 @@ package de.oftik.hygs.cmd.cat;
 import de.oftik.hygs.cmd.CommandTargetDefinition;
 import de.oftik.hygs.cmd.NotificationType;
 import de.oftik.hygs.cmd.SuccessNotification;
-import de.oftik.hygs.ui.cap.Category;
+import de.oftik.hygs.query.cap.Category;
 
 public class CategoryCreated extends SuccessNotification {
 

@@ -18,6 +18,8 @@ import de.oftik.hygs.cmd.Notification;
 import de.oftik.hygs.cmd.NotificationListener;
 import de.oftik.hygs.query.cap.Capability;
 import de.oftik.hygs.query.cap.CapabilityDAO;
+import de.oftik.hygs.query.cap.Category;
+import de.oftik.hygs.query.cap.CategoryDAO;
 import de.oftik.hygs.ui.ApplicationContext;
 import de.oftik.hygs.ui.GroupedEntityCreateDialog;
 import de.oftik.hygs.ui.GroupedEntityPanel;
@@ -96,8 +98,7 @@ public class CapabilityPanel extends GroupedEntityPanel<Category, Capability, Ca
 	@Override
 	public void createEntity(ActionEvent evt) {
 		final GroupedEntityCreateDialog<Category, Capability, CapabilityForm> dlg = wrapFormAsCreateDialog();
-//		dlg.getForm().setCompanyCache(this);
-//		dlg.getForm().setCapabilityCache(this);
+		dlg.getForm().setGroups(extractGroups());
 		dlg.showAndWaitForDecision();
 	}
 

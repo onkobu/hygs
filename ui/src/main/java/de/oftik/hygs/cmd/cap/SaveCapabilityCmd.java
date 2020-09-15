@@ -11,7 +11,7 @@ import de.oftik.hygs.cmd.Notification;
 import de.oftik.hygs.query.cap.Capability;
 import de.oftik.hygs.query.cap.CapabilityColumn;
 import de.oftik.hygs.query.cap.CapabilityTable;
-import de.oftik.hygs.ui.cap.Category;
+import de.oftik.hygs.query.cap.Category;
 
 public class SaveCapabilityCmd extends AbstractCommand {
 	private final String id;

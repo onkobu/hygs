@@ -32,11 +32,12 @@ public class SaveCompanyCmd extends AbstractCommand {
 	public PreparedStatement prepare(Connection conn) throws SQLException {
 		final PreparedStatement stmt = update(conn, CompanyTable.TABLE, CompanyColumn.cmp_id, CompanyColumn.cmp_name,
 				CompanyColumn.cmp_street, CompanyColumn.cmp_city, CompanyColumn.cmp_zip);
-		stmt.setString(1, name);
-		stmt.setString(2, street);
-		stmt.setString(3, city);
-		stmt.setString(4, zip);
-		stmt.setString(5, id);
+		int idx = 0;
+		stmt.setString(++idx, name);
+		stmt.setString(++idx, street);
+		stmt.setString(++idx, city);
+		stmt.setString(++idx, zip);
+		stmt.setString(++idx, id); // must be last because WHERE is last
 		return stmt;
 	}
 

@@ -5,7 +5,7 @@
 -- do not change by hand, will be generated automatically
 --
 
--- generated 2019-04-26
+-- generated 2020-09-15
 .print DDL
 .read ddl/initial.sql
 .read ddl/001_prj_role.sql
@@ -17,6 +17,7 @@
 .read ddl/010_app_properties.sql
 .read ddl/014_v_prj_cap.sql
 .read ddl/015_deleted_col.sql
+.read ddl/016_v_cap_cat.sql
 
 .print DML
 .read dml/cap_capability.sql

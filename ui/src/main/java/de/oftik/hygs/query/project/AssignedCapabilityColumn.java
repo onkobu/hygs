@@ -9,18 +9,6 @@ import de.oftik.keyhs.kersantti.ColumnType;
 import de.oftik.keyhs.kersantti.SqlType;
 
 public enum AssignedCapabilityColumn implements Column<AssignedCapability> {
-	id(ColumnType.PK_TYPE) {
-		@Override
-		public void map(AssignedCapability t, ResultSet rs) throws SQLException {
-			t.setId(asString(rs));
-		}
-
-		@Override
-		public void map(AssignedCapability t, int idx, PreparedStatement stmt) throws SQLException {
-			stmt.setString(idx, t.getId());
-		}
-	},
-
 	prj_id(ColumnType.FK_TYPE) {
 		@Override
 		public void map(AssignedCapability t, ResultSet rs) throws SQLException {

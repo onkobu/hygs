@@ -1,4 +1,4 @@
-package de.oftik.hygs.ui.cap;
+package de.oftik.hygs.query.cap;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

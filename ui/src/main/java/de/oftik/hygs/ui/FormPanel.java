@@ -1,6 +1,9 @@
 package de.oftik.hygs.ui;
 
 import java.awt.GridBagLayout;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.function.Supplier;
 
 import javax.swing.JButton;
@@ -92,5 +95,19 @@ public abstract class FormPanel extends JPanel {
 
 	protected CommandBroker broker() {
 		return brokerSupplier.get();
+	}
+
+	protected LocalDate convertDate(Date date) {
+		if (date == null) {
+			return null;
+		}
+		return LocalDate.ofInstant(date.toInstant(), ZoneId.systemDefault());
+	}
+
+	protected String nullable(String value) {
+		if (value == null || value.isBlank()) {
+			return null;
+		}
+		return value;
 	}
 }

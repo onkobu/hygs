@@ -1,8 +1,9 @@
-package de.oftik.hygs.ui.cap;
+package de.oftik.hygs.query.cap;
 
 import de.oftik.hygs.contract.EntitySource;
 import de.oftik.hygs.contract.Identifiable;
 import de.oftik.hygs.contract.MappableToString;
+import de.oftik.hygs.ui.cap.CategoryTable;
 import de.oftik.keyhs.kersantti.AbstractIdentifiable;
 
 public class Category extends AbstractIdentifiable implements Identifiable<Category>, MappableToString {

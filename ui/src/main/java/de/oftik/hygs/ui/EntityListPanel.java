@@ -171,6 +171,7 @@ public abstract class EntityListPanel<T extends Identifiable, F extends EntityFo
 		newButton = createButton(I18N.NEW_ENTITY, this::createEntity);
 		saveButton = createButton(I18N.SAVE_CHANGES, this::saveEntity);
 		deleteButton = createButton(I18N.DELETE, this::deleteEntity);
+		newButton.setEnabled(false);
 		saveButton.setEnabled(false);
 		deleteButton.setEnabled(false);
 		createUI();
@@ -289,11 +290,17 @@ public abstract class EntityListPanel<T extends Identifiable, F extends EntityFo
 		case RELOAD_DATABASE:
 			clearList();
 			fillList();
+			enableActions(true);
 			break;
 		case CLOSED_DATABASE:
 			clearList();
+			enableActions(true);
 			break;
 		}
+	}
+
+	private void enableActions(boolean state) {
+		newButton.setEnabled(state);
 	}
 
 	protected DAO<T> getDAO() {

@@ -19,7 +19,7 @@ public class Project extends AbstractIdentifiable implements Identifiable<Projec
 	private int weight;
 	private boolean deleted;
 
-	Project() {
+	public Project() {
 	}
 
 	public Project(String id, String name, LocalDate from, LocalDate to, Company company, String description,

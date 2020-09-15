@@ -37,12 +37,12 @@ public enum CapabilityColumn implements Column<Capability> {
 	cap_category(SqlType.INTEGER.deriveType()) {
 		@Override
 		public void map(Capability t, ResultSet rs) throws SQLException {
-			t.setCategoryId(asLong(rs));
+			t.setCategoryId(asString(rs));
 		}
 
 		@Override
 		public void map(Capability t, int idx, PreparedStatement stmt) throws SQLException {
-			stmt.setLong(idx, t.getCategoryId());
+			stmt.setString(idx, t.getCategoryId());
 		}
 	},
 

@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Collections;
 
 import de.oftik.hygs.contract.EntitySource;
+import de.oftik.hygs.query.cap.Category;
+import de.oftik.hygs.query.cap.CategoryColumn;
 import de.oftik.keyhs.kersantti.Column;
 import de.oftik.keyhs.kersantti.Constraint;
 import de.oftik.keyhs.kersantti.Table;
