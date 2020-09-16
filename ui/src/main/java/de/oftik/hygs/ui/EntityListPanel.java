@@ -37,7 +37,7 @@ import de.oftik.keyhs.kersantti.query.DAO;
  * @param <T>
  */
 public abstract class EntityListPanel<T extends Identifiable, F extends EntityForm<T>> extends JPanel
-		implements ApplicationContextListener {
+		implements ApplicationContextListener, SaveController {
 	private static final Logger log = Logger.getLogger(EntityListPanel.class.getName());
 
 	private final DefaultListModel<T> listModel = new DefaultListModel<>();
@@ -180,26 +180,51 @@ public abstract class EntityListPanel<T extends Identifiable, F extends EntityFo
 
 	public abstract F createForm(Supplier<CommandBroker> brokerSupplier);
 
-	public abstract void createEntity(ActionEvent evt);
+	public final void createEntity(ActionEvent evt) {
+		entityForm.blank();
+	}
 
 	public void onEntityInsert(List<String> ids) {
-		fillList();
-		selectById(ids.get(0));
+		try {
+			getDAO().findById(ids.get(0)).ifPresent(listModel::addElement);
+			selectById(ids.get(0));
+		} catch (SQLException e) {
+			throw new IllegalStateException(e);
+		}
 	}
 
 	public void onEntityUpdate(List<String> ids) {
-		fillList();
-		selectById(ids.get(0));
+		try {
+			getDAO().findById(ids.get(0)).ifPresent(e -> {
+				for (int i = 0; i < listModel.getSize(); i++) {
+					if (listModel.get(i).getId().equals(e.getId())) {
+						listModel.set(i, e);
+						break;
+					}
+				}
+			});
+			selectById(ids.get(0));
+		} catch (SQLException e) {
+			throw new IllegalStateException(e);
+		}
 	}
 
 	public void onEntityDelete(List<String> ids) {
-		fillList();
-		deleteSelection();
+		for (int i = 0; i < listModel.getSize(); i++) {
+			if (listModel.get(i).getId().equals(ids.get(0))) {
+				listModel.remove(i);
+				break;
+			}
+		}
 	}
 
 	public void onEntityResurrected(List<String> ids) {
-		fillList();
-		deleteSelection();
+		try {
+			getDAO().findById(ids.get(0)).ifPresent(listModel::addElement);
+			selectById(ids.get(0));
+		} catch (SQLException e) {
+			throw new IllegalStateException(e);
+		}
 	}
 
 	public void selectById(String id) {
@@ -216,19 +241,19 @@ public abstract class EntityListPanel<T extends Identifiable, F extends EntityFo
 	}
 
 	public void saveEntity(ActionEvent evt) {
-		entityForm.saveEntity();
+		if (isNewEntity()) {
+			entityForm.createEntity();
+		} else {
+			entityForm.saveEntity();
+		}
+	}
+
+	protected boolean isNewEntity() {
+		return entityForm.hasId();
 	}
 
 	public void deleteEntity(ActionEvent evt) {
 		entityForm.deleteEntity();
-	}
-
-	public EntityCreateDialog<T, F> wrapFormAsCreateDialog() {
-		return new EntityCreateDialog<>(this, createForm(applicationContext::getBroker));
-	}
-
-	public EntityCreateDialog<T, F> wrapFormAsSaveDialog() {
-		return new EntityCreateDialog<>(this, createForm(applicationContext::getBroker));
 	}
 
 	protected CommandBroker broker() {
@@ -305,5 +330,10 @@ public abstract class EntityListPanel<T extends Identifiable, F extends EntityFo
 
 	protected DAO<T> getDAO() {
 		return dao;
+	}
+
+	@Override
+	public void setSaveEnabled(boolean state) {
+		saveButton.setEnabled(state);
 	}
 }

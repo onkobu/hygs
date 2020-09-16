@@ -37,8 +37,7 @@ public interface Command {
 
 	default <T extends Identifiable> PreparedStatement delete(Connection conn, Table<T> t, Column<T> pkCol,
 			Column<T> delCol) throws SQLException {
-		return conn.prepareStatement(
-				"UPDATE " + t.name() + " SET " + delCol.name() + "=TRUE WHERE " + pkCol.name() + "=?",
+		return conn.prepareStatement("DELETE FROM " + t.name() + " WHERE " + pkCol.name() + "=?",
 				Statement.RETURN_GENERATED_KEYS);
 	}
 

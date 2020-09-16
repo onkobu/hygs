@@ -18,6 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -32,7 +34,6 @@ import de.oftik.hygs.cmd.project.DeleteProjectCmd;
 import de.oftik.hygs.cmd.project.SaveProjectCmd;
 import de.oftik.hygs.contract.CacheListener;
 import de.oftik.hygs.contract.CacheType;
-import de.oftik.hygs.query.cap.Capability;
 import de.oftik.hygs.query.company.Company;
 import de.oftik.hygs.query.project.AssignedCapability;
 import de.oftik.hygs.query.project.AssignedCapabilityDAO;
@@ -41,6 +42,7 @@ import de.oftik.hygs.ui.ComponentFactory;
 import de.oftik.hygs.ui.EntityForm;
 import de.oftik.hygs.ui.I18N;
 import de.oftik.hygs.ui.MappableToStringRenderer;
+import de.oftik.hygs.ui.SaveController;
 import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
 import de.oftik.kehys.keijukainen.gui.ListTableModel;
 import de.oftik.keyhs.kersantti.query.Converters;
@@ -115,12 +117,12 @@ public class ProjectForm extends EntityForm<Project> {
 
 	private final CacheListener cacheListener = new CacheListenerImpl();
 
-	public ProjectForm(Supplier<CommandBroker> brokerSupplier) {
-		this(brokerSupplier, false);
+	public ProjectForm(SaveController sc, Supplier<CommandBroker> brokerSupplier) {
+		this(sc, brokerSupplier, false);
 	}
 
-	public ProjectForm(Supplier<CommandBroker> brokerSupplier, boolean createMode) {
-		super(brokerSupplier);
+	public ProjectForm(SaveController sc, Supplier<CommandBroker> brokerSupplier, boolean createMode) {
+		super(sc, brokerSupplier);
 		this.createMode = createMode;
 		capabilityTable.setModel(tableModel);
 		capabilityTable.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new JTextField()));
@@ -172,7 +174,26 @@ public class ProjectForm extends EntityForm<Project> {
 		idField.setColumns(10);
 		idField.setEditable(false);
 		nameField.setColumns(30);
+		nameField.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				checkSaveStatus();
+			}
 
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				checkSaveStatus();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				checkSaveStatus();
+			}
+
+			private void checkSaveStatus() {
+				setSaveable(!isBlank(nameField));
+			}
+		});
 		addRowTextField(I18N.ID, idField, gbc);
 		addRowTextField(I18N.PROJECT, nameField, gbc.nextRow());
 
@@ -196,7 +217,8 @@ public class ProjectForm extends EntityForm<Project> {
 		if (createMode) {
 
 		} else {
-			broker().execute(new AssignCapabilityCmd(currentProject, (Capability) capabilityBox.getSelectedItem()));
+			broker().execute(new AssignCapabilityCmd(currentProject,
+					((CapabilityWithCategory) capabilityBox.getSelectedItem()).getCapability()));
 		}
 	}
 
@@ -246,6 +268,10 @@ public class ProjectForm extends EntityForm<Project> {
 		} catch (SQLException e) {
 			log.throwing(getClass().getSimpleName(), "showEntity", e);
 		}
+	}
 
+	@Override
+	public boolean hasId() {
+		return isBlank(idField);
 	}
 }

@@ -4,6 +4,8 @@ import java.awt.GridBagLayout;
 import java.util.function.Supplier;
 
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import de.oftik.hygs.cmd.Command;
 import de.oftik.hygs.cmd.CommandBroker;
@@ -13,6 +15,7 @@ import de.oftik.hygs.cmd.company.SaveCompanyCmd;
 import de.oftik.hygs.query.company.Company;
 import de.oftik.hygs.ui.EntityForm;
 import de.oftik.hygs.ui.I18N;
+import de.oftik.hygs.ui.SaveController;
 import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
 
 public class CompanyForm extends EntityForm<Company> {
@@ -22,8 +25,8 @@ public class CompanyForm extends EntityForm<Company> {
 	private final JTextField cityField = new JTextField();
 	private final JTextField zipField = new JTextField();
 
-	public CompanyForm(Supplier<CommandBroker> brokerSupplier) {
-		super(brokerSupplier);
+	public CompanyForm(SaveController sc, Supplier<CommandBroker> brokerSupplier) {
+		super(sc, brokerSupplier);
 		createUI();
 	}
 
@@ -33,6 +36,26 @@ public class CompanyForm extends EntityForm<Company> {
 		idField.setColumns(10);
 		idField.setEditable(false);
 		nameField.setColumns(30);
+		nameField.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				checkSaveStatus();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				checkSaveStatus();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				checkSaveStatus();
+			}
+
+			private void checkSaveStatus() {
+				setSaveable(!isBlank(nameField));
+			}
+		});
 		streetField.setColumns(nameField.getColumns());
 		cityField.setColumns(idField.getColumns());
 		zipField.setColumns(idField.getColumns());
@@ -85,5 +108,10 @@ public class CompanyForm extends EntityForm<Company> {
 	@Override
 	public void destroy() {
 		// nothing to do here
+	}
+
+	@Override
+	public boolean hasId() {
+		return isBlank(idField);
 	}
 }

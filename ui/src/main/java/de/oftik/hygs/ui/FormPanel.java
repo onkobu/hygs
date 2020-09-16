@@ -75,7 +75,7 @@ public abstract class FormPanel extends JPanel {
 
 	protected void addDatePicker(I18N label, JDatePickerImpl picker, GridBagConstraintFactory gbc) {
 		addLabel(label, gbc);
-		add(picker, gbc.nextColumn().fillHorizontal().end());
+		add(picker, gbc.nextColumn().weightx(0.5).fillHorizontal().end());
 	}
 
 	protected void addDescriptionArea(I18N label, JTextArea area, GridBagConstraintFactory gbc) {
@@ -109,5 +109,9 @@ public abstract class FormPanel extends JPanel {
 			return null;
 		}
 		return value;
+	}
+
+	protected boolean isBlank(JTextField field) {
+		return field.getText() == null || field.getText().isBlank();
 	}
 }

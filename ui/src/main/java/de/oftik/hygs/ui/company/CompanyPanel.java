@@ -1,6 +1,5 @@
 package de.oftik.hygs.ui.company;
 
-import java.awt.event.ActionEvent;
 import java.util.function.Supplier;
 
 import de.oftik.hygs.cmd.CommandBroker;
@@ -20,11 +19,7 @@ public class CompanyPanel extends EntityListPanel<Company, CompanyForm> {
 
 	@Override
 	public CompanyForm createForm(Supplier<CommandBroker> brokerSupplier) {
-		return new CompanyForm(brokerSupplier);
+		return new CompanyForm(this, brokerSupplier);
 	}
 
-	@Override
-	public void createEntity(ActionEvent evt) {
-		wrapFormAsCreateDialog().showAndWaitForDecision();
-	}
 }

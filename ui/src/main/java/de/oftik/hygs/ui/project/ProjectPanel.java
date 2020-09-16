@@ -1,6 +1,5 @@
 package de.oftik.hygs.ui.project;
 
-import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +24,6 @@ import de.oftik.hygs.query.project.Project;
 import de.oftik.hygs.query.project.ProjectDAO;
 import de.oftik.hygs.ui.ApplicationContext;
 import de.oftik.hygs.ui.ContextEvent;
-import de.oftik.hygs.ui.EntityCreateDialog;
 import de.oftik.hygs.ui.EntityListPanel;
 import de.oftik.keyhs.kersantti.ForeignKey;
 
@@ -74,7 +72,7 @@ public class ProjectPanel extends EntityListPanel<Project, ProjectForm> implemen
 
 	@Override
 	public ProjectForm createForm(Supplier<CommandBroker> brokerSupplier) {
-		return new ProjectForm(brokerSupplier);
+		return new ProjectForm(this, brokerSupplier);
 	}
 
 	@Override
@@ -105,14 +103,6 @@ public class ProjectPanel extends EntityListPanel<Project, ProjectForm> implemen
 			throw new IllegalStateException(ex);
 		}
 		cacheListener.forEach((cl) -> cl.refresh(Cache.CAPABILITY));
-	}
-
-	@Override
-	public void createEntity(ActionEvent evt) {
-		final EntityCreateDialog<Project, ProjectForm> dlg = wrapFormAsCreateDialog();
-		dlg.getForm().setCompanyCache(this);
-		dlg.getForm().setCapabilityCache(this);
-		dlg.showAndWaitForDecision();
 	}
 
 	@Override

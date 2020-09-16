@@ -6,13 +6,16 @@ import de.oftik.hygs.cmd.Command;
 import de.oftik.hygs.cmd.CommandBroker;
 
 public abstract class EntityForm<T> extends FormPanel {
-	public EntityForm(Supplier<CommandBroker> brokerSupplier) {
+	private final SaveController saveController;
+
+	public EntityForm(SaveController sc, Supplier<CommandBroker> brokerSupplier) {
 		super(brokerSupplier);
+		this.saveController = sc;
 	}
 
 	/**
 	 * Fill the view with the entities details.
-	 * 
+	 *
 	 * @param t
 	 */
 	public abstract void showEntity(T t);
@@ -39,5 +42,11 @@ public abstract class EntityForm<T> extends FormPanel {
 	 * Blank all fields due to empty selection.
 	 */
 	public abstract void blank();
+
+	public abstract boolean hasId();
+
+	public void setSaveable(boolean state) {
+		saveController.setSaveEnabled(state);
+	}
 
 }
