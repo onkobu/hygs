@@ -3,7 +3,7 @@ package de.oftik.hygs.ui;
 import java.io.File;
 
 import de.oftik.hygs.cmd.CommandBroker;
-import de.oftik.keyhs.kersantti.DatabaseContext;
+import de.oftik.kehys.kersantti.DatabaseContext;
 
 public interface ApplicationContext extends DatabaseContext {
 	@Override

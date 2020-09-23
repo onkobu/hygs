@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import de.oftik.hygs.ui.ApplicationContext;
-import de.oftik.keyhs.kersantti.query.DAO;
+import de.oftik.kehys.kersantti.query.DAO;
 
 public class AssignedCapabilityDAO extends DAO<AssignedCapability> {
 	public AssignedCapabilityDAO(ApplicationContext context) {

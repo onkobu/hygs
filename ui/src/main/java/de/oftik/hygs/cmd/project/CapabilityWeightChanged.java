@@ -5,7 +5,7 @@ import de.oftik.hygs.cmd.NotificationType;
 import de.oftik.hygs.cmd.SuccessNotification;
 import de.oftik.hygs.query.cap.Capability;
 import de.oftik.hygs.query.project.Project;
-import de.oftik.keyhs.kersantti.ForeignKey;
+import de.oftik.kehys.kersantti.ForeignKey;
 
 public class CapabilityWeightChanged extends SuccessNotification {
 

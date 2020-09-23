@@ -18,7 +18,7 @@ import de.oftik.hygs.ui.prjmon.ProjectMonthsExporter;
 import de.oftik.kehys.keijukainen.function.EitherOr;
 import de.oftik.kehys.keijukainen.function.Pair;
 import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
-import de.oftik.keyhs.kersantti.query.QueryStatistics;
+import de.oftik.kehys.kersantti.query.QueryStatistics;
 
 public class ExportPanel extends JPanel {
 	private final ApplicationContext context;

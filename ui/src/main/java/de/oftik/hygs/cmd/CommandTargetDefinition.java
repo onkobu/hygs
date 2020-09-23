@@ -11,7 +11,7 @@ import de.oftik.hygs.query.project.ProjectCapTable;
 import de.oftik.hygs.query.project.ProjectTable;
 import de.oftik.hygs.ui.ApplicationContext;
 import de.oftik.hygs.ui.cap.CategoryTable;
-import de.oftik.keyhs.kersantti.Table;
+import de.oftik.kehys.kersantti.Table;
 
 public enum CommandTargetDefinition implements CommandTarget {
 	category(CategoryTable.TABLE) {

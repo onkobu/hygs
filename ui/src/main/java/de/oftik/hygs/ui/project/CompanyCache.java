@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 
 import de.oftik.hygs.contract.CacheListener;
 import de.oftik.hygs.query.company.Company;
-import de.oftik.keyhs.kersantti.ForeignKey;
+import de.oftik.kehys.kersantti.ForeignKey;
 
 public interface CompanyCache {
 	Company getCompany(ForeignKey<Company> companyKey);

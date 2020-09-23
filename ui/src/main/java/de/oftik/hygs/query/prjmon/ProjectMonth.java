@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import de.oftik.keyhs.kersantti.AbstractIdentifiable;
+import de.oftik.kehys.kersantti.AbstractIdentifiable;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)

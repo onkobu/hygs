@@ -25,7 +25,7 @@ import de.oftik.hygs.query.project.ProjectDAO;
 import de.oftik.hygs.ui.ApplicationContext;
 import de.oftik.hygs.ui.ContextEvent;
 import de.oftik.hygs.ui.EntityListPanel;
-import de.oftik.keyhs.kersantti.ForeignKey;
+import de.oftik.kehys.kersantti.ForeignKey;
 
 public class ProjectPanel extends EntityListPanel<Project, ProjectForm> implements CompanyCache, CapabilityCache {
 	private final CompanyDAO companyDao;

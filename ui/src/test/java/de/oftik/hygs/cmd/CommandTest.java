@@ -16,11 +16,11 @@ import org.junit.jupiter.api.Test;
 
 import de.oftik.hygs.contract.EntitySource;
 import de.oftik.hygs.contract.Identifiable;
-import de.oftik.keyhs.kersantti.AbstractIdentifiable;
-import de.oftik.keyhs.kersantti.Column;
-import de.oftik.keyhs.kersantti.ColumnType;
-import de.oftik.keyhs.kersantti.Constraint;
-import de.oftik.keyhs.kersantti.Table;
+import de.oftik.kehys.kersantti.AbstractIdentifiable;
+import de.oftik.kehys.kersantti.Column;
+import de.oftik.kehys.kersantti.ColumnType;
+import de.oftik.kehys.kersantti.Constraint;
+import de.oftik.kehys.kersantti.Table;
 import mockit.Mocked;
 import mockit.Verifications;
 

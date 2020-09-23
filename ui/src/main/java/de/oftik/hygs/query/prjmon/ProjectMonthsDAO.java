@@ -1,7 +1,7 @@
 package de.oftik.hygs.query.prjmon;
 
 import de.oftik.hygs.ui.ApplicationContext;
-import de.oftik.keyhs.kersantti.query.DAO;
+import de.oftik.kehys.kersantti.query.DAO;
 
 public class ProjectMonthsDAO extends DAO<ProjectMonth> {
 

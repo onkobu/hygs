@@ -8,9 +8,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import de.oftik.keyhs.kersantti.Column;
-import de.oftik.keyhs.kersantti.Identifiable;
-import de.oftik.keyhs.kersantti.Table;
+import de.oftik.kehys.kersantti.Column;
+import de.oftik.kehys.kersantti.Identifiable;
+import de.oftik.kehys.kersantti.Table;
 
 public interface Command {
 

@@ -4,9 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import de.oftik.keyhs.kersantti.Column;
-import de.oftik.keyhs.kersantti.ColumnType;
-import de.oftik.keyhs.kersantti.SqlType;
+import de.oftik.kehys.kersantti.Column;
+import de.oftik.kehys.kersantti.ColumnType;
+import de.oftik.kehys.kersantti.SqlType;
 
 public enum ProjectMonthColumn implements Column<ProjectMonth> {
 	prj_id(ColumnType.PK_TYPE) {

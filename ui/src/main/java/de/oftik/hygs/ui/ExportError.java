@@ -1,6 +1,6 @@
 package de.oftik.hygs.ui;
 
-import de.oftik.keyhs.kersantti.Identifiable;
+import de.oftik.kehys.kersantti.Identifiable;
 
 public class ExportError {
 	private final Throwable throwable;

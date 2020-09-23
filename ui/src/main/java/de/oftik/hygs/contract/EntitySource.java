@@ -1,7 +1,7 @@
 package de.oftik.hygs.contract;
 
-import de.oftik.keyhs.kersantti.Column;
-import de.oftik.keyhs.kersantti.Table;
+import de.oftik.kehys.kersantti.Column;
+import de.oftik.kehys.kersantti.Table;
 
 public interface EntitySource<T extends Identifiable<T>> {
 	String name();

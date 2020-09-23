@@ -3,7 +3,7 @@ package de.oftik.hygs.query.company;
 import de.oftik.hygs.contract.EntitySource;
 import de.oftik.hygs.contract.Identifiable;
 import de.oftik.hygs.contract.MappableToString;
-import de.oftik.keyhs.kersantti.AbstractIdentifiable;
+import de.oftik.kehys.kersantti.AbstractIdentifiable;
 
 public class Company extends AbstractIdentifiable implements Identifiable<Company>, MappableToString {
 	private String id;

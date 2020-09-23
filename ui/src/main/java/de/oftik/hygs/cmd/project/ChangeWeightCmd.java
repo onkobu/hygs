@@ -13,7 +13,7 @@ import de.oftik.hygs.query.project.AssignedCapability;
 import de.oftik.hygs.query.project.Project;
 import de.oftik.hygs.query.project.ProjectCapColumn;
 import de.oftik.hygs.query.project.ProjectCapTable;
-import de.oftik.keyhs.kersantti.ForeignKey;
+import de.oftik.kehys.kersantti.ForeignKey;
 
 public class ChangeWeightCmd extends AbstractCommand {
 

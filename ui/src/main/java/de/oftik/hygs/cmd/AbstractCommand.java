@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import de.oftik.keyhs.kersantti.Identifiable;
-import de.oftik.keyhs.kersantti.Table;
+import de.oftik.kehys.kersantti.Identifiable;
+import de.oftik.kehys.kersantti.Table;
 
 public abstract class AbstractCommand implements Command {
 	private static final Logger LOG = Logger.getLogger(AbstractCommand.class.getName());

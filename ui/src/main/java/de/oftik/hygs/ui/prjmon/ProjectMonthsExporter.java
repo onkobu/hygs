@@ -24,7 +24,7 @@ import de.oftik.hygs.ui.ApplicationContext;
 import de.oftik.hygs.ui.ExportError;
 import de.oftik.hygs.ui.TimerConsumerWrapper;
 import de.oftik.kehys.keijukainen.function.Pair;
-import de.oftik.keyhs.kersantti.query.QueryStatistics;
+import de.oftik.kehys.kersantti.query.QueryStatistics;
 
 public class ProjectMonthsExporter {
 	private ProjectMonthsDAO dao;

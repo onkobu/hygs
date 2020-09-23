@@ -6,9 +6,9 @@ import java.util.function.Consumer;
 import de.oftik.hygs.Validators;
 import de.oftik.hygs.contract.EntitySource;
 import de.oftik.hygs.contract.Identifiable;
-import de.oftik.keyhs.kersantti.Column;
-import de.oftik.keyhs.kersantti.DatabaseContext;
-import de.oftik.keyhs.kersantti.query.DAO;
+import de.oftik.kehys.kersantti.Column;
+import de.oftik.kehys.kersantti.DatabaseContext;
+import de.oftik.kehys.kersantti.query.DAO;
 
 public abstract class AbstractDao<T extends Identifiable<T>> extends DAO<T> {
 

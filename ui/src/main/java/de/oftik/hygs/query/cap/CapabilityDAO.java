@@ -5,7 +5,7 @@ import java.util.List;
 
 import de.oftik.hygs.query.AbstractDao;
 import de.oftik.hygs.ui.ApplicationContext;
-import de.oftik.keyhs.kersantti.Column;
+import de.oftik.kehys.kersantti.Column;
 
 public class CapabilityDAO extends AbstractDao<Capability> {
 	public CapabilityDAO(ApplicationContext context) {

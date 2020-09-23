@@ -34,7 +34,7 @@ import de.oftik.hygs.cmd.Notification;
 import de.oftik.hygs.cmd.NotificationListener;
 import de.oftik.hygs.contract.Identifiable;
 import de.oftik.hygs.contract.MappableToString;
-import de.oftik.keyhs.kersantti.query.DAO;
+import de.oftik.kehys.kersantti.query.DAO;
 
 /**
  * A panel with a tree-like structure on one side, grouping entities. Next to it

@@ -6,8 +6,8 @@ import de.oftik.hygs.contract.EntitySource;
 import de.oftik.hygs.contract.Identifiable;
 import de.oftik.hygs.contract.MappableToString;
 import de.oftik.hygs.query.company.Company;
-import de.oftik.keyhs.kersantti.AbstractIdentifiable;
-import de.oftik.keyhs.kersantti.ForeignKey;
+import de.oftik.kehys.kersantti.AbstractIdentifiable;
+import de.oftik.kehys.kersantti.ForeignKey;
 
 public class Project extends AbstractIdentifiable implements Identifiable<Project>, MappableToString {
 	private String id;

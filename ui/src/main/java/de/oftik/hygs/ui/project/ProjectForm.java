@@ -47,7 +47,7 @@ import de.oftik.hygs.ui.MappableToStringRenderer;
 import de.oftik.hygs.ui.SaveController;
 import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
 import de.oftik.kehys.keijukainen.gui.ListTableModel;
-import de.oftik.keyhs.kersantti.query.Converters;
+import de.oftik.kehys.kersantti.query.Converters;
 
 public class ProjectForm extends EntityForm<Project> {
 	private static final Logger log = Logger.getLogger(ProjectForm.class.getName());

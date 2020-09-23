@@ -14,8 +14,8 @@ import de.oftik.hygs.query.company.Company;
 import de.oftik.hygs.query.project.Project;
 import de.oftik.hygs.query.project.ProjectColumn;
 import de.oftik.hygs.query.project.ProjectTable;
-import de.oftik.keyhs.kersantti.Column;
-import de.oftik.keyhs.kersantti.ForeignKey;
+import de.oftik.kehys.kersantti.Column;
+import de.oftik.kehys.kersantti.ForeignKey;
 
 public class SaveProjectCmd extends AbstractCommand {
 	private final String id;

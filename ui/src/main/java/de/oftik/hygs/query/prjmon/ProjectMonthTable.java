@@ -3,9 +3,9 @@ package de.oftik.hygs.query.prjmon;
 import java.util.Collection;
 import java.util.Collections;
 
-import de.oftik.keyhs.kersantti.Column;
-import de.oftik.keyhs.kersantti.Constraint;
-import de.oftik.keyhs.kersantti.Table;
+import de.oftik.kehys.kersantti.Column;
+import de.oftik.kehys.kersantti.Constraint;
+import de.oftik.kehys.kersantti.Table;
 
 public class ProjectMonthTable implements Table<ProjectMonth> {
 	public static final ProjectMonthTable TABLE = new ProjectMonthTable();
