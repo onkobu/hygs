@@ -21,4 +21,7 @@ public class CapabilityWeightChanged extends SuccessNotification {
 		this.capabilityId = capability.getParentId();
 	}
 
+	public String getCapabilityId() {
+		return capabilityId;
+	}
 }

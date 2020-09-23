@@ -6,7 +6,7 @@ package de.oftik.hygs.contract;
  * @author onkobu
  *
  */
-public interface Identifiable<T extends Identifiable> extends de.oftik.keyhs.kersantti.Identifiable {
+public interface Identifiable<T extends Identifiable<T>> extends de.oftik.keyhs.kersantti.Identifiable {
 	/**
 	 *
 	 * @return Source to make it distinct from other identifiables of other sources.

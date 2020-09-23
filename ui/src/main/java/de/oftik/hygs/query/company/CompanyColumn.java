@@ -83,7 +83,7 @@ public enum CompanyColumn implements Column<Company> {
 
 	private final ColumnType type;
 
-	private CompanyColumn(ColumnType type) {
+	CompanyColumn(ColumnType type) {
 		this.type = type;
 	}
 

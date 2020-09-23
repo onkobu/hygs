@@ -3,6 +3,7 @@ package de.oftik.hygs.cmd.company;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 import de.oftik.hygs.cmd.AbstractCommand;
@@ -28,8 +29,8 @@ public class CreateCompanyCmd extends AbstractCommand {
 
 	@Override
 	public PreparedStatement prepare(Connection conn) throws SQLException {
-		final PreparedStatement stmt = insert(conn, CompanyTable.TABLE, CompanyColumn.cmp_name,
-				CompanyColumn.cmp_street, CompanyColumn.cmp_city, CompanyColumn.cmp_zip);
+		final PreparedStatement stmt = insert(conn, CompanyTable.TABLE, Arrays.asList(CompanyColumn.cmp_name,
+				CompanyColumn.cmp_street, CompanyColumn.cmp_city, CompanyColumn.cmp_zip));
 		stmt.setString(1, name);
 		stmt.setString(2, street);
 		stmt.setString(3, city);

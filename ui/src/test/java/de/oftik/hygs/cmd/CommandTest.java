@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -110,8 +111,8 @@ public class CommandTest {
 
 	@Test
 	public void renderInsert(@Mocked Connection conn) throws Exception {
-		new TestCommand().insert(conn, TestTable.TABLE, new TestColumn("id"), new TestColumn("value1"),
-				new TestColumn("value2"), new TestColumn("value3"));
+		new TestCommand().insert(conn, TestTable.TABLE, Arrays.asList(new TestColumn("id"), new TestColumn("value1"),
+				new TestColumn("value2"), new TestColumn("value3")));
 		new Verifications() {
 			{
 				String s;
@@ -123,7 +124,7 @@ public class CommandTest {
 
 	@Test
 	public void renderUpdateSingleColumn(@Mocked Connection conn) throws Exception {
-		new TestCommand().update(conn, TestTable.TABLE, new TestColumn("id"), new TestColumn("value"));
+		new TestCommand().update(conn, TestTable.TABLE, new TestColumn("id"), Arrays.asList(new TestColumn("value")));
 		new Verifications() {
 			{
 				String s;
@@ -135,8 +136,8 @@ public class CommandTest {
 
 	@Test
 	public void renderUpdate(@Mocked Connection conn) throws Exception {
-		new TestCommand().update(conn, TestTable.TABLE, new TestColumn("id"), new TestColumn("value1"),
-				new TestColumn("value2"), new TestColumn("value3"));
+		new TestCommand().update(conn, TestTable.TABLE, new TestColumn("id"),
+				Arrays.asList(new TestColumn("value1"), new TestColumn("value2"), new TestColumn("value3")));
 		new Verifications() {
 			{
 				String s;

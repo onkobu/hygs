@@ -108,7 +108,7 @@ public enum ProjectColumn implements Column<Project> {
 
 	private final ColumnType type;
 
-	private ProjectColumn(ColumnType type) {
+	ProjectColumn(ColumnType type) {
 		this.type = type;
 	}
 

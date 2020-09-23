@@ -47,7 +47,7 @@ public enum ProjectCapColumn implements Column<ProjectCapMapping> {
 
 	private final ColumnType type;
 
-	private ProjectCapColumn(ColumnType type) {
+	ProjectCapColumn(ColumnType type) {
 		this.type = type;
 	}
 

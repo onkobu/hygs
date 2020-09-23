@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.function.Supplier;
@@ -34,6 +35,7 @@ import de.oftik.hygs.cmd.project.DeleteProjectCmd;
 import de.oftik.hygs.cmd.project.SaveProjectCmd;
 import de.oftik.hygs.contract.CacheListener;
 import de.oftik.hygs.contract.CacheType;
+import de.oftik.hygs.query.cap.Capability;
 import de.oftik.hygs.query.company.Company;
 import de.oftik.hygs.query.project.AssignedCapability;
 import de.oftik.hygs.query.project.AssignedCapabilityDAO;
@@ -70,9 +72,9 @@ public class ProjectForm extends EntityForm<Project> {
 
 	private AssignedCapabilityDAO assignedCapabilityDAO;
 	private final ListTableModel<AssignedCapability> tableModel = new ListTableModel<AssignedCapability>(
-			createDescription(identifiers[0], String.class, AssignedCapability::getName),
-			createDescription(identifiers[1], String.class, AssignedCapability::getVersion),
-			createDescription(identifiers[2], Number.class, AssignedCapability::getWeight, true)) {
+			Arrays.asList(createDescription(identifiers[0], String.class, AssignedCapability::getName),
+					createDescription(identifiers[1], String.class, AssignedCapability::getVersion),
+					createDescription(identifiers[2], Number.class, AssignedCapability::getWeight, true))) {
 
 		@Override
 		public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
@@ -213,12 +215,10 @@ public class ProjectForm extends EntityForm<Project> {
 		add(editCapPanel, gbc.nextRow().nextColumn().remainderX().end());
 	}
 
+	@SuppressWarnings("PMD.UnusedFormalParameter")
 	public void addCapability(ActionEvent evt) {
-		if (createMode) {
-
-		} else {
-			broker().execute(new AssignCapabilityCmd(currentProject,
-					((CapabilityWithCategory) capabilityBox.getSelectedItem()).getCapability()));
+		if (!createMode) {
+			broker().execute(new AssignCapabilityCmd(currentProject, (Capability) capabilityBox.getSelectedItem()));
 		}
 	}
 

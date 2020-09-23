@@ -12,7 +12,7 @@ public class FilterTreeModel extends DefaultTreeModel {
 	}
 
 	public FilterTreeModel(TreeNode root, boolean asksAllowsChildren) {
-		this(root, false, false);
+		this(root, asksAllowsChildren, false);
 	}
 
 	public FilterTreeModel(TreeNode root, boolean asksAllowsChildren, boolean filterIsActive) {
@@ -43,20 +43,16 @@ public class FilterTreeModel extends DefaultTreeModel {
 
 	@Override
 	public Object getChild(Object parent, int index) {
-		if (filtering) {
-			if (parent instanceof FilterNode) {
-				return ((FilterNode) parent).getChildAt(index, filtering);
-			}
+		if (filtering && parent instanceof FilterNode) {
+			return ((FilterNode) parent).getChildAt(index, filtering);
 		}
 		return ((TreeNode) parent).getChildAt(index);
 	}
 
 	@Override
 	public int getChildCount(Object parent) {
-		if (filtering) {
-			if (parent instanceof FilterNode) {
-				return ((FilterNode) parent).getChildCount(filtering);
-			}
+		if (filtering && parent instanceof FilterNode) {
+			return ((FilterNode) parent).getChildCount(filtering);
 		}
 		return ((TreeNode) parent).getChildCount();
 	}

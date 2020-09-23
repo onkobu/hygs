@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 import de.oftik.hygs.cmd.AbstractCommand;
@@ -37,9 +38,9 @@ public class CreateProjectCmd extends AbstractCommand {
 
 	@Override
 	public PreparedStatement prepare(Connection conn) throws SQLException {
-		final PreparedStatement stmt = insert(conn, ProjectTable.TABLE, ProjectColumn.prj_name, ProjectColumn.prj_from,
-				ProjectColumn.prj_to, ProjectColumn.prj_company, ProjectColumn.prj_description,
-				ProjectColumn.prj_weight);
+		final PreparedStatement stmt = insert(conn, ProjectTable.TABLE,
+				Arrays.asList(ProjectColumn.prj_name, ProjectColumn.prj_from, ProjectColumn.prj_to,
+						ProjectColumn.prj_company, ProjectColumn.prj_description, ProjectColumn.prj_weight));
 		int idx = 0;
 		stmt.setString(++idx, name);
 		stmt.setTimestamp(++idx, Column.toTimestamp(from));

@@ -45,7 +45,7 @@ import de.oftik.keyhs.kersantti.query.DAO;
  * @param <G>
  * @param <E>
  */
-public abstract class GroupedEntityPanel<G extends Identifiable, E extends Identifiable & MappableToString, F extends GroupedEntityForm<G, E>>
+public abstract class GroupedEntityPanel<G extends Identifiable<G>, E extends Identifiable<E> & MappableToString, F extends GroupedEntityForm<G, E>>
 		extends JPanel implements ApplicationContextListener {
 	private static final Logger log = Logger.getLogger(GroupedEntityPanel.class.getName());
 
@@ -75,7 +75,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 	 *
 	 * @param <T>
 	 */
-	protected static final class EntityNotificationListener<G extends Identifiable, E extends Identifiable & MappableToString, F extends GroupedEntityForm<G, E>>
+	protected static final class EntityNotificationListener<G extends Identifiable<G>, E extends Identifiable<E> & MappableToString, F extends GroupedEntityForm<G, E>>
 			implements NotificationListener {
 		private final CommandTarget target;
 		private final GroupedEntityPanel<G, E, F> reference;
@@ -167,6 +167,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 		entityForm.deleteEntity();
 	}
 
+	@SuppressWarnings({ "PMD.UnusedFormalParameter", "unchecked" })
 	private void nodeSelected(TreeSelectionEvent evt) {
 		final TreePath sp = tree.getSelectionPath();
 		if (sp == null) {
@@ -287,6 +288,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 		entityForm.setGroups(extractGroups());
 	}
 
+	@SuppressWarnings("unchecked")
 	protected List<G> extractGroups() {
 		final List<G> groups = new ArrayList<>();
 		for (int i = 0; i < root.getChildCount(); i++) {
@@ -303,12 +305,12 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 		return existing;
 	}
 
+	@SuppressWarnings("PMD.UnusedFormalParameter")
 	private void delete(G g) {
 		throw new UnsupportedOperationException("Not ready yet");
 	}
 
 	private void fillTree() {
-		final List<G> groups = new ArrayList<>();
 		try {
 			groupDao.consumeAll((g) -> {
 				final FilterNode tn = addOrReplace(g);
@@ -336,6 +338,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable, E extends Ident
 		entityForm.setGroups(Collections.emptyList());
 	}
 
+	@SuppressWarnings("unchecked")
 	protected FilterNode registerGroup(final FilterNode tn) {
 		root.add(tn);
 		groupMap.put(((G) tn.getUserObject()).getId(), tn);

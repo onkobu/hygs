@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 import de.oftik.hygs.cmd.AbstractCommand;
@@ -39,9 +40,9 @@ public class SaveProjectCmd extends AbstractCommand {
 
 	@Override
 	public PreparedStatement prepare(Connection conn) throws SQLException {
-		final PreparedStatement stmt = update(conn, ProjectTable.TABLE, ProjectColumn.prj_id, ProjectColumn.prj_name,
-				ProjectColumn.prj_from, ProjectColumn.prj_to, ProjectColumn.prj_company, ProjectColumn.prj_description,
-				ProjectColumn.prj_weight);
+		final PreparedStatement stmt = update(conn, ProjectTable.TABLE, ProjectColumn.prj_id,
+				Arrays.asList(ProjectColumn.prj_name, ProjectColumn.prj_from, ProjectColumn.prj_to,
+						ProjectColumn.prj_company, ProjectColumn.prj_description, ProjectColumn.prj_weight));
 		int idx = 0;
 		stmt.setString(++idx, name);
 		stmt.setTimestamp(++idx, Column.toTimestamp(from));
@@ -49,7 +50,7 @@ public class SaveProjectCmd extends AbstractCommand {
 		stmt.setString(++idx, companyKey.getParentId());
 		stmt.setString(++idx, description);
 		stmt.setInt(++idx, weight);
-		stmt.setString(++idx, id);
+		stmt.setString(++idx, id);// WHERE id comes last
 		return stmt;
 	}
 

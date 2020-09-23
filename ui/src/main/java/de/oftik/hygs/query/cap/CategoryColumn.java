@@ -47,7 +47,7 @@ public enum CategoryColumn implements Column<Category> {
 
 	private final ColumnType type;
 
-	private CategoryColumn(ColumnType type) {
+	CategoryColumn(ColumnType type) {
 		this.type = type;
 	}
 
