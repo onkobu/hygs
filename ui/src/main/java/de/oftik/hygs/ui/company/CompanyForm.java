@@ -114,4 +114,9 @@ public class CompanyForm extends EntityForm<Company> {
 	public boolean hasId() {
 		return isBlank(idField);
 	}
+
+	@Override
+	public void enableActions(boolean state) {
+		// no actions to enable
+	}
 }

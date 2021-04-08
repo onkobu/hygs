@@ -35,4 +35,6 @@ public abstract class GroupedEntityForm<G, E> extends FormPanel {
 		broker().execute(deleteEntityCommand());
 	}
 
+	public abstract void enableActions(boolean state);
+
 }

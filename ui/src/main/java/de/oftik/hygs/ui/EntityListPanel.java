@@ -320,13 +320,14 @@ public abstract class EntityListPanel<T extends Identifiable<T>, F extends Entit
 			break;
 		case CLOSED_DATABASE:
 			clearList();
-			enableActions(true);
+			enableActions(false);
 			break;
 		}
 	}
 
 	private void enableActions(boolean state) {
 		newButton.setEnabled(state);
+		entityForm.enableActions(state);
 	}
 
 	protected DAO<T> getDAO() {

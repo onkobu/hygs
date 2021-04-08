@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
@@ -22,9 +21,8 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
+import org.jdatepicker.JDatePicker;
+import org.jdatepicker.UtilDateModel;
 
 import de.oftik.hygs.cmd.Command;
 import de.oftik.hygs.cmd.CommandBroker;
@@ -57,10 +55,8 @@ public class ProjectForm extends EntityForm<Project> {
 	private final JTextArea descriptionArea = new JTextArea(4, 20);
 	private final UtilDateModel fromModel = new UtilDateModel();
 	private final UtilDateModel toModel = new UtilDateModel();
-	private final JDatePickerImpl fromPicker = new JDatePickerImpl(new JDatePanelImpl(fromModel, new Properties()),
-			new DateFormatter());
-	private final JDatePickerImpl toPicker = new JDatePickerImpl(new JDatePanelImpl(toModel, new Properties()),
-			new DateFormatter());
+	private final JDatePicker fromPicker = new JDatePicker(fromModel);
+	private final JDatePicker toPicker = new JDatePicker(toModel);
 	private final JComboBox<Company> companyBox = new JComboBox<>();
 	private final JComboBox<CapabilityWithCategory> capabilityBox = new JComboBox<>();
 	private final String[] identifiers = new String[] { I18N.CAPABILITY.label(), I18N.VERSION.label(),
@@ -131,6 +127,10 @@ public class ProjectForm extends EntityForm<Project> {
 		companyBox.setRenderer(new MappableToStringRenderer());
 		capabilityBox.setRenderer(new MappableToStringRenderer());
 		createUI();
+		addCapButton.setEnabled(false);
+		fromPicker.setEnabled(false);
+		toPicker.setEnabled(false);
+		capabilityBox.setEnabled(false);
 	}
 
 	@Override
@@ -273,5 +273,13 @@ public class ProjectForm extends EntityForm<Project> {
 	@Override
 	public boolean hasId() {
 		return isBlank(idField);
+	}
+
+	@Override
+	public void enableActions(boolean state) {
+		addCapButton.setEnabled(state);
+		fromPicker.setEnabled(state);
+		toPicker.setEnabled(state);
+		capabilityBox.setEnabled(state);
 	}
 }

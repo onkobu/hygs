@@ -1,16 +1,5 @@
 # Bugs
 
-## Entity Actions not disabled while no Database open
-
-1. Do not open a database upon startup or close an open database
-1. Pick any view that creates entities, e.g. Company
-1. Click New & fill in form
-1. Finish with Ok
-1. Exception occurs
-
-Instead all actions on all entity views must be disabled when no database is
-open.
-
 
 # User Stories
 
@@ -34,6 +23,8 @@ opened to make it the most recent version
 
 # Done
 
+## User Stories
+
 - search in capabilities/ filter tree
 - en, will not break current upgrade.sh, as it filters by locale-specific
   upgrade.lst
@@ -47,6 +38,20 @@ opened to make it the most recent version
   upgrade-scripts until max file name
 - role table, JOIN-table to cap_project,
 - Tool-Recommendation, sqlitestudio, sqlitebrowser
+
+# Fixed
+
+## Entity Actions not disabled while no Database open
+
+1. Do not open a database upon startup or close an open database
+1. Pick any view that creates entities, e.g. Company
+1. Click New & fill in form
+1. Finish with Ok
+1. Exception occurs
+
+Instead all actions on all entity views must be disabled when no database is
+open.
+
 
 # Rejected
 

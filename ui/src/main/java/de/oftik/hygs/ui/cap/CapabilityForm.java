@@ -43,6 +43,8 @@ public class CapabilityForm extends GroupedEntityForm<Category, Capability> {
 	private final DefaultComboBoxModel<Category> categoriesModel = new DefaultComboBoxModel<>();
 	private final JComboBox<Category> categories = new JComboBox<>(categoriesModel);
 
+	private final Component createCategoryButton;
+
 	static class CategoryRenderer implements ListCellRenderer<Category> {
 		private final DefaultListCellRenderer rendererDelegate = new DefaultListCellRenderer();
 
@@ -60,6 +62,8 @@ public class CapabilityForm extends GroupedEntityForm<Category, Capability> {
 		categories.setRenderer(new CategoryRenderer());
 		categories.setEditable(false);
 		categories.setEnabled(false);
+		createCategoryButton = ComponentFactory.createButton(I18N.CREATE_CATEGORY, this::createCategory);
+		createCategoryButton.setEnabled(false);
 		createUI();
 		broker().registerListener(new NotificationListener() {
 			@Override
@@ -90,7 +94,7 @@ public class CapabilityForm extends GroupedEntityForm<Category, Capability> {
 
 		final JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridLayout(1, 8));
-		buttonPanel.add(ComponentFactory.createButton(I18N.CREATE_CATEGORY, this::createCategory));
+		buttonPanel.add(createCategoryButton);
 		add(buttonPanel, gbc.nextRow().remainderX().end());
 	}
 
@@ -155,5 +159,10 @@ public class CapabilityForm extends GroupedEntityForm<Category, Capability> {
 	@Override
 	public void destroy() {
 		// clear caches
+	}
+
+	@Override
+	public void enableActions(boolean state) {
+		createCategoryButton.setEnabled(state);
 	}
 }

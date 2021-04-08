@@ -16,7 +16,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.JDatePicker;
 
 import de.oftik.hygs.cmd.CommandBroker;
 import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
@@ -73,7 +73,7 @@ public abstract class FormPanel extends JPanel {
 		add(new JLabel(label.label()), gbc.anchorEast().end());
 	}
 
-	protected void addDatePicker(I18N label, JDatePickerImpl picker, GridBagConstraintFactory gbc) {
+	protected void addDatePicker(I18N label, JDatePicker picker, GridBagConstraintFactory gbc) {
 		addLabel(label, gbc);
 		add(picker, gbc.nextColumn().weightx(0.5).fillHorizontal().end());
 	}

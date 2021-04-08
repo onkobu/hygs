@@ -49,4 +49,6 @@ public abstract class EntityForm<T> extends FormPanel {
 		saveController.setSaveEnabled(state);
 	}
 
+	public abstract void enableActions(boolean state);
+
 }

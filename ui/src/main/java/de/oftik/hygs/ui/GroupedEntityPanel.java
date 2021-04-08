@@ -359,6 +359,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable<G>, E extends Id
 
 	private void enableActions(boolean state) {
 		newButton.setEnabled(state);
+		entityForm.enableActions(state);
 	}
 
 }
