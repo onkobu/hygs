@@ -7,4 +7,6 @@ module hygs.uidi {
 	requires kehys.lippu;
 	requires jdatepicker;
 
+	opens de.oftik.hygs.ui.prjmon;
+	opens de.oftik.hygs.query.prjmon;
 }
