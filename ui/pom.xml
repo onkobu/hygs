@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>de.oftik</groupId>
 		<artifactId>oftik-parent</artifactId>
-		<version>1.0.3</version>
+		<version>1.0.4-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>hygs-ui</artifactId>
@@ -42,6 +42,7 @@
 			<groupId>com.sun.istack</groupId>
 			<artifactId>istack-commons-runtime</artifactId>
 		</dependency>
+		<!-- https://github.com/JDatePicker/JDatePicker -->
 		<dependency>
 			<groupId>org.jdatepicker</groupId>
 			<artifactId>jdatepicker</artifactId>
