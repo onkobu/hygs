@@ -3,13 +3,44 @@
 
 # User Stories
 
-## To be implemented
+## More Groups/ Tools
+
+- DevOps, Monitoring
+- Security, OWASP
+
+## Shared Anonymous State
+
+- in a company bring together profiles
+- anonymous
+- owner can reverse map
+
+## Levels of Abstraction
+
+As a human resources planner I want to have a structured overview of skills to
+have an overview above a detailed report.
+
+- Capabilities contribute to abstract skills and expertise
+- skills and expertise accumulate experience
+- for example Java contributes to software development, Jenkins to Continuous
+  Integration
+- use groups of capabilities to project onto
+- what about general skills like security, resilience, 
+- PDF report (XSL-FO), one page, header=personal data, two sections: skills/
+  experience + projects (with tools/ technologies and time line)
+
+## Courses, Qualifications, Certificates
+
+- contribute to skills and expertise
+
+## Compare Databases
 
 As smart user I want to compare an open database with another to know which is
 the most recent version
 
 - table with continuous history/ audit-table?
 - output/ display?
+
+## Import existing databases
 
 As smart user I want to import/ merge another database into the currently
 opened to make it the most recent version
