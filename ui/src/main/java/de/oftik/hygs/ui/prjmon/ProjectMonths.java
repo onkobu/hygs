@@ -2,10 +2,9 @@ package de.oftik.hygs.ui.prjmon;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
 import de.oftik.hygs.query.prjmon.ProjectMonth;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class ProjectMonths {

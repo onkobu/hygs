@@ -3,9 +3,9 @@ module hygs.uidi {
 	requires java.desktop;
 	requires kehys.kersantti;
 	requires kehys.keijukainen;
-	requires java.xml.bind;
 	requires kehys.lippu;
 	requires jdatepicker;
+	requires jakarta.xml.bind;
 
 	opens de.oftik.hygs.ui.prjmon;
 	opens de.oftik.hygs.query.prjmon;

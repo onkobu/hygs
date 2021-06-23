@@ -9,10 +9,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.PropertyException;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -25,6 +21,10 @@ import de.oftik.hygs.ui.ExportError;
 import de.oftik.hygs.ui.TimerConsumerWrapper;
 import de.oftik.kehys.keijukainen.function.Pair;
 import de.oftik.kehys.kersantti.query.QueryStatistics;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.PropertyException;
 
 public class ProjectMonthsExporter {
 	private ProjectMonthsDAO dao;

@@ -10,7 +10,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.xml.bind.JAXBException;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
@@ -19,6 +18,7 @@ import de.oftik.kehys.keijukainen.function.EitherOr;
 import de.oftik.kehys.keijukainen.function.Pair;
 import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
 import de.oftik.kehys.kersantti.query.QueryStatistics;
+import jakarta.xml.bind.JAXBException;
 
 public class ExportPanel extends JPanel {
 	private final ApplicationContext context;
