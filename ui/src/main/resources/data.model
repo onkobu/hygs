@@ -1,4 +1,4 @@
-namespace cap {
+namespace de.oftik.hygs.query.cap {
 	# Turns into an entity, column-enum and DAO
 	entity capability abbr cap {
 		name as string max 64
@@ -9,7 +9,7 @@ namespace cap {
 }
 
 # this opens a new package
-namespace company {
+namespace de.oftik.hygs.query.company {
 	# Turns into another entity, column-enum and DAO
 	entity company abbr cmp {
 		name as string
