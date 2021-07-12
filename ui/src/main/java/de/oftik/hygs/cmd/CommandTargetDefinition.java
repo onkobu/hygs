@@ -5,12 +5,12 @@ import de.oftik.hygs.cmd.cat.CategoryQueue;
 import de.oftik.hygs.cmd.company.CompanyQueue;
 import de.oftik.hygs.cmd.project.ProjectCapMappingQueue;
 import de.oftik.hygs.cmd.project.ProjectQueue;
-import de.oftik.hygs.query.cap.CapabilityTable;
-import de.oftik.hygs.query.company.CompanyTable;
+import de.oftik.hygs.orm.cap.CapabilityTable;
+import de.oftik.hygs.orm.cap.CategoryTable;
+import de.oftik.hygs.orm.company.CompanyTable;
+import de.oftik.hygs.orm.project.ProjectTable;
 import de.oftik.hygs.query.project.ProjectCapTable;
-import de.oftik.hygs.query.project.ProjectTable;
 import de.oftik.hygs.ui.ApplicationContext;
-import de.oftik.hygs.ui.cap.CategoryTable;
 import de.oftik.kehys.kersantti.Table;
 
 public enum CommandTargetDefinition implements CommandTarget {

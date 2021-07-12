@@ -25,7 +25,7 @@ import de.oftik.hygs.cmd.CommandTarget;
 import de.oftik.hygs.cmd.Notification;
 import de.oftik.hygs.cmd.NotificationListener;
 import de.oftik.hygs.cmd.NotificationType;
-import de.oftik.hygs.contract.Identifiable;
+import de.oftik.kehys.kersantti.Table;
 import de.oftik.kehys.kersantti.query.DAO;
 
 /**
@@ -36,14 +36,14 @@ import de.oftik.kehys.kersantti.query.DAO;
  *
  * @param <T>
  */
-public abstract class EntityListPanel<T extends Identifiable<T>, F extends EntityForm<T>> extends JPanel
-		implements ApplicationContextListener, SaveController {
+public abstract class EntityListPanel<I extends de.oftik.kehys.kersantti.Identifiable, T extends Table<I>, F extends EntityForm<I>>
+		extends JPanel implements ApplicationContextListener, SaveController {
 	private static final Logger log = Logger.getLogger(EntityListPanel.class.getName());
 
-	private final DefaultListModel<T> listModel = new DefaultListModel<>();
-	private final JList<T> entityList = new JList<>(listModel);
+	private final DefaultListModel<I> listModel = new DefaultListModel<>();
+	private final JList<I> entityList = new JList<>(listModel);
 	private final F entityForm;
-	private final DAO<T> dao;
+	private final DAO<I> dao;
 	private final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 	private final ApplicationContext applicationContext;
 	private final JButton newButton;
@@ -57,12 +57,12 @@ public abstract class EntityListPanel<T extends Identifiable<T>, F extends Entit
 	 *
 	 * @param <T>
 	 */
-	protected static final class EntityNotificationListener<T extends Identifiable<T>, F extends EntityForm<T>>
+	protected static final class EntityNotificationListener<I extends de.oftik.kehys.kersantti.Identifiable, T extends Table<I>, F extends EntityForm<I>>
 			implements NotificationListener {
 		private final CommandTarget target;
-		private final EntityListPanel<T, F> reference;
+		private final EntityListPanel<I, T, F> reference;
 
-		public EntityNotificationListener(CommandTarget target, EntityListPanel<T, F> ref) {
+		public EntityNotificationListener(CommandTarget target, EntityListPanel<I, T, F> ref) {
 			this.target = target;
 			this.reference = ref;
 		}
@@ -159,7 +159,7 @@ public abstract class EntityListPanel<T extends Identifiable<T>, F extends Entit
 		}
 	}
 
-	public EntityListPanel(ApplicationContext context, DAO<T> dao, ListCellRenderer<T> cellRenderer) {
+	public EntityListPanel(ApplicationContext context, DAO<I> dao, ListCellRenderer<I> cellRenderer) {
 		this.applicationContext = context;
 		this.entityForm = createForm(context::getBroker);
 		this.dao = dao;
@@ -274,7 +274,7 @@ public abstract class EntityListPanel<T extends Identifiable<T>, F extends Entit
 		return panel;
 	}
 
-	private void showEntity(T t) {
+	private void showEntity(I t) {
 		// Upon clear or remove removing of selection yields null entities
 		if (t == null) {
 			saveButton.setEnabled(false);
@@ -330,7 +330,7 @@ public abstract class EntityListPanel<T extends Identifiable<T>, F extends Entit
 		entityForm.enableActions(state);
 	}
 
-	protected DAO<T> getDAO() {
+	protected DAO<I> getDAO() {
 		return dao;
 	}
 

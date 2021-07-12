@@ -44,14 +44,24 @@ public class CommandTest {
 	}
 
 	public static final class SampleIdentifiable extends AbstractIdentifiable
-			implements Identifiable<SampleIdentifiable> {
+			implements Identifiable<SampleIdentifiable, TestTable> {
 		@Override
 		public String getId() {
 			return unexpectedCall();
 		}
 
 		@Override
-		public EntitySource<SampleIdentifiable> getSource() {
+		public EntitySource<SampleIdentifiable, TestTable> getSource() {
+			return unexpectedCall();
+		}
+
+		@Override
+		public void createId() {
+			unexpectedCall();
+		}
+
+		@Override
+		public SampleIdentifiable unwrap() {
 			return unexpectedCall();
 		}
 	}

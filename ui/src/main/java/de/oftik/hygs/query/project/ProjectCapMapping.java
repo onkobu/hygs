@@ -1,6 +1,7 @@
 package de.oftik.hygs.query.project;
 
-import de.oftik.hygs.query.cap.Capability;
+import de.oftik.hygs.orm.cap.Capability;
+import de.oftik.hygs.orm.project.Project;
 import de.oftik.kehys.kersantti.AbstractIdentifiable;
 import de.oftik.kehys.kersantti.ForeignKey;
 
@@ -22,9 +23,11 @@ public class ProjectCapMapping extends AbstractIdentifiable {
 		this.assignedWeight = assignedWeight;
 	}
 
+	@Override
 	public void createId() {
 	}
 
+	@Override
 	public String getId() {
 		return String.format("%d-%d", getProject().getParentId(), getCapability().getParentId());
 	}

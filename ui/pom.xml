@@ -16,7 +16,7 @@
 		<jmockit.version>1.49</jmockit.version>
 		<java.version>11</java.version>
 		<jaxb.core.version>2.3.0.1</jaxb.core.version>
-		<kehys.version>1.0.9</kehys.version>
+		<kehys.version>1.0.10-SNAPSHOT</kehys.version>
 	</properties>
 
 	<scm>
@@ -164,6 +164,20 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>de.oftik</groupId>
+				<artifactId>taulukoita-maven-plugin</artifactId>
+				<version>${kehys.version}</version>
+				<executions>
+					<execution>
+						<id>taulukoita</id>
+						<goals>
+							<goal>taulukoita</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 
 		</plugins>

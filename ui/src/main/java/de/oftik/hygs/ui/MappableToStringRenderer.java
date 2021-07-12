@@ -9,11 +9,11 @@ import javax.swing.ListCellRenderer;
 import de.oftik.hygs.contract.Identifiable;
 import de.oftik.hygs.contract.MappableToString;
 
-public class MappableToStringRenderer implements ListCellRenderer<Identifiable<?>> {
+public class MappableToStringRenderer implements ListCellRenderer<Identifiable<?, ?>> {
 	private final DefaultListCellRenderer delegate = new DefaultListCellRenderer();
 
 	@Override
-	public Component getListCellRendererComponent(JList<? extends Identifiable<?>> list, Identifiable<?> value,
+	public Component getListCellRendererComponent(JList<? extends Identifiable<?, ?>> list, Identifiable<?, ?> value,
 			int index, boolean isSelected, boolean cellHasFocus) {
 		if (value instanceof MappableToString) {
 			return delegate.getListCellRendererComponent(list, ((MappableToString) value).toShortString(), index,

@@ -1,11 +1,11 @@
 package de.oftik.hygs.ui.project;
 
-import de.oftik.hygs.query.cap.Capability;
+import de.oftik.hygs.query.cap.CapabilityBinding;
 
 public class CapSelectItem {
-	private final Capability capability;
+	private final CapabilityBinding capability;
 
-	CapSelectItem(Capability capability) {
+	CapSelectItem(CapabilityBinding capability) {
 		super();
 		this.capability = capability;
 	}

@@ -32,8 +32,6 @@ import de.oftik.hygs.cmd.CommandBroker;
 import de.oftik.hygs.cmd.CommandTarget;
 import de.oftik.hygs.cmd.Notification;
 import de.oftik.hygs.cmd.NotificationListener;
-import de.oftik.hygs.contract.Identifiable;
-import de.oftik.hygs.contract.MappableToString;
 import de.oftik.kehys.kersantti.query.DAO;
 
 /**
@@ -45,7 +43,7 @@ import de.oftik.kehys.kersantti.query.DAO;
  * @param <G>
  * @param <E>
  */
-public abstract class GroupedEntityPanel<G extends Identifiable<G>, E extends Identifiable<E> & MappableToString, F extends GroupedEntityForm<G, E>>
+public abstract class GroupedEntityPanel<G extends de.oftik.kehys.kersantti.Identifiable, E extends de.oftik.kehys.kersantti.Identifiable, F extends GroupedEntityForm<G, E>, D extends DAO<E>>
 		extends JPanel implements ApplicationContextListener {
 	private static final Logger log = Logger.getLogger(GroupedEntityPanel.class.getName());
 
@@ -56,7 +54,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable<G>, E extends Id
 	private final JTextField filterField = ComponentFactory.textField(I18N.SEARCH);
 	private final F entityForm;
 	private final DAO<G> groupDao;
-	private final DAO<E> entityDao;
+	private final D entityDao;
 
 	private final Map<String, FilterNode> groupMap = new HashMap<>();
 
@@ -75,12 +73,12 @@ public abstract class GroupedEntityPanel<G extends Identifiable<G>, E extends Id
 	 *
 	 * @param <T>
 	 */
-	protected static final class EntityNotificationListener<G extends Identifiable<G>, E extends Identifiable<E> & MappableToString, F extends GroupedEntityForm<G, E>>
+	protected static final class EntityNotificationListener<G extends de.oftik.kehys.kersantti.Identifiable, E extends de.oftik.kehys.kersantti.Identifiable, F extends GroupedEntityForm<G, E>, D extends DAO<E>>
 			implements NotificationListener {
 		private final CommandTarget target;
-		private final GroupedEntityPanel<G, E, F> reference;
+		private final GroupedEntityPanel<G, E, F, D> reference;
 
-		public EntityNotificationListener(CommandTarget target, GroupedEntityPanel<G, E, F> ref) {
+		public EntityNotificationListener(CommandTarget target, GroupedEntityPanel<G, E, F, D> ref) {
 			this.target = target;
 			this.reference = ref;
 		}
@@ -116,7 +114,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable<G>, E extends Id
 		}
 	}
 
-	public GroupedEntityPanel(ApplicationContext context, I18N rootTitle, DAO<G> groupDao, DAO<E> entityDao,
+	public GroupedEntityPanel(ApplicationContext context, I18N rootTitle, DAO<G> groupDao, D entityDao,
 			TreeCellRenderer renderer) {
 		this.applicationContext = context;
 		this.groupDao = groupDao;
@@ -225,7 +223,7 @@ public abstract class GroupedEntityPanel<G extends Identifiable<G>, E extends Id
 
 	protected abstract List<E> loadForGroup(G g) throws SQLException;
 
-	protected DAO<E> entityDao() {
+	protected D entityDao() {
 		return entityDao;
 	}
 

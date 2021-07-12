@@ -6,7 +6,7 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import de.oftik.hygs.query.project.Project;
+import de.oftik.hygs.orm.project.Project;
 
 public class ProjectCellRenderer implements ListCellRenderer<Project> {
 	private final DefaultListCellRenderer wrapped = new DefaultListCellRenderer();

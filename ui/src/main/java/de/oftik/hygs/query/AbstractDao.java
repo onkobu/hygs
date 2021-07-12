@@ -8,14 +8,16 @@ import de.oftik.hygs.contract.EntitySource;
 import de.oftik.hygs.contract.Identifiable;
 import de.oftik.kehys.kersantti.Column;
 import de.oftik.kehys.kersantti.DatabaseContext;
+import de.oftik.kehys.kersantti.Table;
 import de.oftik.kehys.kersantti.query.DAO;
 
-public abstract class AbstractDao<T extends Identifiable<T>> extends DAO<T> {
+public abstract class AbstractDao<I extends de.oftik.kehys.kersantti.Identifiable, T extends Table<I>, B extends Identifiable<I, T>>
+		extends DAO<I> {
 
-	private final Column<T> deletedColumn;
+	private final Column<I> deletedColumn;
 
-	public AbstractDao(DatabaseContext context, EntitySource<T> source) {
-		super(context, source.getTable());
+	public AbstractDao(DatabaseContext context, EntitySource<I, T> source) {
+		super(context, source.getTable()); // Hyg's layer over ORM requires this trick
 		this.deletedColumn = source.getDeleteColumn();
 	}
 
@@ -24,7 +26,9 @@ public abstract class AbstractDao<T extends Identifiable<T>> extends DAO<T> {
 		return Validators.isValidPath(context().dbPath());
 	}
 
-	public void consumeDeleted(Consumer<T> cons) throws SQLException {
-		findBy(cons, deletedColumn, true);
+	public void consumeDeleted(Consumer<B> cons) throws SQLException {
+		findBy(ci -> cons.accept(bind(ci)), deletedColumn, true);
 	}
+
+	abstract protected B bind(I i);
 }

@@ -1,4 +1,4 @@
-module hygs.uidi {
+module hygs.ui {
 	requires transitive java.sql;
 	requires java.desktop;
 	requires kehys.kersantti;

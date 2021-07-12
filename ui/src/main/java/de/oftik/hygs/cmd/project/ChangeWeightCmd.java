@@ -8,9 +8,9 @@ import java.util.List;
 import de.oftik.hygs.cmd.AbstractCommand;
 import de.oftik.hygs.cmd.CommandTargetDefinition;
 import de.oftik.hygs.cmd.Notification;
-import de.oftik.hygs.query.cap.Capability;
-import de.oftik.hygs.query.project.AssignedCapability;
-import de.oftik.hygs.query.project.Project;
+import de.oftik.hygs.orm.cap.Capability;
+import de.oftik.hygs.orm.project.CapabilityInProject;
+import de.oftik.hygs.orm.project.Project;
 import de.oftik.hygs.query.project.ProjectCapColumn;
 import de.oftik.hygs.query.project.ProjectCapTable;
 import de.oftik.kehys.kersantti.ForeignKey;
@@ -21,10 +21,10 @@ public class ChangeWeightCmd extends AbstractCommand {
 	private final ForeignKey<Capability> capabilityId;
 	private final int weight;
 
-	public ChangeWeightCmd(AssignedCapability cap, int weight) {
+	public ChangeWeightCmd(CapabilityInProject cap, int weight) {
 		super(CommandTargetDefinition.project_capability);
-		this.projectId = cap.getProject();
-		this.capabilityId = cap.getCapability();
+		this.projectId = cap.getProjectId();
+		this.capabilityId = cap.getCapabilityId();
 		this.weight = weight;
 	}
 

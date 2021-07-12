@@ -3,8 +3,8 @@ package de.oftik.hygs.cmd.project;
 import de.oftik.hygs.cmd.CommandTargetDefinition;
 import de.oftik.hygs.cmd.NotificationType;
 import de.oftik.hygs.cmd.SuccessNotification;
-import de.oftik.hygs.query.cap.Capability;
-import de.oftik.hygs.query.project.Project;
+import de.oftik.hygs.orm.cap.Capability;
+import de.oftik.hygs.orm.project.Project;
 
 public class CapabilityAssigned extends SuccessNotification {
 

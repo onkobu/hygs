@@ -8,14 +8,14 @@ import java.util.List;
 import de.oftik.hygs.cmd.AbstractCommand;
 import de.oftik.hygs.cmd.CommandTargetDefinition;
 import de.oftik.hygs.cmd.Notification;
-import de.oftik.hygs.query.cap.Capability;
-import de.oftik.hygs.query.cap.CapabilityColumn;
-import de.oftik.hygs.query.cap.CapabilityTable;
+import de.oftik.hygs.orm.cap.CapabilityColumn;
+import de.oftik.hygs.orm.cap.CapabilityTable;
+import de.oftik.hygs.query.cap.CapabilityBinding;
 
 public class DeleteCapabilityCmd extends AbstractCommand {
-	private final Capability capability;
+	private final CapabilityBinding capability;
 
-	public DeleteCapabilityCmd(Capability cap) {
+	public DeleteCapabilityCmd(CapabilityBinding cap) {
 		super(CommandTargetDefinition.capability);
 		this.capability = cap;
 	}

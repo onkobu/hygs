@@ -8,9 +8,9 @@ import java.util.List;
 import de.oftik.hygs.cmd.AbstractCommand;
 import de.oftik.hygs.cmd.CommandTargetDefinition;
 import de.oftik.hygs.cmd.Notification;
-import de.oftik.hygs.query.company.Company;
-import de.oftik.hygs.query.company.CompanyColumn;
-import de.oftik.hygs.query.company.CompanyTable;
+import de.oftik.hygs.orm.company.Company;
+import de.oftik.hygs.orm.company.CompanyColumn;
+import de.oftik.hygs.orm.company.CompanyTable;
 
 public class DeleteCompanyCmd extends AbstractCommand {
 	private final String id;
@@ -30,6 +30,8 @@ public class DeleteCompanyCmd extends AbstractCommand {
 
 	@Override
 	public Notification toNotification(Connection conn, List<String> generatedKeys) {
-		return new CompanyDeleted(Company.withId(id));
+		final var c = new Company();
+		c.setId(id);
+		return new CompanyDeleted(c);
 	}
 }

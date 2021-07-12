@@ -33,13 +33,14 @@ import de.oftik.hygs.cmd.project.DeleteProjectCmd;
 import de.oftik.hygs.cmd.project.SaveProjectCmd;
 import de.oftik.hygs.contract.CacheListener;
 import de.oftik.hygs.contract.CacheType;
-import de.oftik.hygs.query.cap.Capability;
-import de.oftik.hygs.query.company.Company;
-import de.oftik.hygs.query.project.AssignedCapability;
+import de.oftik.hygs.orm.cap.Capability;
+import de.oftik.hygs.orm.company.Company;
+import de.oftik.hygs.orm.project.CapabilityInProject;
+import de.oftik.hygs.orm.project.Project;
 import de.oftik.hygs.query.project.AssignedCapabilityDAO;
-import de.oftik.hygs.query.project.Project;
 import de.oftik.hygs.ui.ComponentFactory;
 import de.oftik.hygs.ui.EntityForm;
+import de.oftik.hygs.ui.EntityRenderer;
 import de.oftik.hygs.ui.I18N;
 import de.oftik.hygs.ui.MappableToStringRenderer;
 import de.oftik.hygs.ui.SaveController;
@@ -67,10 +68,10 @@ public class ProjectForm extends EntityForm<Project> {
 	private CapabilityCache capabilityCache;
 
 	private AssignedCapabilityDAO assignedCapabilityDAO;
-	private final ListTableModel<AssignedCapability> tableModel = new ListTableModel<AssignedCapability>(
-			Arrays.asList(createDescription(identifiers[0], String.class, AssignedCapability::getName),
-					createDescription(identifiers[1], String.class, AssignedCapability::getVersion),
-					createDescription(identifiers[2], Number.class, AssignedCapability::getWeight, true))) {
+	private final ListTableModel<CapabilityInProject> tableModel = new ListTableModel<CapabilityInProject>(
+			Arrays.asList(createDescription(identifiers[0], String.class, CapabilityInProject::getName),
+					createDescription(identifiers[1], String.class, CapabilityInProject::getVersion),
+					createDescription(identifiers[2], Number.class, CapabilityInProject::getWeight, true))) {
 
 		@Override
 		public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
@@ -124,7 +125,7 @@ public class ProjectForm extends EntityForm<Project> {
 		this.createMode = createMode;
 		capabilityTable.setModel(tableModel);
 		capabilityTable.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new JTextField()));
-		companyBox.setRenderer(new MappableToStringRenderer());
+		companyBox.setRenderer(new EntityRenderer<>(p -> p.getName()));
 		capabilityBox.setRenderer(new MappableToStringRenderer());
 		createUI();
 		addCapButton.setEnabled(false);
@@ -147,7 +148,9 @@ public class ProjectForm extends EntityForm<Project> {
 
 	@Override
 	public Command deleteEntityCommand() {
-		return new DeleteProjectCmd(Project.withId(idField.getText()));
+		var prj = new Project();
+		prj.setId(idField.getText());
+		return new DeleteProjectCmd(prj);
 	}
 
 	void setCompanyCache(CompanyCache cc) {
@@ -166,7 +169,7 @@ public class ProjectForm extends EntityForm<Project> {
 		this.assignedCapabilityDAO = assCapDao;
 	}
 
-	void changeCapabilityWeight(AssignedCapability cap, int weight) {
+	void changeCapabilityWeight(CapabilityInProject cap, int weight) {
 		broker().execute(new ChangeWeightCmd(cap, weight));
 	}
 
@@ -231,7 +234,7 @@ public class ProjectForm extends EntityForm<Project> {
 		fromModel.setValue(Converters.dateFromLocalDate(t.getFrom()));
 		toModel.setValue(Converters.dateFromLocalDate(t.getTo()));
 		descriptionArea.setText(t.getDescription());
-		companyBox.setSelectedItem(companyCache.getCompany(t.getCompany()));
+		companyBox.setSelectedItem(companyCache.getCompany(t.getCompanyId()));
 		refreshCapabilities();
 	}
 
@@ -258,7 +261,7 @@ public class ProjectForm extends EntityForm<Project> {
 
 	public void refreshCapabilities() {
 		try {
-			final List<AssignedCapability> caps = assignedCapabilityDAO.findByProject(currentProject);
+			final List<CapabilityInProject> caps = assignedCapabilityDAO.findByProject(currentProject);
 			if (caps.isEmpty()) {
 				tableModel.clear();
 				return;

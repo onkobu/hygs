@@ -12,7 +12,7 @@ import de.oftik.hygs.cmd.CommandBroker;
 import de.oftik.hygs.cmd.company.CreateCompanyCmd;
 import de.oftik.hygs.cmd.company.DeleteCompanyCmd;
 import de.oftik.hygs.cmd.company.SaveCompanyCmd;
-import de.oftik.hygs.query.company.Company;
+import de.oftik.hygs.orm.company.Company;
 import de.oftik.hygs.ui.EntityForm;
 import de.oftik.hygs.ui.I18N;
 import de.oftik.hygs.ui.SaveController;
@@ -84,7 +84,9 @@ public class CompanyForm extends EntityForm<Company> {
 
 	@Override
 	public Command deleteEntityCommand() {
-		return new DeleteCompanyCmd(Company.withId(idField.getText()));
+		final var c = new Company();
+		c.setId(idField.getText());
+		return new DeleteCompanyCmd(c);
 	}
 
 	@Override

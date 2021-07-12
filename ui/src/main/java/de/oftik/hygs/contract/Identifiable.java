@@ -1,18 +1,21 @@
 package de.oftik.hygs.contract;
 
+import de.oftik.kehys.kersantti.Table;
+
 /**
  * Basic contract for an entity.
  *
  * @author onkobu
  *
  */
-public interface Identifiable<T extends Identifiable<T>> extends de.oftik.kehys.kersantti.Identifiable {
+public interface Identifiable<I extends de.oftik.kehys.kersantti.Identifiable, T extends Table<I>> {
 	/**
 	 *
 	 * @return Source to make it distinct from other identifiables of other sources.
 	 */
-	EntitySource<T> getSource();
+	EntitySource<I, T> getSource();
 
-	default void createId() {
-	}
+	String getId();
+
+	I unwrap();
 }

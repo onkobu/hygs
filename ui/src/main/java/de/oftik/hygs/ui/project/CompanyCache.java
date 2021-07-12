@@ -3,7 +3,7 @@ package de.oftik.hygs.ui.project;
 import java.util.function.Consumer;
 
 import de.oftik.hygs.contract.CacheListener;
-import de.oftik.hygs.query.company.Company;
+import de.oftik.hygs.orm.company.Company;
 import de.oftik.kehys.kersantti.ForeignKey;
 
 public interface CompanyCache {

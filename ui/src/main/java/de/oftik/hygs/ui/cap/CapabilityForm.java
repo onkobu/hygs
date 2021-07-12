@@ -26,8 +26,9 @@ import de.oftik.hygs.cmd.cap.CreateCapabilityCmd;
 import de.oftik.hygs.cmd.cap.DeleteCapabilityCmd;
 import de.oftik.hygs.cmd.cap.SaveCapabilityCmd;
 import de.oftik.hygs.cmd.cat.CreateCategoryCmd;
-import de.oftik.hygs.query.cap.Capability;
-import de.oftik.hygs.query.cap.Category;
+import de.oftik.hygs.orm.cap.Capability;
+import de.oftik.hygs.orm.cap.Category;
+import de.oftik.hygs.query.cap.CapabilityBinding;
 import de.oftik.hygs.ui.ComponentFactory;
 import de.oftik.hygs.ui.GroupedEntityForm;
 import de.oftik.hygs.ui.I18N;
@@ -153,7 +154,7 @@ public class CapabilityForm extends GroupedEntityForm<Category, Capability> {
 
 	@Override
 	public Command deleteEntityCommand() {
-		return new DeleteCapabilityCmd(Capability.withId(idField.getText()));
+		return new DeleteCapabilityCmd(CapabilityBinding.withId(idField.getText()));
 	}
 
 	@Override

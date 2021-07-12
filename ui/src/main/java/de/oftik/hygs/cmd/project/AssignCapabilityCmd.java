@@ -9,8 +9,8 @@ import java.util.List;
 import de.oftik.hygs.cmd.AbstractCommand;
 import de.oftik.hygs.cmd.CommandTargetDefinition;
 import de.oftik.hygs.cmd.Notification;
-import de.oftik.hygs.query.cap.Capability;
-import de.oftik.hygs.query.project.Project;
+import de.oftik.hygs.orm.cap.Capability;
+import de.oftik.hygs.orm.project.Project;
 import de.oftik.hygs.query.project.ProjectCapColumn;
 import de.oftik.hygs.query.project.ProjectCapTable;
 

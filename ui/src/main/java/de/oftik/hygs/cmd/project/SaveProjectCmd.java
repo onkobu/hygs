@@ -10,10 +10,10 @@ import java.util.List;
 import de.oftik.hygs.cmd.AbstractCommand;
 import de.oftik.hygs.cmd.CommandTargetDefinition;
 import de.oftik.hygs.cmd.Notification;
-import de.oftik.hygs.query.company.Company;
-import de.oftik.hygs.query.project.Project;
-import de.oftik.hygs.query.project.ProjectColumn;
-import de.oftik.hygs.query.project.ProjectTable;
+import de.oftik.hygs.orm.company.Company;
+import de.oftik.hygs.orm.project.Project;
+import de.oftik.hygs.orm.project.ProjectColumn;
+import de.oftik.hygs.orm.project.ProjectTable;
 import de.oftik.kehys.kersantti.Column;
 import de.oftik.kehys.kersantti.ForeignKey;
 
@@ -42,7 +42,7 @@ public class SaveProjectCmd extends AbstractCommand {
 	public PreparedStatement prepare(Connection conn) throws SQLException {
 		final PreparedStatement stmt = update(conn, ProjectTable.TABLE, ProjectColumn.prj_id,
 				Arrays.asList(ProjectColumn.prj_name, ProjectColumn.prj_from, ProjectColumn.prj_to,
-						ProjectColumn.prj_company, ProjectColumn.prj_description, ProjectColumn.prj_weight));
+						ProjectColumn.prj_company_id, ProjectColumn.prj_description, ProjectColumn.prj_weight));
 		int idx = 0;
 		stmt.setString(++idx, name);
 		stmt.setTimestamp(++idx, Column.toTimestamp(from));

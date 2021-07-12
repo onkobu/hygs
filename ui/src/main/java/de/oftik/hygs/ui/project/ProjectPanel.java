@@ -14,20 +14,22 @@ import de.oftik.hygs.cmd.Notification;
 import de.oftik.hygs.cmd.project.CapabilityAssigned;
 import de.oftik.hygs.contract.CacheListener;
 import de.oftik.hygs.contract.CacheType;
+import de.oftik.hygs.orm.cap.Category;
+import de.oftik.hygs.orm.company.Company;
+import de.oftik.hygs.orm.project.Project;
+import de.oftik.hygs.orm.project.ProjectTable;
 import de.oftik.hygs.query.cap.CapabilityDAO;
-import de.oftik.hygs.query.cap.Category;
 import de.oftik.hygs.query.cap.CategoryDAO;
-import de.oftik.hygs.query.company.Company;
 import de.oftik.hygs.query.company.CompanyDAO;
 import de.oftik.hygs.query.project.AssignedCapabilityDAO;
-import de.oftik.hygs.query.project.Project;
 import de.oftik.hygs.query.project.ProjectDAO;
 import de.oftik.hygs.ui.ApplicationContext;
 import de.oftik.hygs.ui.ContextEvent;
 import de.oftik.hygs.ui.EntityListPanel;
 import de.oftik.kehys.kersantti.ForeignKey;
 
-public class ProjectPanel extends EntityListPanel<Project, ProjectForm> implements CompanyCache, CapabilityCache {
+public class ProjectPanel extends EntityListPanel<Project, ProjectTable, ProjectForm>
+		implements CompanyCache, CapabilityCache {
 	private final CompanyDAO companyDao;
 	private final CapabilityDAO capabilityDao;
 	private final CategoryDAO categoryDao;
@@ -51,8 +53,8 @@ public class ProjectPanel extends EntityListPanel<Project, ProjectForm> implemen
 		prjForm.setCompanyCache(this);
 		prjForm.setCapabilityCache(this);
 		prjForm.setAssignedCapabilityDAO(new AssignedCapabilityDAO(applicationContext));
-		broker().registerListener(
-				new EntityNotificationListener<Project, ProjectForm>(CommandTargetDefinition.project, this));
+		broker().registerListener(new EntityNotificationListener<Project, ProjectTable, ProjectForm>(
+				CommandTargetDefinition.project, this));
 		broker().registerListener(new AssignmentNotificationListener<CapabilityAssigned>(
 				CommandTargetDefinition.project_capability, this::capabilityAssigned));
 		broker().registerListener(new SubElementNotificationListener(CommandTargetDefinition.project_capability,
@@ -97,8 +99,8 @@ public class ProjectPanel extends EntityListPanel<Project, ProjectForm> implemen
 		cacheListener.forEach((cl) -> cl.refresh(Cache.COMPANY));
 		capabilityCache.clear();
 		try {
-			capabilityDao.consumeAll((cmp) -> capabilityCache.put(cmp.getId(),
-					new CapabilityWithCategory(cmp, categoryCache.get(cmp.getCategoryId()))));
+			capabilityDao.consumeAll((cap) -> capabilityCache.put(cap.getId(),
+					new CapabilityWithCategory(cap, categoryCache.get(cap.getCategoryId().getParentId()))));
 		} catch (SQLException ex) {
 			throw new IllegalStateException(ex);
 		}

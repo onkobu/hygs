@@ -1,16 +1,19 @@
 package de.oftik.hygs.contract;
 
 import de.oftik.kehys.kersantti.Column;
+import de.oftik.kehys.kersantti.OrMappable;
 import de.oftik.kehys.kersantti.Table;
 
-public interface EntitySource<T extends Identifiable<T>> {
-	String name();
+public interface EntitySource<I extends OrMappable, T extends Table<I>> {
+	default String name() {
+		return getTable().name();
+	}
 
-	Table<T> getTable();
+	T getTable();
 
-	default Column<T> getPrimaryKeyColumn() {
+	default Column<I> getPrimaryKeyColumn() {
 		return getTable().getPkColumn();
 	}
 
-	Column<T> getDeleteColumn();
+	Column<I> getDeleteColumn();
 }

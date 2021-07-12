@@ -16,16 +16,16 @@ import de.oftik.hygs.cmd.CommandTarget;
 import de.oftik.hygs.cmd.CommandTargetDefinition;
 import de.oftik.hygs.cmd.Notification;
 import de.oftik.hygs.cmd.NotificationListener;
-import de.oftik.hygs.query.cap.Capability;
+import de.oftik.hygs.orm.cap.Capability;
+import de.oftik.hygs.orm.cap.Category;
 import de.oftik.hygs.query.cap.CapabilityDAO;
-import de.oftik.hygs.query.cap.Category;
 import de.oftik.hygs.query.cap.CategoryDAO;
 import de.oftik.hygs.ui.ApplicationContext;
 import de.oftik.hygs.ui.GroupedEntityCreateDialog;
 import de.oftik.hygs.ui.GroupedEntityPanel;
 import de.oftik.hygs.ui.I18N;
 
-public class CapabilityPanel extends GroupedEntityPanel<Category, Capability, CapabilityForm> {
+public class CapabilityPanel extends GroupedEntityPanel<Category, Capability, CapabilityForm, CapabilityDAO> {
 	static class CapabilityTreeCellRenderer implements TreeCellRenderer {
 		private final DefaultTreeCellRenderer rendererDelegate = new DefaultTreeCellRenderer();
 
@@ -92,7 +92,7 @@ public class CapabilityPanel extends GroupedEntityPanel<Category, Capability, Ca
 
 	@Override
 	protected List<Capability> loadForGroup(Category g) throws SQLException {
-		return ((CapabilityDAO) entityDao()).findByCategory(g);
+		return entityDao().findByCategory(g);
 	}
 
 	@Override

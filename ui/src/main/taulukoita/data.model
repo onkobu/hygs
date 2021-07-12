@@ -1,0 +1,50 @@
+namespace de.oftik.hygs.orm.cap {
+	# Turns into an entity, column-enum and DAO
+	entity capability abbr cap {
+		name as string max 64
+		# TODO: transform camel case to kebab case/ underscore for SQL
+		version as string max 32
+		deleted as flag
+		
+		referencing category
+	}
+	
+	entity category abbr cat {
+		name as string max 64
+		deleted as flag
+	}
+}
+
+# this opens a new package
+namespace de.oftik.hygs.orm.company {
+	# Turns into another entity, column-enum and DAO
+	entity company abbr cmp {
+		name as string
+		street as string
+		city as string
+		zip as string
+		deleted as flag
+	}
+}
+
+namespace de.oftik.hygs.orm.project {
+	# No id and v_-prefix for table
+	projection capabilityInProject abbr assc {
+		name as string max 64
+		weight as integer
+		version as string max 16
+		
+		referencing project, de.oftik.hygs.orm.cap.capability
+	}
+	
+	entity project abbr prj {
+		name as string max 64
+		from as date
+		to as date
+		description as string
+		deleted as flag
+		weight as integer
+		
+		referencing de.oftik.hygs.orm.company.company
+	}
+}

@@ -1,14 +1,14 @@
 package de.oftik.hygs.ui.project;
 
-import java.sql.SQLException;
-
 import de.oftik.hygs.contract.EntitySource;
 import de.oftik.hygs.contract.Identifiable;
 import de.oftik.hygs.contract.MappableToString;
-import de.oftik.hygs.query.cap.Capability;
-import de.oftik.hygs.query.cap.Category;
+import de.oftik.hygs.orm.cap.Capability;
+import de.oftik.hygs.orm.cap.CapabilityTable;
+import de.oftik.hygs.orm.cap.Category;
+import de.oftik.hygs.query.cap.CapabilityDAO;
 
-public class CapabilityWithCategory implements MappableToString, Identifiable<Capability> {
+public class CapabilityWithCategory implements MappableToString, Identifiable<Capability, CapabilityTable> {
 	private final Capability capability;
 	private final Category category;
 
@@ -28,7 +28,7 @@ public class CapabilityWithCategory implements MappableToString, Identifiable<Ca
 
 	@Override
 	public String toShortString() {
-		return String.format("%s > %s", category.getName(), capability.toShortString());
+		return String.format("%s > %s", category.getName(), capability.getName());
 	}
 
 	@Override
@@ -42,18 +42,13 @@ public class CapabilityWithCategory implements MappableToString, Identifiable<Ca
 	}
 
 	@Override
-	public void recordException(SQLException e) {
-		capability.recordException(e);
+	public EntitySource<Capability, CapabilityTable> getSource() {
+		return CapabilityDAO.SOURCE;
 	}
 
 	@Override
-	public void unwindExceptions() throws SQLException {
-		capability.unwindExceptions();
-	}
-
-	@Override
-	public EntitySource<Capability> getSource() {
-		return capability.getSource();
+	public Capability unwrap() {
+		return capability;
 	}
 
 }

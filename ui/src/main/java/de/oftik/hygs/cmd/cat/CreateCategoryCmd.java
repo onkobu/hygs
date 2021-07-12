@@ -11,9 +11,9 @@ import de.oftik.hygs.cmd.Command;
 import de.oftik.hygs.cmd.CommandTarget;
 import de.oftik.hygs.cmd.CommandTargetDefinition;
 import de.oftik.hygs.cmd.Notification;
-import de.oftik.hygs.query.cap.Category;
-import de.oftik.hygs.query.cap.CategoryColumn;
-import de.oftik.hygs.ui.cap.CategoryTable;
+import de.oftik.hygs.orm.cap.Category;
+import de.oftik.hygs.orm.cap.CategoryColumn;
+import de.oftik.hygs.orm.cap.CategoryTable;
 
 public class CreateCategoryCmd implements Command {
 	private static final Logger LOG = Logger.getLogger(CreateCategoryCmd.class.getName());
