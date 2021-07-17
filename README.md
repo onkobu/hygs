@@ -61,7 +61,7 @@ I thank the collegue who pointed out that unique feature, to carry around an ent
 
 ![Application Maintenance Table](docs/app_maintenance.1degree.png)
 
-![Application Maintenance Table](docs/app_properties.1degree.png)
+![Application Properties Table](docs/app_properties.1degree.png)
 
 ![Application Audit Log](docs/log_audit.1degree.png)
  
