@@ -28,8 +28,7 @@ public class DeleteProjectCmd implements Command {
 
 	@Override
 	public PreparedStatement prepare(Connection conn) throws SQLException {
-		final PreparedStatement stmt = delete(conn, ProjectTable.TABLE, ProjectColumn.prj_id,
-				ProjectColumn.prj_deleted);
+		final PreparedStatement stmt = trash(conn, ProjectTable.TABLE, ProjectColumn.prj_id, ProjectColumn.prj_deleted);
 		stmt.setString(1, prj.getId());
 		return stmt;
 	}

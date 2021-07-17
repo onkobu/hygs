@@ -2,13 +2,12 @@ package de.oftik.hygs.ui.project;
 
 import de.oftik.hygs.contract.EntitySource;
 import de.oftik.hygs.contract.Identifiable;
-import de.oftik.hygs.contract.MappableToString;
 import de.oftik.hygs.orm.cap.Capability;
 import de.oftik.hygs.orm.cap.CapabilityTable;
 import de.oftik.hygs.orm.cap.Category;
 import de.oftik.hygs.query.cap.CapabilityDAO;
 
-public class CapabilityWithCategory implements MappableToString, Identifiable<Capability, CapabilityTable> {
+public class CapabilityWithCategory implements Identifiable<Capability, CapabilityTable> {
 	private final Capability capability;
 	private final Category category;
 
@@ -24,16 +23,6 @@ public class CapabilityWithCategory implements MappableToString, Identifiable<Ca
 
 	public Category getCategory() {
 		return category;
-	}
-
-	@Override
-	public String toShortString() {
-		return String.format("%s > %s", category.getName(), capability.getName());
-	}
-
-	@Override
-	public String toLongString() {
-		return toShortString();
 	}
 
 	@Override

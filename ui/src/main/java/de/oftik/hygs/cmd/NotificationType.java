@@ -17,6 +17,11 @@ public enum NotificationType {
 	DELETE,
 
 	/**
+	 * Prepared for deletion.
+	 */
+	TRASHED,
+
+	/**
 	 * Type is irrelevant, technical notification like errors during enqueue.
 	 */
 	TECHNICAL,

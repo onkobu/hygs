@@ -47,7 +47,7 @@ public abstract class GroupedEntityPanel<G extends de.oftik.kehys.kersantti.Iden
 		extends JPanel implements ApplicationContextListener {
 	private static final Logger log = Logger.getLogger(GroupedEntityPanel.class.getName());
 
-	private final DefaultMutableTreeNode root;
+	private final FilterNode root;
 	private final FilterTreeModel treeModel;
 	private final JTree tree;
 	private final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
@@ -120,7 +120,7 @@ public abstract class GroupedEntityPanel<G extends de.oftik.kehys.kersantti.Iden
 		this.groupDao = groupDao;
 		this.entityDao = entityDao;
 		this.entityForm = createForm(context::getBroker);
-		this.root = new DefaultMutableTreeNode(rootTitle.label());
+		this.root = new FilterNode(rootTitle.label(), true, true);
 		this.treeModel = new FilterTreeModel(root, true, true);
 		this.tree = new JTree(treeModel);
 		tree.setCellRenderer(renderer);
@@ -172,15 +172,15 @@ public abstract class GroupedEntityPanel<G extends de.oftik.kehys.kersantti.Iden
 			selectionCleared();
 			return;
 		}
-		final DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) sp.getLastPathComponent();
+		final FilterNode selNode = (FilterNode) sp.getLastPathComponent();
 		if (isGroupNode(selNode)) {
-			groupSelected((G) selNode.getUserObject());
+			groupSelected(((IdentifiableBinding<G>) selNode.getUserObject()).getIdentifiable());
 			return;
 		}
 
 		if (isEntityNode(selNode)) {
-			entitySelected((G) ((DefaultMutableTreeNode) selNode.getParent()).getUserObject(),
-					(E) selNode.getUserObject());
+			entitySelected(((IdentifiableBinding<G>) ((DefaultMutableTreeNode) selNode.getParent()).getUserObject())
+					.getIdentifiable(), ((IdentifiableBinding<E>) selNode.getUserObject()).getIdentifiable());
 			return;
 		}
 		selectionCleared();
@@ -200,9 +200,9 @@ public abstract class GroupedEntityPanel<G extends de.oftik.kehys.kersantti.Iden
 		}
 	}
 
-	protected abstract boolean isEntityNode(DefaultMutableTreeNode node);
+	protected abstract boolean isEntityNode(FilterNode node);
 
-	protected abstract boolean isGroupNode(DefaultMutableTreeNode node);
+	protected abstract boolean isGroupNode(FilterNode node);
 
 	protected void groupSelected(G g) {
 		saveButton.setEnabled(false);
@@ -261,6 +261,10 @@ public abstract class GroupedEntityPanel<G extends de.oftik.kehys.kersantti.Iden
 
 	public abstract F createForm(Supplier<CommandBroker> brokerSupplier);
 
+	public abstract IdentifiableBinding<E> bind(E e);
+
+	public abstract IdentifiableBinding<G> bindGroup(G g);
+
 	public GroupedEntityCreateDialog<G, E, F> wrapFormAsCreateDialog() {
 		return new GroupedEntityCreateDialog<>(this, createForm(applicationContext::getBroker));
 	}
@@ -290,7 +294,7 @@ public abstract class GroupedEntityPanel<G extends de.oftik.kehys.kersantti.Iden
 	protected List<G> extractGroups() {
 		final List<G> groups = new ArrayList<>();
 		for (int i = 0; i < root.getChildCount(); i++) {
-			groups.add((G) ((DefaultMutableTreeNode) root.getChildAt(i)).getUserObject());
+			groups.add(((IdentifiableBinding<G>) ((FilterNode) root.getChildAt(i)).getUserObject()).getIdentifiable());
 		}
 		return groups;
 	}
@@ -321,7 +325,10 @@ public abstract class GroupedEntityPanel<G extends de.oftik.kehys.kersantti.Iden
 				if (entities == null || entities.isEmpty()) {
 					return;
 				}
-				entities.stream().forEach(e -> tn.add(e, () -> toNode(e)));
+				entities.stream().forEach(e -> {
+					final var binding = bind(e);
+					tn.add(binding, () -> toNode(binding));
+				});
 			});
 		} catch (SQLException e) {
 			throw new IllegalStateException(e);
@@ -339,13 +346,14 @@ public abstract class GroupedEntityPanel<G extends de.oftik.kehys.kersantti.Iden
 	@SuppressWarnings("unchecked")
 	protected FilterNode registerGroup(final FilterNode tn) {
 		root.add(tn);
-		groupMap.put(((G) tn.getUserObject()).getId(), tn);
+		groupMap.put(((IdentifiableBinding<G>) tn.getUserObject()).getId(), tn);
 		return tn;
 	}
 
 	protected FilterNode toGroupNode(G g) {
 		final FilterNode tn = new FilterNode();
-		tn.setUserObject(g);
+		final IdentifiableBinding<G> gBinding = bindGroup(g);
+		tn.setUserObject(gBinding);
 		return tn;
 	}
 

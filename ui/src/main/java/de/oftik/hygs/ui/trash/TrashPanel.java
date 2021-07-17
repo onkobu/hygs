@@ -8,6 +8,8 @@ import static de.oftik.hygs.ui.ListModels.transferAll;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Logger;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -15,6 +17,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import de.oftik.hygs.cmd.CommandTargetDefinition;
+import de.oftik.hygs.cmd.DeleteEntityCmd;
 import de.oftik.hygs.cmd.ResurrectEntityCmd;
 import de.oftik.hygs.contract.Identifiable;
 import de.oftik.hygs.query.cap.CapabilityDAO;
@@ -26,12 +30,14 @@ import de.oftik.hygs.ui.ApplicationContextListener;
 import de.oftik.hygs.ui.ComponentFactory;
 import de.oftik.hygs.ui.ContextEvent;
 import de.oftik.hygs.ui.EnabledConstraints.ConstraintContext;
+import de.oftik.hygs.ui.EntityRenderer;
 import de.oftik.hygs.ui.I18N;
 import de.oftik.hygs.ui.ListModels;
-import de.oftik.hygs.ui.MappableToStringRenderer;
 import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
 
 public class TrashPanel extends JPanel implements ApplicationContextListener {
+	private static final Logger log = Logger.getLogger(TrashPanel.class.getName());
+
 	private final ApplicationContext applicationContext;
 	private final DefaultListModel<Identifiable<?, ?>> trashListModel = new DefaultListModel<>();
 	private final DefaultListModel<Identifiable<?, ?>> toProcessListModel = new DefaultListModel<>();
@@ -50,12 +56,58 @@ public class TrashPanel extends JPanel implements ApplicationContextListener {
 		this.projectDao = new ProjectDAO(applicationContext);
 		this.capabilityDao = new CapabilityDAO(applicationContext);
 		trash = new JList<>(trashListModel);
-		trash.setCellRenderer(new MappableToStringRenderer());
+		trash.setCellRenderer(new EntityRenderer<Identifiable<?, ?>>(Identifiable::toString));
 		toProcess = new JList<>(toProcessListModel);
-		toProcess.setCellRenderer(new MappableToStringRenderer());
+		toProcess.setCellRenderer(new EntityRenderer<Identifiable<?, ?>>(Identifiable::toString));
 		createUI();
 		fillList();
 		applicationContext.addListener(this);
+		applicationContext.getBroker().registerListener(new TrashNotificationListener(CommandTargetDefinition.company) {
+			@Override
+			void handleEntityIds(List<String> ids) {
+				try {
+					companyDao.findByIds(ids).ifPresent(
+							lst -> lst.stream().map(CompanyBinding::new).forEach(trashListModel::addElement));
+				} catch (SQLException e) {
+					log.throwing(TrashPanel.class.getName(), "handleEntityIds", e);
+				}
+			}
+		});
+		applicationContext.getBroker()
+				.registerListener(new TrashNotificationListener(CommandTargetDefinition.category) {
+					@Override
+					void handleEntityIds(List<String> ids) {
+						try {
+							categoryDao.findByIds(ids).ifPresent(
+									lst -> lst.stream().map(CategoryBinding::new).forEach(trashListModel::addElement));
+						} catch (SQLException e) {
+							log.throwing(TrashPanel.class.getName(), "handleEntityIds", e);
+						}
+					}
+				});
+		applicationContext.getBroker()
+				.registerListener(new TrashNotificationListener(CommandTargetDefinition.capability) {
+					@Override
+					void handleEntityIds(List<String> ids) {
+						try {
+							capabilityDao.findByIds(ids).ifPresent(lst -> lst.stream().map(CapabilityBinding::new)
+									.forEach(trashListModel::addElement));
+						} catch (SQLException e) {
+							log.throwing(TrashPanel.class.getName(), "handleEntityIds", e);
+						}
+					}
+				});
+		applicationContext.getBroker().registerListener(new TrashNotificationListener(CommandTargetDefinition.project) {
+			@Override
+			void handleEntityIds(List<String> ids) {
+				try {
+					projectDao.findByIds(ids).ifPresent(
+							lst -> lst.stream().map(ProjectBinding::new).forEach(trashListModel::addElement));
+				} catch (SQLException e) {
+					log.throwing(TrashPanel.class.getName(), "handleEntityIds", e);
+				}
+			}
+		});
 	}
 
 	private void createUI() {
@@ -80,10 +132,10 @@ public class TrashPanel extends JPanel implements ApplicationContextListener {
 
 	private void fillList() {
 		try {
-			categoryDao.consumeDeleted(trashListModel::addElement);
-			companyDao.consumeDeleted(trashListModel::addElement);
-			projectDao.consumeDeleted(trashListModel::addElement);
-			capabilityDao.consumeDeleted(trashListModel::addElement);
+			categoryDao.consumeDeleted(c -> trashListModel.addElement(new CategoryBinding(c)));
+			companyDao.consumeDeleted(c -> trashListModel.addElement(new CompanyBinding(c)));
+			projectDao.consumeDeleted(p -> trashListModel.addElement(new ProjectBinding(p)));
+			capabilityDao.consumeDeleted(c -> trashListModel.addElement(new CapabilityBinding(c)));
 		} catch (SQLException e) {
 			throw new IllegalStateException(e);
 		}
@@ -112,6 +164,13 @@ public class TrashPanel extends JPanel implements ApplicationContextListener {
 	}
 
 	public void delete(ActionEvent evt) {
+		if (toProcessListModel.size() == 0) {
+			return;
+		}
+		for (int i = 0; i < toProcessListModel.getSize(); i++) {
+			applicationContext.getBroker().execute(new DeleteEntityCmd(toProcessListModel.get(i)));
+		}
+		toProcessListModel.clear();
 	}
 
 	public void resurrect(ActionEvent evt) {

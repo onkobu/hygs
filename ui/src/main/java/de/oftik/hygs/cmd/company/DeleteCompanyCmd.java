@@ -22,8 +22,7 @@ public class DeleteCompanyCmd extends AbstractCommand {
 
 	@Override
 	public PreparedStatement prepare(Connection conn) throws SQLException {
-		final PreparedStatement stmt = delete(conn, CompanyTable.TABLE, CompanyColumn.cmp_id,
-				CompanyColumn.cmp_deleted);
+		final PreparedStatement stmt = trash(conn, CompanyTable.TABLE, CompanyColumn.cmp_id, CompanyColumn.cmp_deleted);
 		stmt.setString(1, id);
 		return stmt;
 	}

@@ -21,9 +21,11 @@ import de.oftik.hygs.orm.cap.Category;
 import de.oftik.hygs.query.cap.CapabilityDAO;
 import de.oftik.hygs.query.cap.CategoryDAO;
 import de.oftik.hygs.ui.ApplicationContext;
+import de.oftik.hygs.ui.FilterNode;
 import de.oftik.hygs.ui.GroupedEntityCreateDialog;
 import de.oftik.hygs.ui.GroupedEntityPanel;
 import de.oftik.hygs.ui.I18N;
+import de.oftik.hygs.ui.IdentifiableBinding;
 
 public class CapabilityPanel extends GroupedEntityPanel<Category, Capability, CapabilityForm, CapabilityDAO> {
 	static class CapabilityTreeCellRenderer implements TreeCellRenderer {
@@ -33,14 +35,14 @@ public class CapabilityPanel extends GroupedEntityPanel<Category, Capability, Ca
 		public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,
 				boolean leaf, int row, boolean hasFocus) {
 			final DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-			if (node.getUserObject() instanceof Category) {
-				final Category cat = (Category) node.getUserObject();
+			if (node.getUserObject() instanceof CategoryBinding) {
+				final Category cat = ((CategoryBinding) node.getUserObject()).getIdentifiable();
 				return rendererDelegate.getTreeCellRendererComponent(tree, cat.getName(), selected, expanded, false,
 						row, hasFocus);
 			}
 
-			if (node.getUserObject() instanceof Capability) {
-				final Capability cap = (Capability) node.getUserObject();
+			if (node.getUserObject() instanceof CapabilityBinding) {
+				final Capability cap = ((CapabilityBinding) node.getUserObject()).getIdentifiable();
 				if (cap.getVersion() != null) {
 					return rendererDelegate.getTreeCellRendererComponent(tree, cap.getName() + " " + cap.getVersion(),
 							selected, expanded, true, row, hasFocus);
@@ -81,13 +83,13 @@ public class CapabilityPanel extends GroupedEntityPanel<Category, Capability, Ca
 	}
 
 	@Override
-	protected boolean isEntityNode(DefaultMutableTreeNode node) {
-		return node.getUserObject() != null && node.getUserObject() instanceof Capability;
+	protected boolean isEntityNode(FilterNode node) {
+		return node.getUserObject() != null && node.getUserObject() instanceof CapabilityBinding;
 	}
 
 	@Override
-	protected boolean isGroupNode(DefaultMutableTreeNode node) {
-		return node.getUserObject() != null && node.getUserObject() instanceof Category;
+	protected boolean isGroupNode(FilterNode node) {
+		return node.getUserObject() != null && node.getUserObject() instanceof CategoryBinding;
 	}
 
 	@Override
@@ -102,4 +104,36 @@ public class CapabilityPanel extends GroupedEntityPanel<Category, Capability, Ca
 		dlg.showAndWaitForDecision();
 	}
 
+	@Override
+	public IdentifiableBinding<Capability> bind(Capability e) {
+		return new CapabilityBinding(e);
+	}
+
+	@Override
+	public IdentifiableBinding<Category> bindGroup(Category g) {
+		return new CategoryBinding(g);
+	}
+
+	static class CapabilityBinding extends IdentifiableBinding<Capability> {
+		CapabilityBinding(Capability c) {
+			super(c);
+		}
+
+		@Override
+		public boolean matchesTerm(String term) {
+			return getIdentifiable().getName().toLowerCase().contains(term.toLowerCase());
+		}
+	}
+
+	static class CategoryBinding extends IdentifiableBinding<Category> {
+
+		public CategoryBinding(Category identifiable) {
+			super(identifiable);
+		}
+
+		@Override
+		public boolean matchesTerm(String term) {
+			return getIdentifiable().getName().toLowerCase().contains(term.toLowerCase());
+		}
+	}
 }

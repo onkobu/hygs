@@ -8,7 +8,7 @@ import de.oftik.hygs.orm.project.ProjectTable;
 import de.oftik.hygs.query.AbstractDao;
 import de.oftik.hygs.ui.ApplicationContext;
 
-public class ProjectDAO extends AbstractDao<Project, ProjectTable, ProjectBinding> {
+public class ProjectDAO extends AbstractDao<Project, ProjectTable> {
 	private static final ProjectTable TABLE = new ProjectTable();
 	public static final EntitySource<Project, ProjectTable> SOURCE = new EntitySourceFixture<>(TABLE,
 			ProjectColumn.prj_deleted);
@@ -20,10 +20,5 @@ public class ProjectDAO extends AbstractDao<Project, ProjectTable, ProjectBindin
 	@Override
 	protected Project instantiate() {
 		return new Project();
-	}
-
-	@Override
-	protected ProjectBinding bind(Project i) {
-		return new ProjectBinding(i);
 	}
 }

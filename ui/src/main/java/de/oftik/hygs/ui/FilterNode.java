@@ -8,9 +8,6 @@ import java.util.function.Supplier;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-import de.oftik.hygs.contract.MappableToString;
-import de.oftik.kehys.kersantti.Identifiable;
-
 public class FilterNode extends DefaultMutableTreeNode {
 	private boolean visible;
 
@@ -18,7 +15,7 @@ public class FilterNode extends DefaultMutableTreeNode {
 		this(null);
 	}
 
-	public FilterNode(Identifiable userObject) {
+	public FilterNode(IdentifiableBinding<?> userObject) {
 		this(userObject, true, true);
 	}
 
@@ -27,14 +24,15 @@ public class FilterNode extends DefaultMutableTreeNode {
 		this.visible = isVisible;
 	}
 
-	public void add(Identifiable childObj, Supplier<FilterNode> childSupplier) {
+	public void add(IdentifiableBinding<?> childObj, Supplier<FilterNode> childSupplier) {
 		if (children == null) {
 			insert(childSupplier.get(), 0);
 			return;
 		}
 		for (TreeNode tn : children) {
 			FilterNode cn = (FilterNode) tn;
-			if (((Identifiable) cn.getUserObject()).getId().equals(childObj.getId())) {
+			if (((IdentifiableBinding) cn.getUserObject()).getIdentifiable().getId()
+					.equals(childObj.getIdentifiable().getId())) {
 				return;
 			}
 		}
@@ -100,9 +98,9 @@ public class FilterNode extends DefaultMutableTreeNode {
 
 	public boolean visitAll(String term) {
 		if (isLeaf()) {
-			final MappableToString mts = (MappableToString) getUserObject();
+			final IdentifiableBinding<?> mts = (IdentifiableBinding<?>) getUserObject();
 			final boolean oldState = isVisible();
-			setVisible(term == null || mts.toShortString().toLowerCase().contains(term));
+			setVisible(term == null || mts.matchesTerm(term));
 			return oldState != isVisible();
 		} else {
 			final Enumeration<TreeNode> children = children();

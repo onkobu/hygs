@@ -7,6 +7,6 @@ import de.oftik.hygs.orm.project.Project;
 
 public class ProjectDeleted extends SuccessNotification {
 	public ProjectDeleted(Project prj) {
-		super(NotificationType.DELETE, CommandTargetDefinition.project, prj.getId());
+		super(NotificationType.TRASHED, CommandTargetDefinition.project, prj.getId());
 	}
 }

@@ -33,7 +33,6 @@ import de.oftik.hygs.cmd.project.DeleteProjectCmd;
 import de.oftik.hygs.cmd.project.SaveProjectCmd;
 import de.oftik.hygs.contract.CacheListener;
 import de.oftik.hygs.contract.CacheType;
-import de.oftik.hygs.orm.cap.Capability;
 import de.oftik.hygs.orm.company.Company;
 import de.oftik.hygs.orm.project.CapabilityInProject;
 import de.oftik.hygs.orm.project.Project;
@@ -42,7 +41,6 @@ import de.oftik.hygs.ui.ComponentFactory;
 import de.oftik.hygs.ui.EntityForm;
 import de.oftik.hygs.ui.EntityRenderer;
 import de.oftik.hygs.ui.I18N;
-import de.oftik.hygs.ui.MappableToStringRenderer;
 import de.oftik.hygs.ui.SaveController;
 import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
 import de.oftik.kehys.keijukainen.gui.ListTableModel;
@@ -126,7 +124,9 @@ public class ProjectForm extends EntityForm<Project> {
 		capabilityTable.setModel(tableModel);
 		capabilityTable.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new JTextField()));
 		companyBox.setRenderer(new EntityRenderer<>(p -> p.getName()));
-		capabilityBox.setRenderer(new MappableToStringRenderer());
+		capabilityBox.setRenderer(new EntityRenderer<CapabilityWithCategory>(
+				cwc -> cwc.getCategory().getName() + " -> " + cwc.getCapability().getName()
+						+ (cwc.getCapability().getVersion() == null ? "" : " " + cwc.getCapability().getVersion())));
 		createUI();
 		addCapButton.setEnabled(false);
 		fromPicker.setEnabled(false);
@@ -221,7 +221,8 @@ public class ProjectForm extends EntityForm<Project> {
 	@SuppressWarnings("PMD.UnusedFormalParameter")
 	public void addCapability(ActionEvent evt) {
 		if (!createMode) {
-			broker().execute(new AssignCapabilityCmd(currentProject, (Capability) capabilityBox.getSelectedItem()));
+			broker().execute(new AssignCapabilityCmd(currentProject,
+					((CapabilityWithCategory) capabilityBox.getSelectedItem()).getCapability()));
 		}
 	}
 

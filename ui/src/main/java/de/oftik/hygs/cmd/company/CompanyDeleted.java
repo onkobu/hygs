@@ -7,6 +7,6 @@ import de.oftik.hygs.orm.company.Company;
 
 public class CompanyDeleted extends SuccessNotification {
 	public CompanyDeleted(Company cmp) {
-		super(NotificationType.DELETE, CommandTargetDefinition.company, cmp.getId());
+		super(NotificationType.TRASHED, CommandTargetDefinition.company, cmp.getId());
 	}
 }

@@ -7,7 +7,7 @@ import de.oftik.hygs.orm.company.CompanyTable;
 import de.oftik.hygs.query.AbstractDao;
 import de.oftik.hygs.ui.ApplicationContext;
 
-public class CompanyDAO extends AbstractDao<Company, CompanyTable, CompanyBinding> {
+public class CompanyDAO extends AbstractDao<Company, CompanyTable> {
 
 	static final EntitySourceFixture<Company, CompanyTable> SOURCE = new EntitySourceFixture<Company, CompanyTable>(
 			CompanyTable.TABLE, CompanyColumn.cmp_deleted);
@@ -19,11 +19,6 @@ public class CompanyDAO extends AbstractDao<Company, CompanyTable, CompanyBindin
 	@Override
 	protected Company instantiate() {
 		return new Company();
-	}
-
-	@Override
-	protected CompanyBinding bind(Company i) {
-		return new CompanyBinding(i);
 	}
 
 }

@@ -17,6 +17,7 @@ import de.oftik.hygs.contract.CacheType;
 import de.oftik.hygs.orm.cap.Category;
 import de.oftik.hygs.orm.company.Company;
 import de.oftik.hygs.orm.project.Project;
+import de.oftik.hygs.orm.project.ProjectColumn;
 import de.oftik.hygs.orm.project.ProjectTable;
 import de.oftik.hygs.query.cap.CapabilityDAO;
 import de.oftik.hygs.query.cap.CategoryDAO;
@@ -44,7 +45,8 @@ public class ProjectPanel extends EntityListPanel<Project, ProjectTable, Project
 	}
 
 	public ProjectPanel(ApplicationContext applicationContext) {
-		super(applicationContext, new ProjectDAO(applicationContext), new ProjectCellRenderer());
+		super(applicationContext, new ProjectDAO(applicationContext), new ProjectCellRenderer(),
+				ProjectColumn.prj_deleted);
 		this.companyDao = new CompanyDAO(applicationContext);
 		this.capabilityDao = new CapabilityDAO(applicationContext);
 		this.categoryDao = new CategoryDAO(applicationContext);

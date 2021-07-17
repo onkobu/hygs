@@ -9,10 +9,10 @@ import java.util.List;
 import de.oftik.hygs.cmd.AbstractCommand;
 import de.oftik.hygs.cmd.CommandTargetDefinition;
 import de.oftik.hygs.cmd.Notification;
+import de.oftik.hygs.orm.cap.Capability;
 import de.oftik.hygs.orm.cap.CapabilityColumn;
 import de.oftik.hygs.orm.cap.CapabilityTable;
 import de.oftik.hygs.orm.cap.Category;
-import de.oftik.hygs.query.cap.CapabilityBinding;
 
 public class SaveCapabilityCmd extends AbstractCommand {
 	private final String id;
@@ -41,6 +41,8 @@ public class SaveCapabilityCmd extends AbstractCommand {
 
 	@Override
 	public Notification toNotification(Connection conn, List<String> generatedKeys) {
-		return new CapabilitySaved(CapabilityBinding.withId(id));
+		final var cap = new Capability();
+		cap.setId(id);
+		return new CapabilitySaved(cap);
 	}
 }

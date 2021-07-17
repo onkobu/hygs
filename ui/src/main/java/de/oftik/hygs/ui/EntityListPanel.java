@@ -25,8 +25,10 @@ import de.oftik.hygs.cmd.CommandTarget;
 import de.oftik.hygs.cmd.Notification;
 import de.oftik.hygs.cmd.NotificationListener;
 import de.oftik.hygs.cmd.NotificationType;
+import de.oftik.kehys.kersantti.Column;
 import de.oftik.kehys.kersantti.Table;
 import de.oftik.kehys.kersantti.query.DAO;
+import de.oftik.kehys.kersantti.query.QueryOperators;
 
 /**
  * A panel that contains a list of entities and a form next to it. Upon
@@ -49,6 +51,8 @@ public abstract class EntityListPanel<I extends de.oftik.kehys.kersantti.Identif
 	private final JButton newButton;
 	private final JButton saveButton;
 	private final JButton deleteButton;
+
+	private final Column<I> deleteColumn;
 
 	/**
 	 * Use this listener to bind to this class' default behavior upon notification.
@@ -86,7 +90,8 @@ public abstract class EntityListPanel<I extends de.oftik.kehys.kersantti.Identif
 			case UPDATE:
 				reference.onEntityUpdate(notification.getIds());
 				break;
-			case DELETE:
+			case DELETE: // both events remove the entity from the panel
+			case TRASHED:
 				reference.onEntityDelete(notification.getIds());
 				break;
 			case RESURRECT:
@@ -159,7 +164,9 @@ public abstract class EntityListPanel<I extends de.oftik.kehys.kersantti.Identif
 		}
 	}
 
-	public EntityListPanel(ApplicationContext context, DAO<I> dao, ListCellRenderer<I> cellRenderer) {
+	public EntityListPanel(ApplicationContext context, DAO<I> dao, ListCellRenderer<I> cellRenderer,
+			Column<I> deleteColumn) {
+		this.deleteColumn = deleteColumn;
 		this.applicationContext = context;
 		this.entityForm = createForm(context::getBroker);
 		this.dao = dao;
@@ -300,7 +307,7 @@ public abstract class EntityListPanel<I extends de.oftik.kehys.kersantti.Identif
 
 	private void fillList() {
 		try {
-			getDAO().consumeAll(listModel::addElement);
+			getDAO().consumeWhere(QueryOperators.columnIs(deleteColumn, false), listModel::addElement);
 		} catch (SQLException e) {
 			throw new IllegalStateException(e);
 		}

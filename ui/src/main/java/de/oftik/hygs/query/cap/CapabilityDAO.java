@@ -13,7 +13,7 @@ import de.oftik.hygs.query.AbstractDao;
 import de.oftik.hygs.ui.ApplicationContext;
 import de.oftik.kehys.kersantti.Column;
 
-public class CapabilityDAO extends AbstractDao<Capability, CapabilityTable, CapabilityBinding> {
+public class CapabilityDAO extends AbstractDao<Capability, CapabilityTable> {
 	public static final EntitySource<Capability, CapabilityTable> SOURCE = new EntitySourceFixture<Capability, CapabilityTable>(
 			CapabilityTable.TABLE, CapabilityColumn.cap_deleted);
 
@@ -34,8 +34,4 @@ public class CapabilityDAO extends AbstractDao<Capability, CapabilityTable, Capa
 		return new Capability();
 	}
 
-	@Override
-	protected CapabilityBinding bind(Capability i) {
-		return new CapabilityBinding(i);
-	}
 }

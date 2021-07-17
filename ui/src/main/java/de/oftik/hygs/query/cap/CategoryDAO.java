@@ -7,7 +7,7 @@ import de.oftik.hygs.orm.cap.CategoryTable;
 import de.oftik.hygs.query.AbstractDao;
 import de.oftik.hygs.ui.ApplicationContext;
 
-public class CategoryDAO extends AbstractDao<Category, CategoryTable, CategoryBinding> {
+public class CategoryDAO extends AbstractDao<Category, CategoryTable> {
 	static final EntitySourceFixture<Category, CategoryTable> SOURCE = new EntitySourceFixture<Category, CategoryTable>(
 			CategoryTable.TABLE, CategoryColumn.cat_deleted);
 
@@ -18,11 +18,6 @@ public class CategoryDAO extends AbstractDao<Category, CategoryTable, CategoryBi
 	@Override
 	protected Category instantiate() {
 		return new Category();
-	}
-
-	@Override
-	protected CategoryBinding bind(Category i) {
-		return new CategoryBinding(i);
 	}
 
 }
