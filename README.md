@@ -1,19 +1,41 @@
 # hygs
 How you grew smart – record of your projects, employers and skills.
 
-As an IT-guy I change frameworks and libraries like clothes. After >30years of experience in general and >20years as employee it piled up. So I wondered how I grew smart and took modern means of statistics to lift this hidden treasure.
+Have a single SQLite database with
 
-## Install it
+* companies – you worked for
+* projects – what you did in the past and currently do
+* capabilities – frameworks, tools and libraries you use, certificates you gained
+* skills – levels of experience
+* roles – what set of capabilities is needed
 
-You only need to load the DDL and DML of this repository:
+And now combine them
+
+1. Insert the companies
+1. Fill in the projects
+1. Assign capabilities, skills and roles
+1. Query the views
+
+How many months you've been using an IDE? How fast you grew from a junior to a senior? How many years you worked in development compared to quality assurance/ testing/ architecture?
+
+# Database
+
+## Preconditions
+
+* get SQLite 3
+* optional get SQLiteStudio3, a UI for SQLite
+
+## Init Database
+
+Load the DDL and DML of this repository (currently only in German):
 
 ```
 sqlite3 your_capability.db ".read db/install_de.sql"
 ```
 
-## Upgrade it
+## Upgrade Database
 
-Use the upgrade.sh-script, to let it iterate through the scripts your instance needs. It'll do a backup first, next to the already existing database. But to stay on the safe side:
+Use the upgrade.sh-script, to let it iterate through the scripts your instance needs. It'll do a backup first, next to the already existing database. But to stay on the safe side it will:
 
 - copy your database
 - upgrade the copy
@@ -21,8 +43,7 @@ Use the upgrade.sh-script, to let it iterate through the scripts your instance n
 - either continue with the copy (delete origin, rename copy to origin)
 - or repeat with origin
 
-
-## Use it
+## Use Database
 
 Mind that all weighting is based on percentage ranging from 0..100. If you are employed fulltime for a project it's weight is 100%, which is the default value. This is the same for capabilities. If you work for example fulltime with Java and spend 10% of your time with Maven, then assign 10 to the prj_cap_mapping for Maven and use the default for Java.
 
@@ -37,23 +58,14 @@ Special cases:
 * Fulltime project moved to maintenance: create two projects, one with 100% mapping, the other with the maintenance rate, e.g. 20%
 * Multiple projects in parallel: create projects according to time slices and weight each accordingly, like A fulltime, then B partly overlapping with A 60% and B 40%: A1 with 100%, A2 with 60%, B with 40%
 
-Recommended Tools
+## Migration/ Versioning
 
-* SQLiteStudio, https://sqlitestudio.pl, full DDL-support
-* SQLite Browser, https://sqlitebrowser.org/, poor trigger support in UI
-* Schema Spy for schema documentation, http://schemaspy.org/
+* for changes add a new script in either DML or DDL-directory
+* increment version number in upgrade.sh, this'll be your file's name
+* test locally with a sample database, incl. upgrade.sh
+* record the script in install.template and invoke gen_install.sh to populate installation script(s)
 
-## SQLite
-
-I was also plagued with tons of skill management tools of the various employers. I can't access them anymore so the information is lost. But I can carry around a SQLite database, on a thumb drive or even uploaded somewhere.
-
-* small and lightweight
-* SQL-support, incl. triggers, views and functions
-* portable
-* adaptable, like with PDO for PHP or JPA for Java or any other recent database-capable programming language
-* fast
-
-I thank the collegue who pointed out that unique feature, to carry around an entire database, designed for its only purpose.
+## Schema
 
 ![Database Schema](docs/relationships.real.large.png)
 
@@ -64,31 +76,22 @@ I thank the collegue who pointed out that unique feature, to carry around an ent
 ![Application Properties Table](docs/app_properties.1degree.png)
 
 ![Application Audit Log](docs/log_audit.1degree.png)
- 
-## Data
- 
-* master data, like capabilities and categories, e.g. Java 8 as capability and Programming Language as a category
-* dynamic data of your own, employers, projects
-* mapping table of capabilities to projects, with weight
-* views for calculations, like effective/ weighted months assigned to a project or effective months spent with a tool/ capability
-* maintenance and auditing data, to keep the database stable and up to date
 
-# For Developers
+# Java UI
 
-* for changes add a new script in either DML or DDL-directory
-* increment version number in upgrade.sh, this'll be your file's name
-* test locally with a sample database, incl. upgrade.sh
-* record the script in install.template and invoke gen_install.sh to populate installation script(s)
+* Java 11
+* Maven 3.6
+* `cd ui && mvn clean install`
 
-## Eclipse/ Java-UI
+Limitations:
 
-* Needs a JDK-11 and Maven 3.6
-* Pulls all other dependencies from the web, so without Internet you're lost
-* ``mvn clean install`` – builds everything
-* To run tests in Eclipse, -javaagent: needs to be set to a recent JMockit-JAR (use your home directory/ .m2/org/jmockit/...)
+* cannot query the views
+* cannot assign/ use skills
 
-## Schemaspy
 
+# Schemaspy
+
+* for schema documentation, http://schemaspy.org/
 * make sure, Java 8 (or later) is installed on your system
 * make sure, GraphViz is installed on your system (with Java-interface)
 * get Schemaspy version from https://github.com/schemaspy, put into any/ new directory
@@ -97,13 +100,13 @@ I thank the collegue who pointed out that unique feature, to carry around an ent
 * create a target directory for Schemaspy-output (HTML, JavaScript, …)
 * invoke Schemaspy from within Schemaspy-directory
 
-Configuration file sqlite.properties for SQLite-JDBC-driver must match the
-driver exactly. The example is using 3.27.2:
+Configuration file sqlite.properties as an extension. I had no success and ran into exceptions with the standard approach. SQLite-JDBC-driver must match the
+driver exactly. The example is using 3.36.0.1:
 
 ```
 description=SQLite-Xerial
 driver=org.sqlite.JDBC
-driverPath=sqlite-jdbc-3.27.2.jar
+driverPath=sqlite-jdbc-3.36.0.1.jar
 connectionSpec=jdbc:sqlite:<db>
 ```
 
@@ -112,10 +115,10 @@ Invocation on command line:
 ```
 # Render graphics to ~/Documents/hygs-schema -directory, complete cataloge,
 # user (-u) and schema (-s) must be given but value is not used.
-# Invocation for version other than 6.0.0 may differ
+# Invocation for version other than 6.1.0 may differ
 #
-java -jar schemaspy-6.0.0.jar -t sqlite.properties \
-  -dp ./sqlite-jdbc-3.27.2.jar 
+java -jar schemaspy-6.1.0.jar -t sqlite.properties \
+  -dp ./sqlite-jdbc-3.36.0.1.jar 
   -db ~/git/hygs/db/sample_de.db 
   -o ~/Documents/hygs-schema -u dontcare -cat % -s dontcare
 ```
