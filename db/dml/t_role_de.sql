@@ -1,0 +1,16 @@
+INSERT INTO t_role (role_id, role_name, role_level, role_deleted) VALUES (1, 'Tester', 1, 0);
+INSERT INTO t_role (role_id, role_name, role_level, role_deleted) VALUES (2, 'UI Designer', 1, 0);
+INSERT INTO t_role (role_id, role_name, role_level, role_deleted) VALUES (3, 'Enterprise Architect', 3, 0);
+INSERT INTO t_role (role_id, role_name, role_level, role_deleted) VALUES (4, 'Senior Architect', 2, 0);
+INSERT INTO t_role (role_id, role_name, role_level, role_deleted) VALUES (5, 'Designer', 1, 0);
+INSERT INTO t_role (role_id, role_name, role_level, role_deleted) VALUES (6, 'Architect', 1, 0);
+INSERT INTO t_role (role_id, role_name, role_level, role_deleted) VALUES (7, 'Principal Developer', 3, 0);
+INSERT INTO t_role (role_id, role_name, role_level, role_deleted) VALUES (8, 'Senior Developer', 2, 0);
+INSERT INTO t_role (role_id, role_name, role_level, role_deleted) VALUES (9, 'Developer', 1, 0);
+INSERT INTO t_role (role_id, role_name, role_level, role_deleted) VALUES (10, 'Trainee', 0, 0);
+INSERT INTO t_role (role_id, role_name, role_level, role_deleted) VALUES (11, 'Database Administrator', 1, 0);
+INSERT INTO t_role (role_id, role_name, role_level, role_deleted) VALUES (12, 'Auditor', 1, 0);
+INSERT INTO t_role (role_id, role_name, role_level, role_deleted) VALUES (13, 'Security Auditor', 2, 0);
+INSERT INTO t_role (role_id, role_name, role_level, role_deleted) VALUES (14, 'Reviewer', 0, 0);
+INSERT INTO t_role (role_id, role_name, role_level, role_deleted) VALUES (15, 'Performance Auditor', 2, 0);
+INSERT INTO t_role (role_id, role_name, role_level, role_deleted) VALUES (16, 'SCRUM Master', 1, 0);

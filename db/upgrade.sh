@@ -1,9 +1,9 @@
 #!/bin/bash
 
 DATABASE=$1
-UPGRADE_TO=16
+UPGRADE_TO=0
 
-if [ $# -eq 0 -o "$1" = '-h' -o "$1" = '--help' ]; then
+if [ $# -eq 0 -o $# -gt 1 -o "$1" = '-h' -o "$1" = '--help' ]; then
 	echo ""
 	echo "Upgrading How-You-Grow-Smart-DB"
 	echo ""
@@ -15,9 +15,29 @@ if [ $# -eq 0 -o "$1" = '-h' -o "$1" = '--help' ]; then
 	exit 0
 fi
 
-VERSION=$(sqlite3 $DATABASE 'SELECT max(cap_version) from app_capability;')
+function init_database {
+	database="$1"
+	sqlite3 $database ".read install_de.sql" >init_database.log 2>&1
+	errCode=$?
+	if [ $errCode -ne 0 ]; then
+		>&2 echo "There were errors, see init_datbase.log"
+	fi
+	echo $errCode
+}
 
-if [ $VERSION -eq $UPGRADE_TO ]; then
+if [ ! -f $DATABASE ]; then
+	errCode=$(init_database $DATABASE)
+
+	exit $errCode
+fi
+
+VERSION=$(sqlite3 $DATABASE 'SELECT max(cap_version) from app_capability;')
+errCode=$?
+
+if [ "$VERSION" = "" ] || [ $errCode -ne 0 ]; then
+	echo "Could not determine application version, exiting"
+	exit $errCode
+elif [ $VERSION -eq $UPGRADE_TO ]; then
 	echo already at version $VERSION, nothing to upgrade
 	exit 0
 fi

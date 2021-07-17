@@ -26,8 +26,8 @@ Use the upgrade.sh-script, to let it iterate through the scripts your instance n
 
 Mind that all weighting is based on percentage ranging from 0..100. If you are employed fulltime for a project it's weight is 100%, which is the default value. This is the same for capabilities. If you work for example fulltime with Java and spend 10% of your time with Maven, then assign 10 to the prj_cap_mapping for Maven and use the default for Java.
 
-* create employers in prj_company
-* create projects in cap_project
+* create employers in t_company
+* create projects in t_project
 * assign capabilities to projects with prj_cap_mapping
 * assign your roles to the projects with prj_role_mapping
 
@@ -60,6 +60,8 @@ I thank the collegue who pointed out that unique feature, to carry around an ent
 ![Application Capability Table](docs/app_capability.1degree.png)
 
 ![Application Maintenance Table](docs/app_maintenance.1degree.png)
+
+![Application Maintenance Table](docs/app_properties.1degree.png)
 
 ![Application Audit Log](docs/log_audit.1degree.png)
  

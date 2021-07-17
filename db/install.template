@@ -1,22 +1,8 @@
 .print DDL
 .read ddl/initial.sql
-.read ddl/001_prj_role.sql
-.read ddl/003_prj_role_map.sql
-.read ddl/004_audit_log_ref2.sql
-.read ddl/005_your_roles.sql
-.read ddl/006_skill_map.sql
-.read ddl/008_skill_views.sql
-.read ddl/010_app_properties.sql
-.read ddl/014_v_prj_cap.sql
-.read ddl/015_deleted_col.sql
-.read ddl/016_v_cap_cat.sql
 
 .print DML
-.read dml/cap_capability.sql
-.read dml/cap_category_$lang.sql
-.read dml/002_prj_role.sql
-.read dml/007_skill_map_$lang.sql
-.read dml/009_capabilities_$lang.sql
-.read dml/011_app_properties.sql
-.read dml/012_roles_and_caps_$lang.sql
-.read dml/013_roles_and_caps_$lang.sql
+.read dml/t_category_$lang.sql
+.read dml/t_capability_$lang.sql
+.read dml/t_role_$lang.sql
+.read dml/t_skill_$lang.sql
