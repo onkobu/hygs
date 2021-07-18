@@ -16,6 +16,7 @@ import de.oftik.hygs.orm.company.Company;
 import de.oftik.hygs.ui.EntityForm;
 import de.oftik.hygs.ui.I18N;
 import de.oftik.hygs.ui.SaveController;
+import de.oftik.hygs.ui.TextFields;
 import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
 
 public class CompanyForm extends EntityForm<Company> {
@@ -53,7 +54,7 @@ public class CompanyForm extends EntityForm<Company> {
 			}
 
 			private void checkSaveStatus() {
-				setSaveable(!isBlank(nameField));
+				setSaveable(!TextFields.isBlank(nameField));
 			}
 		});
 		streetField.setColumns(nameField.getColumns());
@@ -113,8 +114,8 @@ public class CompanyForm extends EntityForm<Company> {
 	}
 
 	@Override
-	public boolean hasId() {
-		return isBlank(idField);
+	public boolean isNewEntity() {
+		return TextFields.isBlank(idField);
 	}
 
 	@Override

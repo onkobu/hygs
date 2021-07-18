@@ -22,7 +22,7 @@ public class AssignedCapabilityDAO extends OrMappableDAO<CapabilityInProject> {
 	}
 
 	public List<CapabilityInProject> findByProject(Project prj) throws SQLException {
-		return findBy(CapabilityInProjectColumn.assc_project_id, prj.getId());
+		return findBy(CapabilityInProjectColumn.assc_project_id, prj.getId(), null);
 	}
 
 	@Override

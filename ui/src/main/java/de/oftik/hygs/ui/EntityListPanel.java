@@ -6,6 +6,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -53,6 +54,8 @@ public abstract class EntityListPanel<I extends de.oftik.kehys.kersantti.Identif
 	private final JButton deleteButton;
 
 	private final Column<I> deleteColumn;
+
+	private final Column<I> orderByColumn;
 
 	/**
 	 * Use this listener to bind to this class' default behavior upon notification.
@@ -165,8 +168,9 @@ public abstract class EntityListPanel<I extends de.oftik.kehys.kersantti.Identif
 	}
 
 	public EntityListPanel(ApplicationContext context, DAO<I> dao, ListCellRenderer<I> cellRenderer,
-			Column<I> deleteColumn) {
+			Column<I> deleteColumn, Column<I> orderByColumn) {
 		this.deleteColumn = deleteColumn;
+		this.orderByColumn = orderByColumn;
 		this.applicationContext = context;
 		this.entityForm = createForm(context::getBroker);
 		this.dao = dao;
@@ -249,15 +253,7 @@ public abstract class EntityListPanel<I extends de.oftik.kehys.kersantti.Identif
 	}
 
 	public void saveEntity(ActionEvent evt) {
-		if (isNewEntity()) {
-			entityForm.createEntity();
-		} else {
-			entityForm.saveEntity();
-		}
-	}
-
-	protected boolean isNewEntity() {
-		return entityForm.hasId();
+		entityForm.createOrSaveEntity();
 	}
 
 	public void deleteEntity(ActionEvent evt) {
@@ -307,7 +303,8 @@ public abstract class EntityListPanel<I extends de.oftik.kehys.kersantti.Identif
 
 	private void fillList() {
 		try {
-			getDAO().consumeWhere(QueryOperators.columnIs(deleteColumn, false), listModel::addElement);
+			getDAO().consumeWhere(QueryOperators.columnIs(deleteColumn, false),
+					Collections.singletonList(orderByColumn), listModel::addElement);
 		} catch (SQLException e) {
 			throw new IllegalStateException(e);
 		}

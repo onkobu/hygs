@@ -42,6 +42,7 @@ import de.oftik.hygs.ui.EntityForm;
 import de.oftik.hygs.ui.EntityRenderer;
 import de.oftik.hygs.ui.I18N;
 import de.oftik.hygs.ui.SaveController;
+import de.oftik.hygs.ui.TextFields;
 import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
 import de.oftik.kehys.keijukainen.gui.ListTableModel;
 import de.oftik.kehys.kersantti.query.Converters;
@@ -196,7 +197,7 @@ public class ProjectForm extends EntityForm<Project> {
 			}
 
 			private void checkSaveStatus() {
-				setSaveable(!isBlank(nameField));
+				setSaveable(!TextFields.isBlank(nameField));
 			}
 		});
 		addRowTextField(I18N.ID, idField, gbc);
@@ -275,8 +276,8 @@ public class ProjectForm extends EntityForm<Project> {
 	}
 
 	@Override
-	public boolean hasId() {
-		return isBlank(idField);
+	public boolean isNewEntity() {
+		return TextFields.isBlank(idField);
 	}
 
 	@Override

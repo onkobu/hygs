@@ -23,9 +23,11 @@ import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
 
 public abstract class FormPanel extends JPanel {
 	private final Supplier<CommandBroker> brokerSupplier;
+	private final SaveController saveController;
 
-	public FormPanel(Supplier<CommandBroker> brokerSupplier) {
+	public FormPanel(SaveController saveController, Supplier<CommandBroker> brokerSupplier) {
 		this.brokerSupplier = brokerSupplier;
+		this.saveController = saveController;
 		setLayout(new GridBagLayout());
 	}
 
@@ -111,7 +113,7 @@ public abstract class FormPanel extends JPanel {
 		return value;
 	}
 
-	protected boolean isBlank(JTextField field) {
-		return field.getText() == null || field.getText().isBlank();
+	protected final void setSaveable(boolean state) {
+		saveController.setSaveEnabled(state);
 	}
 }

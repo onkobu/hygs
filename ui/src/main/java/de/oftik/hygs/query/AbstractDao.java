@@ -25,6 +25,6 @@ public abstract class AbstractDao<I extends de.oftik.kehys.kersantti.Identifiabl
 	}
 
 	public void consumeDeleted(Consumer<I> cons) throws SQLException {
-		findBy(ci -> cons.accept(ci), deletedColumn, true);
+		findBy(ci -> cons.accept(ci), deletedColumn, true, null);
 	}
 }

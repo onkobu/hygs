@@ -6,11 +6,9 @@ import de.oftik.hygs.cmd.Command;
 import de.oftik.hygs.cmd.CommandBroker;
 
 public abstract class EntityForm<T> extends FormPanel {
-	private final SaveController saveController;
 
 	public EntityForm(SaveController sc, Supplier<CommandBroker> brokerSupplier) {
-		super(brokerSupplier);
-		this.saveController = sc;
+		super(sc, brokerSupplier);
 	}
 
 	/**
@@ -26,12 +24,12 @@ public abstract class EntityForm<T> extends FormPanel {
 
 	public abstract Command deleteEntityCommand();
 
-	public void createEntity() {
-		broker().execute(createEntityCommand());
-	}
-
-	public void saveEntity() {
-		broker().execute(saveEntityCommand());
+	public final void createOrSaveEntity() {
+		if (isNewEntity()) {
+			broker().execute(createEntityCommand());
+		} else {
+			broker().execute(saveEntityCommand());
+		}
 	}
 
 	public void deleteEntity() {
@@ -43,12 +41,7 @@ public abstract class EntityForm<T> extends FormPanel {
 	 */
 	public abstract void blank();
 
-	public abstract boolean hasId();
-
-	public void setSaveable(boolean state) {
-		saveController.setSaveEnabled(state);
-	}
+	public abstract boolean isNewEntity();
 
 	public abstract void enableActions(boolean state);
-
 }

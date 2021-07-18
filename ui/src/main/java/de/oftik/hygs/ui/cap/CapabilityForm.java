@@ -15,6 +15,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import de.oftik.hygs.cmd.Command;
 import de.oftik.hygs.cmd.CommandBroker;
@@ -31,6 +33,8 @@ import de.oftik.hygs.orm.cap.Category;
 import de.oftik.hygs.ui.ComponentFactory;
 import de.oftik.hygs.ui.GroupedEntityForm;
 import de.oftik.hygs.ui.I18N;
+import de.oftik.hygs.ui.SaveController;
+import de.oftik.hygs.ui.TextFields;
 import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
 
 public class CapabilityForm extends GroupedEntityForm<Category, Capability> {
@@ -57,8 +61,8 @@ public class CapabilityForm extends GroupedEntityForm<Category, Capability> {
 		}
 	}
 
-	public CapabilityForm(Supplier<CommandBroker> brokerSupplier) {
-		super(brokerSupplier);
+	public CapabilityForm(SaveController sc, Supplier<CommandBroker> brokerSupplier) {
+		super(sc, brokerSupplier);
 		categories.setRenderer(new CategoryRenderer());
 		categories.setEditable(false);
 		categories.setEnabled(false);
@@ -96,6 +100,27 @@ public class CapabilityForm extends GroupedEntityForm<Category, Capability> {
 		buttonPanel.setLayout(new GridLayout(1, 8));
 		buttonPanel.add(createCategoryButton);
 		add(buttonPanel, gbc.nextRow().remainderX().end());
+
+		nameField.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				checkSaveStatus();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				checkSaveStatus();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				checkSaveStatus();
+			}
+
+			private void checkSaveStatus() {
+				setSaveable(!TextFields.isBlank(nameField));
+			}
+		});
 	}
 
 	@Override
@@ -108,10 +133,10 @@ public class CapabilityForm extends GroupedEntityForm<Category, Capability> {
 	}
 
 	@Override
-	public void clearEntity() {
-		nameField.setText("");
-		idField.setText("");
-		versionField.setText("");
+	public void blank() {
+		nameField.setText(null);
+		idField.setText(null);
+		versionField.setText(null);
 		categories.setSelectedIndex(-1);
 	}
 
@@ -161,6 +186,11 @@ public class CapabilityForm extends GroupedEntityForm<Category, Capability> {
 	@Override
 	public void destroy() {
 		// clear caches
+	}
+
+	@Override
+	protected boolean isNewEntity() {
+		return TextFields.isBlank(idField);
 	}
 
 	@Override

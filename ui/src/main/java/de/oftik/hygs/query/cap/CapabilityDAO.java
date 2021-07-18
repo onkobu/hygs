@@ -1,7 +1,9 @@
 package de.oftik.hygs.query.cap;
 
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import de.oftik.hygs.contract.EntitySource;
 import de.oftik.hygs.contract.EntitySourceFixture;
@@ -22,7 +24,9 @@ public class CapabilityDAO extends AbstractDao<Capability, CapabilityTable> {
 	}
 
 	public List<Capability> findByCategory(Category g) throws SQLException {
-		return super.findBy(CapabilityColumn.cap_category_id, g.getId());
+		return super.findBy(CapabilityColumn.cap_category_id, g.getId(),
+				Collections.singletonList(CapabilityColumn.cap_name)).stream().filter(cap -> !cap.isDeleted())
+						.collect(Collectors.toList());
 	}
 
 	protected Column<?> getDeletedColumn() {

@@ -87,7 +87,7 @@ public class ProjectMonthsExporter {
 				allErrors.add(new ExportError(e, pm));
 			}
 		});
-		dao.consumeAll(tcw);
+		dao.consumeAll(tcw, null);
 		tcw.stop();
 		xsw.writeEndElement();
 		xsw.writeEndDocument();

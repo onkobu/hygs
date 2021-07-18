@@ -46,7 +46,7 @@ public class ProjectPanel extends EntityListPanel<Project, ProjectTable, Project
 
 	public ProjectPanel(ApplicationContext applicationContext) {
 		super(applicationContext, new ProjectDAO(applicationContext), new ProjectCellRenderer(),
-				ProjectColumn.prj_deleted);
+				ProjectColumn.prj_deleted, ProjectColumn.prj_name);
 		this.companyDao = new CompanyDAO(applicationContext);
 		this.capabilityDao = new CapabilityDAO(applicationContext);
 		this.categoryDao = new CategoryDAO(applicationContext);
@@ -88,21 +88,23 @@ public class ProjectPanel extends EntityListPanel<Project, ProjectTable, Project
 	private void fillCache() {
 		companyCache.clear();
 		try {
-			companyDao.consumeAll((cmp) -> companyCache.put(cmp.getId(), cmp));
+			companyDao.consumeAll((cmp) -> companyCache.put(cmp.getId(), cmp), null);
 		} catch (SQLException ex) {
 			throw new IllegalStateException(ex);
 		}
 		categoryCache.clear();
 		try {
-			categoryDao.consumeAll((cat) -> categoryCache.put(cat.getId(), cat));
+			categoryDao.consumeAll((cat) -> categoryCache.put(cat.getId(), cat), null);
 		} catch (SQLException ex) {
 			throw new IllegalStateException(ex);
 		}
 		cacheListener.forEach((cl) -> cl.refresh(Cache.COMPANY));
 		capabilityCache.clear();
 		try {
-			capabilityDao.consumeAll((cap) -> capabilityCache.put(cap.getId(),
-					new CapabilityWithCategory(cap, categoryCache.get(cap.getCategoryId().getParentId()))));
+			capabilityDao.consumeAll(
+					(cap) -> capabilityCache.put(cap.getId(),
+							new CapabilityWithCategory(cap, categoryCache.get(cap.getCategoryId().getParentId()))),
+					null);
 		} catch (SQLException ex) {
 			throw new IllegalStateException(ex);
 		}

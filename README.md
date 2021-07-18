@@ -96,28 +96,18 @@ Limitations:
 * make sure, GraphViz is installed on your system (with Java-interface)
 * get Schemaspy version from https://github.com/schemaspy, put into any/ new directory
 * get JDBC-driver from https://github.com/xerial/sqlite-jdbc, put into same directory as Schemaspy
-* create sqlite.properties (see below), put into same directory as Schemaspy
 * create a target directory for Schemaspy-output (HTML, JavaScript, …)
 * invoke Schemaspy from within Schemaspy-directory
-
-Configuration file sqlite.properties as an extension. I had no success and ran into exceptions with the standard approach. SQLite-JDBC-driver must match the
-driver exactly. The example is using 3.36.0.1:
-
-```
-description=SQLite-Xerial
-driver=org.sqlite.JDBC
-driverPath=sqlite-jdbc-3.36.0.1.jar
-connectionSpec=jdbc:sqlite:<db>
-```
 
 Invocation on command line:
 
 ```
 # Render graphics to ~/Documents/hygs-schema -directory, complete cataloge,
 # user (-u) and schema (-s) must be given but value is not used.
-# Invocation for version other than 6.1.0 may differ
+# Invocation for version other than 6.1.0 may differ. Type sqlite-xerial
+# taken from -dbhelp
 #
-java -jar schemaspy-6.1.0.jar -t sqlite.properties \
+java -jar schemaspy-6.1.0.jar -t sqlite-xerial \
   -dp ./sqlite-jdbc-3.36.0.1.jar 
   -db ~/git/hygs/db/sample_de.db 
   -o ~/Documents/hygs-schema -u dontcare -cat % -s dontcare

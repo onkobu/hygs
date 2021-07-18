@@ -32,6 +32,7 @@ import de.oftik.hygs.cmd.CommandBroker;
 import de.oftik.hygs.cmd.CommandTarget;
 import de.oftik.hygs.cmd.Notification;
 import de.oftik.hygs.cmd.NotificationListener;
+import de.oftik.kehys.kersantti.Column;
 import de.oftik.kehys.kersantti.query.DAO;
 
 /**
@@ -44,7 +45,7 @@ import de.oftik.kehys.kersantti.query.DAO;
  * @param <E>
  */
 public abstract class GroupedEntityPanel<G extends de.oftik.kehys.kersantti.Identifiable, E extends de.oftik.kehys.kersantti.Identifiable, F extends GroupedEntityForm<G, E>, D extends DAO<E>>
-		extends JPanel implements ApplicationContextListener {
+		extends JPanel implements ApplicationContextListener, SaveController {
 	private static final Logger log = Logger.getLogger(GroupedEntityPanel.class.getName());
 
 	private final FilterNode root;
@@ -65,6 +66,8 @@ public abstract class GroupedEntityPanel<G extends de.oftik.kehys.kersantti.Iden
 	private final JButton saveButton;
 
 	private final JButton deleteButton;
+
+	private final List<Column<G>> groupOrderColumns;
 
 	/**
 	 * Use this listener to bind to this class' default behavior upon notification.
@@ -102,6 +105,7 @@ public abstract class GroupedEntityPanel<G extends de.oftik.kehys.kersantti.Iden
 			case UPDATE:
 				reference.onEntityUpdate(notification.getIds());
 				break;
+			case TRASHED:
 			case DELETE:
 				reference.onEntityDelete(notification.getIds());
 				break;
@@ -109,16 +113,18 @@ public abstract class GroupedEntityPanel<G extends de.oftik.kehys.kersantti.Iden
 				reference.onEntityResurrected(notification.getIds());
 				break;
 			default:
-				log.warning("unhandled notification type " + notification);
+				log.warning("unhandled notification type " + notification.type() + ", target " + notification.target()
+						+ " for ID(s) " + notification.getIds());
 			}
 		}
 	}
 
 	public GroupedEntityPanel(ApplicationContext context, I18N rootTitle, DAO<G> groupDao, D entityDao,
-			TreeCellRenderer renderer) {
+			TreeCellRenderer renderer, Column<G> groupOrderColumn) {
 		this.applicationContext = context;
 		this.groupDao = groupDao;
 		this.entityDao = entityDao;
+		this.groupOrderColumns = Collections.singletonList(groupOrderColumn);
 		this.entityForm = createForm(context::getBroker);
 		this.root = new FilterNode(rootTitle.label(), true, true);
 		this.treeModel = new FilterTreeModel(root, true, true);
@@ -155,14 +161,21 @@ public abstract class GroupedEntityPanel<G extends de.oftik.kehys.kersantti.Iden
 		fillTree();
 	}
 
-	public abstract void createEntity(ActionEvent evt);
-
-	public void saveEntity(ActionEvent evt) {
-		entityForm.saveEntity();
+	public final void createEntity(ActionEvent evt) {
+		entityForm.blank();
 	}
 
-	public void deleteEntity(ActionEvent evt) {
+	public final void saveEntity(ActionEvent evt) {
+		entityForm.createOrSaveEntity();
+	}
+
+	public final void deleteEntity(ActionEvent evt) {
 		entityForm.deleteEntity();
+	}
+
+	@Override
+	public void setSaveEnabled(boolean state) {
+		saveButton.setEnabled(state);
 	}
 
 	@SuppressWarnings({ "PMD.UnusedFormalParameter", "unchecked" })
@@ -218,7 +231,7 @@ public abstract class GroupedEntityPanel<G extends de.oftik.kehys.kersantti.Iden
 	protected void selectionCleared() {
 		saveButton.setEnabled(false);
 		deleteButton.setEnabled(false);
-		entityForm.clearEntity();
+		entityForm.blank();
 	}
 
 	protected abstract List<E> loadForGroup(G g) throws SQLException;
@@ -264,10 +277,6 @@ public abstract class GroupedEntityPanel<G extends de.oftik.kehys.kersantti.Iden
 	public abstract IdentifiableBinding<E> bind(E e);
 
 	public abstract IdentifiableBinding<G> bindGroup(G g);
-
-	public GroupedEntityCreateDialog<G, E, F> wrapFormAsCreateDialog() {
-		return new GroupedEntityCreateDialog<>(this, createForm(applicationContext::getBroker));
-	}
 
 	private void filterTree(String term) {
 		treeModel.filter(term);
@@ -329,7 +338,7 @@ public abstract class GroupedEntityPanel<G extends de.oftik.kehys.kersantti.Iden
 					final var binding = bind(e);
 					tn.add(binding, () -> toNode(binding));
 				});
-			});
+			}, groupOrderColumns);
 		} catch (SQLException e) {
 			throw new IllegalStateException(e);
 		}

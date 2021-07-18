@@ -1,7 +1,6 @@
 package de.oftik.hygs.ui.cap;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.function.Supplier;
@@ -18,11 +17,11 @@ import de.oftik.hygs.cmd.Notification;
 import de.oftik.hygs.cmd.NotificationListener;
 import de.oftik.hygs.orm.cap.Capability;
 import de.oftik.hygs.orm.cap.Category;
+import de.oftik.hygs.orm.cap.CategoryColumn;
 import de.oftik.hygs.query.cap.CapabilityDAO;
 import de.oftik.hygs.query.cap.CategoryDAO;
 import de.oftik.hygs.ui.ApplicationContext;
 import de.oftik.hygs.ui.FilterNode;
-import de.oftik.hygs.ui.GroupedEntityCreateDialog;
 import de.oftik.hygs.ui.GroupedEntityPanel;
 import de.oftik.hygs.ui.I18N;
 import de.oftik.hygs.ui.IdentifiableBinding;
@@ -57,7 +56,7 @@ public class CapabilityPanel extends GroupedEntityPanel<Category, Capability, Ca
 
 	public CapabilityPanel(ApplicationContext context) {
 		super(context, I18N.CATEGORY, new CategoryDAO(context), new CapabilityDAO(context),
-				new CapabilityTreeCellRenderer());
+				new CapabilityTreeCellRenderer(), CategoryColumn.cat_name);
 		broker().registerListener(new NotificationListener() {
 			@Override
 			public CommandTarget target() {
@@ -79,7 +78,7 @@ public class CapabilityPanel extends GroupedEntityPanel<Category, Capability, Ca
 
 	@Override
 	public CapabilityForm createForm(Supplier<CommandBroker> brokerSupplier) {
-		return new CapabilityForm(brokerSupplier);
+		return new CapabilityForm(this, brokerSupplier);
 	}
 
 	@Override
@@ -95,13 +94,6 @@ public class CapabilityPanel extends GroupedEntityPanel<Category, Capability, Ca
 	@Override
 	protected List<Capability> loadForGroup(Category g) throws SQLException {
 		return entityDao().findByCategory(g);
-	}
-
-	@Override
-	public void createEntity(ActionEvent evt) {
-		final GroupedEntityCreateDialog<Category, Capability, CapabilityForm> dlg = wrapFormAsCreateDialog();
-		dlg.getForm().setGroups(extractGroups());
-		dlg.showAndWaitForDecision();
 	}
 
 	@Override

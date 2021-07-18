@@ -15,7 +15,7 @@ public class CompanyPanel extends EntityListPanel<Company, CompanyTable, Company
 
 	public CompanyPanel(ApplicationContext applicationContext) {
 		super(applicationContext, new CompanyDAO(applicationContext), new CompanyCellRenderer(),
-				CompanyColumn.cmp_deleted);
+				CompanyColumn.cmp_deleted, CompanyColumn.cmp_name);
 		broker().registerListener(new EntityNotificationListener<Company, CompanyTable, CompanyForm>(
 				CommandTargetDefinition.company, this));
 	}

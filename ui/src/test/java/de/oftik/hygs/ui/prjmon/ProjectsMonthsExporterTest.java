@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import de.oftik.hygs.query.prjmon.ProjectMonth;
 import de.oftik.hygs.query.prjmon.ProjectMonthsDAO;
 import de.oftik.hygs.ui.ExportError;
+import de.oftik.kehys.kersantti.Column;
 
 public class ProjectsMonthsExporterTest {
 	@Test
@@ -71,7 +72,8 @@ public class ProjectsMonthsExporterTest {
 		}
 
 		@Override
-		public void consumeAll(Consumer<ProjectMonth> consumer) throws SQLException {
+		public void consumeAll(Consumer<ProjectMonth> consumer, List<Column<ProjectMonth>> orderBy)
+				throws SQLException {
 			entities.stream().forEach(consumer);
 		}
 	}
