@@ -5,16 +5,24 @@ import static de.oftik.kehys.keijukainen.gui.ListTableModel.createDescription;
 import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
+import javax.swing.AbstractAction;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -31,6 +39,7 @@ import de.oftik.hygs.cmd.project.ChangeWeightCmd;
 import de.oftik.hygs.cmd.project.CreateProjectCmd;
 import de.oftik.hygs.cmd.project.DeleteProjectCmd;
 import de.oftik.hygs.cmd.project.SaveProjectCmd;
+import de.oftik.hygs.cmd.project.UnassignCapabilityCmd;
 import de.oftik.hygs.contract.CacheListener;
 import de.oftik.hygs.contract.CacheType;
 import de.oftik.hygs.orm.company.Company;
@@ -47,7 +56,7 @@ import de.oftik.kehys.keijukainen.gui.GridBagConstraintFactory;
 import de.oftik.kehys.keijukainen.gui.ListTableModel;
 import de.oftik.kehys.kersantti.query.Converters;
 
-public class ProjectForm extends EntityForm<Project> {
+public class ProjectForm extends EntityForm<Project> implements CapabilityController {
 	private static final Logger log = Logger.getLogger(ProjectForm.class.getName());
 
 	private final JTextField idField = new JTextField();
@@ -98,7 +107,9 @@ public class ProjectForm extends EntityForm<Project> {
 
 		private void refreshCapabilities() {
 			capabilityBox.removeAllItems();
-			capabilityCache.consumeAllCapabilities(capabilityBox::addItem);
+			SortedSet<CapabilityWithCategory> capabilities = new TreeSet<>();
+			capabilityCache.consumeAllCapabilities(capabilities::add);
+			capabilities.forEach(capabilityBox::addItem);
 		}
 
 		private void refreshCompanies() {
@@ -121,9 +132,22 @@ public class ProjectForm extends EntityForm<Project> {
 
 	public ProjectForm(SaveController sc, Supplier<CommandBroker> brokerSupplier, boolean createMode) {
 		super(sc, brokerSupplier);
+		capabilityTable.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+					deleteSelectedCapability();
+				}
+			}
+		});
 		this.createMode = createMode;
 		capabilityTable.setModel(tableModel);
 		capabilityTable.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new JTextField()));
+
+		final var deleteItem = new JMenuItem(new DeleteCapabilityAction(this));
+		final var popup = new JPopupMenu();
+		popup.add(deleteItem);
+		capabilityTable.setComponentPopupMenu(popup);
 		companyBox.setRenderer(new EntityRenderer<>(p -> p.getName()));
 		capabilityBox.setRenderer(new EntityRenderer<CapabilityWithCategory>(
 				cwc -> cwc.getCategory().getName() + " -> " + cwc.getCapability().getName()
@@ -286,5 +310,31 @@ public class ProjectForm extends EntityForm<Project> {
 		fromPicker.setEnabled(state);
 		toPicker.setEnabled(state);
 		capabilityBox.setEnabled(state);
+	}
+
+	@Override
+	public void deleteSelectedCapability() {
+		if (capabilityTable.getSelectedRowCount() < 0) {
+			return;
+		}
+		List<CapabilityInProject> toDelete = new ArrayList<>();
+		for (var rowIdx : capabilityTable.getSelectedRows()) {
+			toDelete.add(tableModel.getRow(rowIdx));
+		}
+		broker().execute(new UnassignCapabilityCmd(currentProject, toDelete));
+	}
+
+	static class DeleteCapabilityAction extends AbstractAction {
+		private final CapabilityController controller;
+
+		DeleteCapabilityAction(CapabilityController controller) {
+			super(I18N.DELETE.label());
+			this.controller = controller;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			controller.deleteSelectedCapability();
+		}
 	}
 }

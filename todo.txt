@@ -1,5 +1,16 @@
 # Bugs
 
+## Capability Version Unchanged
+
+1. Take any Capability
+2. Alter its version
+3. Save
+
+Expected: Showing the capability shows altered version number.
+Observed: Version unchanged
+
+The action itself is executed correctly and reload takes place. The node's
+user object seems to be stale.
 
 # User Stories
 
@@ -56,6 +67,7 @@ opened to make it the most recent version
 
 ## User Stories
 
+- unassign capabilities from projects
 - search in capabilities/ filter tree
 - en, will not break current upgrade.sh, as it filters by locale-specific
   upgrade.lst

@@ -34,5 +34,10 @@ public enum NotificationType {
 	/**
 	 * One entity was assigned/ linked to another.
 	 */
-	ASSIGNED;
+	ASSIGNED,
+
+	/**
+	 * Entities were unlinked.
+	 */
+	UNASSIGNED;
 }

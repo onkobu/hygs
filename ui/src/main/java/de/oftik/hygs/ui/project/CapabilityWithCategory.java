@@ -7,7 +7,8 @@ import de.oftik.hygs.orm.cap.CapabilityTable;
 import de.oftik.hygs.orm.cap.Category;
 import de.oftik.hygs.query.cap.CapabilityDAO;
 
-public class CapabilityWithCategory implements Identifiable<Capability, CapabilityTable> {
+public class CapabilityWithCategory
+		implements Identifiable<Capability, CapabilityTable>, Comparable<CapabilityWithCategory> {
 	private final Capability capability;
 	private final Category category;
 
@@ -38,6 +39,29 @@ public class CapabilityWithCategory implements Identifiable<Capability, Capabili
 	@Override
 	public Capability unwrap() {
 		return capability;
+	}
+
+	@Override
+	public int compareTo(CapabilityWithCategory other) {
+		var order = category.getName().compareTo(other.category.getName());
+		if (order != 0)
+			return order;
+		order = capability.getName().compareTo(other.capability.getName());
+		if (order != 0)
+			return order;
+
+		if (capability.getVersion() == null) {
+			if (other.capability.getVersion() == null) {
+				return 0;
+			}
+			return -1;
+		}
+
+		if (other.capability.getVersion() == null) {
+			return 1;
+		}
+
+		return capability.getVersion().compareTo(other.capability.getVersion());
 	}
 
 }
