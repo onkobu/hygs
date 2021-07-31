@@ -10,12 +10,20 @@ import java.util.function.Supplier;
 
 import de.oftik.hygs.cmd.CommandBroker;
 import de.oftik.hygs.cmd.CommandTargetDefinition;
+import de.oftik.hygs.cmd.EntityResurrected;
 import de.oftik.hygs.cmd.Notification;
+import de.oftik.hygs.cmd.NotificationType;
+import de.oftik.hygs.cmd.company.CompanyCreated;
+import de.oftik.hygs.cmd.company.CompanyDeleted;
+import de.oftik.hygs.cmd.company.CompanySaved;
 import de.oftik.hygs.cmd.project.CapabilityAssigned;
 import de.oftik.hygs.contract.CacheListener;
 import de.oftik.hygs.contract.CacheType;
+import de.oftik.hygs.orm.cap.CapabilityColumn;
 import de.oftik.hygs.orm.cap.Category;
+import de.oftik.hygs.orm.cap.CategoryColumn;
 import de.oftik.hygs.orm.company.Company;
+import de.oftik.hygs.orm.company.CompanyColumn;
 import de.oftik.hygs.orm.project.Project;
 import de.oftik.hygs.orm.project.ProjectColumn;
 import de.oftik.hygs.orm.project.ProjectTable;
@@ -28,6 +36,7 @@ import de.oftik.hygs.ui.ApplicationContext;
 import de.oftik.hygs.ui.ContextEvent;
 import de.oftik.hygs.ui.EntityListPanel;
 import de.oftik.kehys.kersantti.ForeignKey;
+import de.oftik.kehys.kersantti.query.QueryOperators;
 
 public class ProjectPanel extends EntityListPanel<Project, ProjectTable, ProjectForm>
 		implements CompanyCache, CapabilityCache {
@@ -55,9 +64,22 @@ public class ProjectPanel extends EntityListPanel<Project, ProjectTable, Project
 		prjForm.setCompanyCache(this);
 		prjForm.setCapabilityCache(this);
 		prjForm.setAssignedCapabilityDAO(new AssignedCapabilityDAO(applicationContext));
+
+		broker().registerListener(new AnyNotificationListener<CompanyCreated>(CommandTargetDefinition.company,
+				this::companyCreated, NotificationType.INSERT));
+		broker().registerListener(new AnyNotificationListener<EntityResurrected>(CommandTargetDefinition.company,
+				this::companyResurrected, NotificationType.RESURRECT));
+
+		broker().registerListener(new AnyNotificationListener<CompanyDeleted>(CommandTargetDefinition.company,
+				this::companyDeleted, NotificationType.DELETE, NotificationType.TRASHED));
+		broker().registerListener(new AnyNotificationListener<CompanyDeleted>(CommandTargetDefinition.company,
+				this::companyDeleted, NotificationType.TRASHED));
+		broker().registerListener(new AnyNotificationListener<CompanySaved>(CommandTargetDefinition.company,
+				this::companySaved, NotificationType.UPDATE));
+
 		broker().registerListener(new EntityNotificationListener<Project, ProjectTable, ProjectForm>(
 				CommandTargetDefinition.project, this));
-		broker().registerListener(new AssignmentNotificationListener<CapabilityAssigned>(
+		broker().registerListener(new AnyNotificationListener<CapabilityAssigned>(
 				CommandTargetDefinition.project_capability, this::capabilityAssigned));
 		broker().registerListener(new SubElementNotificationListener(CommandTargetDefinition.project_capability,
 				this::capabilitySuccess, this::capabilityError));
@@ -68,6 +90,43 @@ public class ProjectPanel extends EntityListPanel<Project, ProjectTable, Project
 	}
 
 	public void capabilityError(Notification not) {
+	}
+
+	public void companyCreated(CompanyCreated notification) {
+		try {
+			final var cmp = companyDao.findById(notification.getIds().get(0));
+			cacheCompany(cmp.get());
+		} catch (SQLException e) {
+			throw new IllegalStateException(e);
+		}
+	}
+
+	public void companyResurrected(EntityResurrected notification) {
+		try {
+			final var cmp = companyDao.findById(notification.getIds().get(0));
+			cacheCompany(cmp.get());
+		} catch (SQLException e) {
+			throw new IllegalStateException(e);
+		}
+	}
+
+	private void cacheCompany(final Company company) {
+		companyCache.put(company.getId(), company);
+		cacheListener.forEach((cl) -> cl.refresh(Cache.COMPANY));
+	}
+
+	public void companySaved(CompanySaved notification) {
+		try {
+			final var cmp = companyDao.findById(notification.getIds().get(0));
+			cacheCompany(cmp.get());
+		} catch (SQLException e) {
+			throw new IllegalStateException(e);
+		}
+	}
+
+	public void companyDeleted(CompanyDeleted notification) {
+		companyCache.remove(notification.getIds().get(0));
+		cacheListener.forEach((cl) -> cl.refresh(Cache.COMPANY));
 	}
 
 	public void capabilityAssigned(CapabilityAssigned notification) {
@@ -88,23 +147,24 @@ public class ProjectPanel extends EntityListPanel<Project, ProjectTable, Project
 	private void fillCache() {
 		companyCache.clear();
 		try {
-			companyDao.consumeAll((cmp) -> companyCache.put(cmp.getId(), cmp), null);
+			companyDao.consumeWhere(QueryOperators.columnIs(CompanyColumn.cmp_deleted, false), null,
+					(cmp) -> companyCache.put(cmp.getId(), cmp));
 		} catch (SQLException ex) {
 			throw new IllegalStateException(ex);
 		}
 		categoryCache.clear();
 		try {
-			categoryDao.consumeAll((cat) -> categoryCache.put(cat.getId(), cat), null);
+			categoryDao.consumeWhere(QueryOperators.columnIs(CategoryColumn.cat_deleted, false), null,
+					(cat) -> categoryCache.put(cat.getId(), cat));
 		} catch (SQLException ex) {
 			throw new IllegalStateException(ex);
 		}
 		cacheListener.forEach((cl) -> cl.refresh(Cache.COMPANY));
 		capabilityCache.clear();
 		try {
-			capabilityDao.consumeAll(
+			capabilityDao.consumeWhere(QueryOperators.columnIs(CapabilityColumn.cap_deleted, false), null,
 					(cap) -> capabilityCache.put(cap.getId(),
-							new CapabilityWithCategory(cap, categoryCache.get(cap.getCategoryId().getParentId()))),
-					null);
+							new CapabilityWithCategory(cap, categoryCache.get(cap.getCategoryId().getParentId()))));
 		} catch (SQLException ex) {
 			throw new IllegalStateException(ex);
 		}

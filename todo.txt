@@ -84,6 +84,17 @@ opened to make it the most recent version
 
 # Fixed
 
+## Created Company not Selectable
+
+1. Create a company
+2. switch to project tab
+3. Open company drop down
+
+Expected: drop down contains company
+Observed: Company is missing
+
+Also affected trashing and resurrecting entities. Fixed.
+
 ## Entity Actions not disabled while no Database open
 
 1. Do not open a database upon startup or close an open database

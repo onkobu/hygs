@@ -6,6 +6,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
@@ -135,14 +136,16 @@ public abstract class EntityListPanel<I extends de.oftik.kehys.kersantti.Identif
 		}
 	}
 
-	protected static final class AssignmentNotificationListener<N extends Notification>
-			implements NotificationListener {
+	protected static final class AnyNotificationListener<N extends Notification> implements NotificationListener {
 		private final CommandTarget target;
 
 		private final Consumer<N> assignmentConsumer;
 
-		public AssignmentNotificationListener(CommandTarget target, Consumer<N> assignmentConsumer) {
+		private final List<NotificationType> notificationTypes;
+
+		public AnyNotificationListener(CommandTarget target, Consumer<N> assignmentConsumer, NotificationType... nt) {
 			super();
+			this.notificationTypes = Arrays.asList(nt);
 			this.target = target;
 			this.assignmentConsumer = assignmentConsumer;
 		}
@@ -160,7 +163,7 @@ public abstract class EntityListPanel<I extends de.oftik.kehys.kersantti.Identif
 		@SuppressWarnings("unchecked")
 		@Override
 		public void onSuccess(Notification notification) {
-			if (notification.type() != NotificationType.ASSIGNED) {
+			if (!notificationTypes.contains(notification.type())) {
 				return;
 			}
 			assignmentConsumer.accept((N) notification);

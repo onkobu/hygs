@@ -1,6 +1,6 @@
 package de.oftik.hygs.ui.project;
 
-import de.oftik.hygs.query.cap.Capability;
+import de.oftik.hygs.orm.cap.Capability;
 
 public class CapSelectItem {
 	private final Capability capability;
