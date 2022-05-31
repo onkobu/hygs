@@ -1,18 +1,37 @@
 # Bugs
 
-## Capability Version Unchanged
+## Empty selections lead to exceptions upon creation
 
-1. Take any Capability
-2. Alter its version
-3. Save
+- in capability tab
+- either click new to flush a displayed capability or fill in empty form
+- leave category empty/ unselected
+- Save
 
-Expected: Showing the capability shows altered version number.
-Observed: Version unchanged
-
-The action itself is executed correctly and reload takes place. The node's
-user object seems to be stale.
+Expected: Error displayed or Save button inactive
+Observed: NPE upon command creation with null category
 
 # User Stories
+
+## Signed Audit Log
+
+- have a passphrase or secret
+- calculate checksum in application
+- amend audit log -> all entries without a checksum
+- requires trigger based audit log
+- rollout from audit log to all tables
+
+(i) See merkzettel, external tool
+(i) It does not make sense at all since any client process embeds the entire
+database and has full writing access. HMACs cannot be re-calculated without
+the secret. But entire rows incl. audit log can be deleted/ replaced/ updated.
+
+## Collegue White- and Blacklist
+
+- associated with project
+- either a hero or a waste of time
+- not to track anybody
+- GDPR compliant
+- encrypt with passphrase of audit log/ signing?
 
 ## More Groups/ Tools
 
@@ -83,6 +102,18 @@ opened to make it the most recent version
 - Tool-Recommendation, sqlitestudio, sqlitebrowser
 
 # Fixed
+
+## Capability Version Unchanged
+
+1. Take any Capability
+2. Alter its version
+3. Save
+
+Expected: Showing the capability shows altered version number.
+Observed: Version unchanged
+
+The action itself is executed correctly and reload takes place. The node's
+user object seems to be stale.
 
 ## Created Company not Selectable
 

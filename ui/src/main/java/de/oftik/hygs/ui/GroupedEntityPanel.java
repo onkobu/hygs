@@ -145,19 +145,23 @@ public abstract class GroupedEntityPanel<G extends de.oftik.kehys.kersantti.Iden
 	}
 
 	public void onEntityResurrected(List<String> ids) {
+		// TODO: same as insert
 		fillTree();
 	}
 
 	public void onEntityDelete(List<String> ids) {
 		selectionCleared();
+		// TODO: only remove the given entities
 		fillTree();
 	}
 
 	public void onEntityUpdate(List<String> ids) {
+		// TODO: only mix in the entities updated attributes
 		fillTree();
 	}
 
 	public void onEntityInsert(List<String> ids) {
+		// TODO: only insert in the new entities
 		fillTree();
 	}
 
@@ -312,6 +316,8 @@ public abstract class GroupedEntityPanel<G extends de.oftik.kehys.kersantti.Iden
 		final FilterNode existing = groupMap.get(g.getId());
 		if (existing == null) {
 			return registerGroup(toGroupNode(g));
+		} else if (existing.getBinding().getIdentifiable() != g) {
+			existing.setUserObject(bindGroup(g));
 		}
 		return existing;
 	}
@@ -324,7 +330,7 @@ public abstract class GroupedEntityPanel<G extends de.oftik.kehys.kersantti.Iden
 	private void fillTree() {
 		try {
 			groupDao.consumeAll((g) -> {
-				final FilterNode tn = addOrReplace(g);
+				final FilterNode groupNode = addOrReplace(g);
 				List<E> entities = null;
 				try {
 					entities = loadForGroup(g);
@@ -336,7 +342,7 @@ public abstract class GroupedEntityPanel<G extends de.oftik.kehys.kersantti.Iden
 				}
 				entities.stream().forEach(e -> {
 					final var binding = bind(e);
-					tn.add(binding, () -> toNode(binding));
+					groupNode.addOrReplace(binding, () -> toNode(binding));
 				});
 			}, groupOrderColumns);
 		} catch (SQLException e) {

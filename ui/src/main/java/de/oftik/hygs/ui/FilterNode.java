@@ -8,6 +8,12 @@ import java.util.function.Supplier;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
+/**
+ * A node that could be hidden by filtering for properties.
+ *
+ * @author onkobu
+ *
+ */
 public class FilterNode extends DefaultMutableTreeNode {
 	private boolean visible;
 
@@ -24,19 +30,33 @@ public class FilterNode extends DefaultMutableTreeNode {
 		this.visible = isVisible;
 	}
 
-	public void add(IdentifiableBinding<?> childObj, Supplier<FilterNode> childSupplier) {
+	/**
+	 * Replaces the given binding for an existing node or adds the supplied one if
+	 * not already present.
+	 *
+	 * @param childObj      Plain object that could already be displayed (with
+	 *                      different data).
+	 * @param childSupplier Supplier for a complete child node if it wasn't already
+	 *                      present.
+	 */
+	public void addOrReplace(IdentifiableBinding<?> childObj, Supplier<FilterNode> childSupplier) {
 		if (children == null) {
 			insert(childSupplier.get(), 0);
 			return;
 		}
 		for (TreeNode tn : children) {
 			FilterNode cn = (FilterNode) tn;
-			if (((IdentifiableBinding) cn.getUserObject()).getIdentifiable().getId()
+			if (((IdentifiableBinding<?>) cn.getUserObject()).getIdentifiable().getId()
 					.equals(childObj.getIdentifiable().getId())) {
+				cn.setUserObject(childObj);
 				return;
 			}
 		}
 		add(childSupplier.get());
+	}
+
+	public IdentifiableBinding<?> getBinding() {
+		return (IdentifiableBinding<?>) getUserObject();
 	}
 
 	public TreeNode getChildAt(int index, boolean filterIsActive) {
