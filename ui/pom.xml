@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>de.oftik</groupId>
 		<artifactId>oftik-parent</artifactId>
-		<version>1.0.4</version>
+		<version>1.0.7-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>hygs-ui</artifactId>
@@ -14,7 +14,7 @@
 
 	<properties>
 		<jmockit.version>1.49</jmockit.version>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<jaxb.core.version>2.3.0.1</jaxb.core.version>
 		<kehys.version>1.0.10-SNAPSHOT</kehys.version>
 	</properties>
@@ -124,6 +124,26 @@
 					<target>${java.version}</target>
 				</configuration>
 			</plugin>
+			  <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-toolchains-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+				  <execution>
+					<goals>
+					  <goal>toolchain</goal>
+					</goals>
+				  </execution>
+				</executions>
+				<configuration>
+				  <toolchains>
+					<jdk>
+					  <version>${java.version}</version>
+					  <vendor>openjdk</vendor>
+					</jdk>
+				  </toolchains>
+				</configuration>
+			  </plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
