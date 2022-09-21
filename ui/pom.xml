@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>de.oftik</groupId>
 		<artifactId>oftik-parent</artifactId>
-		<version>1.0.7-SNAPSHOT</version>
+		<version>1.0.9-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>hygs-ui</artifactId>
@@ -16,7 +16,7 @@
 		<jmockit.version>1.49</jmockit.version>
 		<java.version>17</java.version>
 		<jaxb.core.version>2.3.0.1</jaxb.core.version>
-		<kehys.version>1.0.10-SNAPSHOT</kehys.version>
+		<kehys.version>1.0.12-SNAPSHOT</kehys.version>
 	</properties>
 
 	<scm>

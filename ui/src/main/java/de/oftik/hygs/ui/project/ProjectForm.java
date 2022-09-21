@@ -120,7 +120,7 @@ public class ProjectForm extends EntityForm<Project> implements CapabilityContro
 				return;
 			}
 			companyBox.setSelectedItem(currentProject);
-		};
+		}
 
 	}
 
